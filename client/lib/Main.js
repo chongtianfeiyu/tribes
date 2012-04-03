@@ -7,5 +7,7 @@ window.onload = function() {
 
 	//Initialize global objects.
 	global.app.init();
+
 	//Start running.
+	global.app.start();
 };
