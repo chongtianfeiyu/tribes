@@ -7,14 +7,13 @@ Game.Controllers.App = (function(options){
 	var renderer;
 
 	//Camera-constants
-	var CAMERA_FOV = 55;
+	var CAMERA_FOV = 45;
 	var CAMERA_NEAR = 1;
 	var CAMERA_FAR = 10000;
 	//Camera-position (relative to player)
 	var CAMERA_X = 0;
-	var CAMERA_Y = -300;
+	var CAMERA_Y = -400;
 	var CAMERA_Z = 200;
-	var CAMERA_ROTATION_X = 70 * (Math.PI / 180);
 
 	//Renderer-constants
 	var WIDTH = window.innerWidth;
@@ -32,12 +31,6 @@ Game.Controllers.App = (function(options){
 			//Bind all events to "this" context
 			_.bindAll(this, "animate", "render", "update", "start");
 			
-			//Initialize camera
-			this.camera = new THREE.PerspectiveCamera( CAMERA_FOV, ASPECT, CAMERA_NEAR, CAMERA_FAR );
-			this.camera.position.y = CAMERA_Y;
-			this.camera.position.z = CAMERA_Z;
-			this.camera.position.x = CAMERA_X;
-			this.camera.rotation.x = CAMERA_ROTATION_X;
 
 			//Initialize scene
 			this.scene = new THREE.Scene();
@@ -50,18 +43,25 @@ Game.Controllers.App = (function(options){
 			this.renderer.setSize( WIDTH, HEIGHT );
 			document.body.appendChild(this.renderer.domElement);
 
-			this.worldView = new Game.Views.World({});
-			this.worldView.init(this.scene);
+			this.world = new Game.Views.World({});
+			this.world.init(this.scene);
 
 
 			 // add subtle ambient lighting
 	        var ambientLight = new THREE.AmbientLight(0x555555);
 	        this.scene.add(ambientLight);
-	 
+	
 	        // add directional light source
 	        var directionalLight = new THREE.DirectionalLight(0xffffff);
 	        directionalLight.position.set(10, 10, 20);
 	        this.scene.add(directionalLight);
+
+
+			//Initialize camera
+			this.camera = new THREE.PerspectiveCamera( CAMERA_FOV, ASPECT, CAMERA_NEAR, CAMERA_FAR );
+			this.camera.position.y = CAMERA_Y;
+			this.camera.position.z = CAMERA_Z;
+			this.camera.position.x = CAMERA_X;
 		},
 
 		start : function() {
@@ -69,8 +69,13 @@ Game.Controllers.App = (function(options){
 		},
 
 		animate : function() {
-			console.log("Animate");
 			requestAnimationFrame( this.animate );
+			
+			var t = new Date().getTime()/800;
+			
+			this.camera.position.x = Math.sin( t * 0.5 ) * 1000;
+			this.camera.position.y = Math.cos( t * 0.5 ) * 1000 - 400;
+			this.camera.lookAt(this.scene.position);
 			this.render();
 		},
 
