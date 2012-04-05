@@ -7,18 +7,12 @@ Game.Controllers.App = (function(options){
 	var renderer;
 
 
-	//Helpers
-	var DEG_TO_RAD = 2 * Math.PI / 360,
-	    RAD_TO_DEG = 1 / DEG_TO_RAD;
-
+	
 	//Camera-constants
 	var CAMERA_FOV = 45;
 	var CAMERA_NEAR = 1;
 	var CAMERA_FAR = 10000;
-	//Camera-position (relative to player)
-	var CAMERA_OFFSET_Y = 400;
-	var CAMERA_OFFSET_X = 500 * Math.sin(1 * DEG_TO_RAD);
-	var CAMERA_OFFSET_Z = 500 * Math.cos(1 * DEG_TO_RAD);
+	
 
 	//Renderer-constants
 	var WIDTH = window.innerWidth;
@@ -34,17 +28,14 @@ Game.Controllers.App = (function(options){
 		projector : null,
 		scene : null,
 		world : null,
+		cameraController : null,
 		
 		init : function() {
 			//Bind all events to "this" context
 			_.bindAll(this, "animate", "render", "update", "start");
-
 			this.camera = new THREE.PerspectiveCamera( CAMERA_FOV, ASPECT, CAMERA_NEAR, CAMERA_FAR );
-			this.camera.position.y = CAMERA_OFFSET_Y;
-			this.camera.position.x = CAMERA_OFFSET_X;
-			this.camera.position.z = CAMERA_OFFSET_Z;
 			
-			
+
 			//Initialize scene
 			this.scene = new THREE.Scene();
 			//Initialize projector
@@ -63,32 +54,23 @@ Game.Controllers.App = (function(options){
 			pointLight.intensity = 1;
 			pointLight.position = new THREE.Vector3(0, 800, 200);
 			this.scene.add(pointLight);
-			
 
-			this.deltaT = 0;
-
+			this.cameraController = new CameraController();
+			this.cameraController.init(this.camera, this.world.player);
+			this.cameraController.update();
 		},
 
-		accDeltaX : 0,
 
 		start : function() {
 			this.animate();
 		},
 		
-		rotateVel : 0,
 
 		animate : function() {
 			requestAnimationFrame( this.animate );
 			this.world.update();
-			if(Input.mouseHold()) {
-				this.accDeltaX += Input.deltaX * 0.5;
-			}
-			var rad = this.accDeltaX * DEG_TO_RAD;
-			CAMERA_OFFSET_X = 500 * Math.sin(rad);
-			CAMERA_OFFSET_Z = 500 * Math.cos(rad);
-			this.camera.position.x = this.world.player.mesh.position.x + CAMERA_OFFSET_X;
-			this.camera.position.z = this.world.player.mesh.position.z + CAMERA_OFFSET_Z;
-			this.camera.lookAt(this.world.player.mesh.position);
+			this.cameraController.update();
+			
 			this.render();
 		},
 

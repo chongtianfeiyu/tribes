@@ -6,6 +6,7 @@ Game.Views.Player = (function(){
 		dirVector = new THREE.Vector3(), 
 		t;
 	var speed = 10;
+	var rotationSpeed = 0.1;
 
 	return {
 		position : null,
