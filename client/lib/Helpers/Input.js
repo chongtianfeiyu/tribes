@@ -35,7 +35,7 @@ var Input = {
 
 		window.onmouseup = (function() {
 			
-			if(Input.mouseHoldTime() < 150){
+			if(Input.mouseHoldTime() < 300){
 				for (var i = Input.onClickDelegates.length - 1; i >= 0; i--) {
 					Input.onClickDelegates[i]();
 				};
@@ -54,7 +54,7 @@ var Input = {
 	},
 
 	mouseHold : function() {
-		return Input.mouseHoldTime() > 150;
+		return Input.mouseHoldTime() > 200;
 	},
 
 	addOnClickEvent : function(f){

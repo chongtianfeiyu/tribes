@@ -25,15 +25,8 @@ Game.Views.World = (function(options){
 		},
 
 		initTerrain : function() {
-			// material
-			var material = new THREE.MeshLambertMaterial({
-				color: 0xFFFFFF
-			});
-			var terrainGeometry = new THREE.PlaneGeometry(1000, 1000);
-			
-			this.terrain = new THREE.Mesh(terrainGeometry, material);
-			this.terrain.rotation.x = -90 *  (Math.PI /180) ;
-			global.app.scene.add(this.terrain);
+			this.terrain = new Terrain();
+			this.terrain.init();
 		}
 	}
 })
