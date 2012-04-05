@@ -13,12 +13,16 @@ Game.Controllers.App = (function(options){
 	//Camera-position (relative to player)
 	var CAMERA_X = 0;
 	var CAMERA_Y = -400;
-	var CAMERA_Z = 200;
+	var CAMERA_Z = 300;
 
 	//Renderer-constants
 	var WIDTH = window.innerWidth;
 	var HEIGHT = window.innerHeight;
 	var ASPECT = WIDTH / HEIGHT;
+	var HALF_WIDTH = WIDTH / 2;
+	var HALF_HEIGHT = HEIGHT / 2;
+
+	
 	
 	return {
 		//Properties
@@ -31,7 +35,10 @@ Game.Controllers.App = (function(options){
 			//Bind all events to "this" context
 			_.bindAll(this, "animate", "render", "update", "start");
 			
-
+			//Initialize camera
+			this.camera = new THREE.PerspectiveCamera( CAMERA_FOV, ASPECT, CAMERA_NEAR, CAMERA_FAR );
+			
+			
 			//Initialize scene
 			this.scene = new THREE.Scene();
 
@@ -47,21 +54,12 @@ Game.Controllers.App = (function(options){
 			this.world.init(this.scene);
 
 
-			 // add subtle ambient lighting
-	        var ambientLight = new THREE.AmbientLight(0x555555);
-	        this.scene.add(ambientLight);
-	
-	        // add directional light source
-	        var directionalLight = new THREE.DirectionalLight(0xffffff);
-	        directionalLight.position.set(10, 10, 20);
-	        this.scene.add(directionalLight);
+			var pointLight = new THREE.PointLight(0xffffff);
+			pointLight.intensity = 1;
+			pointLight.position = new THREE.Vector3(0, 	0, 1000);
+			this.scene.add(pointLight);
+			this.time = 0;
 
-
-			//Initialize camera
-			this.camera = new THREE.PerspectiveCamera( CAMERA_FOV, ASPECT, CAMERA_NEAR, CAMERA_FAR );
-			this.camera.position.y = CAMERA_Y;
-			this.camera.position.z = CAMERA_Z;
-			this.camera.position.x = CAMERA_X;
 		},
 
 		start : function() {
@@ -70,12 +68,16 @@ Game.Controllers.App = (function(options){
 
 		animate : function() {
 			requestAnimationFrame( this.animate );
+			this.time += 0.005;
+			this.world.update();
+			this.camera.lookAt(this.world.player.mesh.position);
+        	//Set camera position relative to player position
+			this.camera.position.y = this.world.player.mesh.position.y - 400;
+			this.camera.position.x = this.world.player.mesh.position.x;
+			this.camera.position.z = this.world.player.mesh.position.z + 500;
 			
-			var t = new Date().getTime()/800;
-			
-			this.camera.position.x = Math.sin( t * 0.5 ) * 1000;
-			this.camera.position.y = Math.cos( t * 0.5 ) * 1000 - 400;
-			this.camera.lookAt(this.scene.position);
+			//Set camera rotation
+
 			this.render();
 		},
 
