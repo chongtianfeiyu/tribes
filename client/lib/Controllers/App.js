@@ -29,12 +29,15 @@ Game.Controllers.App = (function(options){
 		scene : null,
 		world : null,
 		cameraController : null,
-		
+		client : null,
+
 		init : function() {
 			//Bind all events to "this" context
 			_.bindAll(this, "animate", "render", "update", "start");
-			this.camera = new THREE.PerspectiveCamera( CAMERA_FOV, ASPECT, CAMERA_NEAR, CAMERA_FAR );
 			
+			//Server-client
+			this.client = new Game.Controllers.Client();
+			this.client.init();
 
 			//Initialize scene
 			this.scene = new THREE.Scene();
@@ -57,8 +60,11 @@ Game.Controllers.App = (function(options){
 			directionalLight.position.set( 50, 270, 100 ).normalize();
 			directionalLight.intensity = 1.5;
 			this.scene.add( directionalLight );
+			
+			//Initialize camera and camera-controller
+			this.camera = new THREE.PerspectiveCamera( CAMERA_FOV, ASPECT, CAMERA_NEAR, CAMERA_FAR );
 
-			this.cameraController = new CameraController();
+			this.cameraController = new Game.Controllers.CameraController();
 			this.cameraController.init(this.camera, this.world.player);
 			this.cameraController.update();
 		},

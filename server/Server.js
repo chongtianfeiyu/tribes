@@ -1,25 +1,46 @@
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-  , fs = require('fs')
+//Configuration
+var SERVER_PORT = 1337;
 
-app.listen(3000);
+//Includes
+var WebSocketServer = require('websocket').server;
+var http = require('http');
+var GameManager = require('./GameManager');
 
-function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
+//Globals
+var clients = [];
+var gameManager = new GameManager();
 
-    res.writeHead(200);
-    res.end(data);
-  });
-}
+//Setup server
+var server = http.createServer(function(request, response){
+	//No implementation
+});
 
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+server.listen(SERVER_PORT, function(){});
+
+//setup WebSocket-server
+var wsServer = new WebSocketServer({httpServer : server});
+
+wsServer.on('request', function(request){
+
+	var connection = request.accept(null, request.origin);
+	
+	
+	//The index of the currently connected user is stored in index (used in remove)
+	var index = clients.push(connection) - 1;
+	
+	console.log("Connected clients: " + clients.length);
+
+	connection.on('message', function(message){
+		gameManager.handleMessage(JSON.parse(message.utf8Data), index);
+	});
+
+	connection.on('close', function(connection){
+		console.log("Disconnected " + connection.remoteAddress);
+		clients.splice(index, 1);
+		console.log("Connected clients: " + clients.length);
+	});
+
+	setInterval(function() {
+		connection.sendUTF(JSON.stringify(gameManager.worldstate(index)));
+	}, 60);
 });

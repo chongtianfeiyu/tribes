@@ -1,4 +1,4 @@
-var CameraController = (function(camera){
+Game.Controllers.CameraController = (function(camera){
 	var CAMERA_OFFSET_Y = 400;
 	var CAMERA_OFFSET_Y_MAX = 640;
 	var CAMERA_OFFSET_Y_MIN = 235;
