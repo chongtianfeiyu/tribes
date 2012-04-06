@@ -23,6 +23,7 @@ Game.Views.Player = (function(){
 			this.mesh = new THREE.Mesh(new THREE.CubeGeometry(30, 30, 30), material);
 			this.mesh.position.y = 15;
 			this.mesh.overdraw = true;
+			this.mesh.castShadow = true;
 			global.app.scene.add(this.mesh);
 		},
 
