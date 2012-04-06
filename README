@@ -1,0 +1,13 @@
+Ladda textur
+			var loader = new THREE.JSONLoader();
+			
+			loader.load("/resources/lamp_animated.js", function(geometry) {
+
+				var material = new THREE.MeshFaceMaterial();
+
+				mesh = new THREE.Mesh( geometry, material );
+				mesh.scale.set(20.2, 20.2, 20.2);
+				mesh.position.x = 100;
+
+				global.app.scene.add( mesh );
+			});
