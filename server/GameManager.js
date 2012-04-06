@@ -9,11 +9,12 @@ module.exports = function() {
 		players.push(player);
 	};
 
-	var changePlayerPos = function(data, index) {
+	var updatePlayer = function(data, index) {
 		for (var i = players.length - 1; i >= 0; i--) {
 			var p = players[i];
 			if(p.getIndex() == index) {
-				p.setPosition(data.x, data.y, data.z);
+				p.setPosition(data.position.x, data.position.y, data.position.z);
+				p.setGoal(data.goal.x, data.goal.y, data.goal.z);
 				break;
 			}
 		};
@@ -26,8 +27,8 @@ module.exports = function() {
 				case "new_player":
 					handleNewPlayer(message.data, index);
 					break;
-				case "change_player_pos":
-					changePlayerPos(message.data, index);
+				case "update_player":
+					updatePlayer(message.data, index);
 					break;
 				default:
 					console.log("Don't know what to do with message of type " + message.type);
@@ -43,7 +44,8 @@ module.exports = function() {
 				if(player.getIndex() != index)
 					data.players.push({
 						name : player.getName(),
-						position : player.getPosition()
+						position : player.getPosition(),
+						goal : player.getGoal()
 					});
 			};
 			return data;

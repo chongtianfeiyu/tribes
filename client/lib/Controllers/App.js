@@ -36,7 +36,7 @@ Game.Controllers.App = (function(options){
 			_.bindAll(this, "animate", "render", "update", "start");
 			
 			//Server-client
-			this.client = new Game.Controllers.Client();
+			this.client = new Game.Controllers.Client({user : options.user});
 			this.client.init();
 
 			//Initialize scene
@@ -49,7 +49,10 @@ Game.Controllers.App = (function(options){
 			this.renderer.setSize( WIDTH, HEIGHT );
 			document.body.appendChild(this.renderer.domElement);
 
-			this.world = new Game.Views.World({});
+			this.world = new Game.Views.World({
+				user : options.user
+
+			});
 			this.world.init();
 
 			var ambient = new THREE.AmbientLight( 0xCCCCCCC);

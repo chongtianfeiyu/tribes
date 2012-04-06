@@ -1,7 +1,7 @@
-Game.Controllers.Client = (function() {
+Game.Controllers.Client = (function(options) {
 
 	var URL = "ws://localhost:1337";
-	var USER_NAME = Math.round(Math.random() * 1000).toString();
+	var USER_NAME = options.user;
 
 	return {
 		
@@ -46,11 +46,19 @@ Game.Controllers.Client = (function() {
 
 		setPlayerPos : function() {
 			this.connection.send(JSON.stringify({
-				type : "change_player_pos",
+				type : "update_player",
 				data : {
-					x : global.app.world.player.mesh.position.x,
-					y : global.app.world.player.mesh.position.y,
-					z : global.app.world.player.mesh.position.z
+					position : {
+						x : global.app.world.player.mesh.position.x,
+						y : global.app.world.player.mesh.position.y,
+						z : global.app.world.player.mesh.position.z
+					},
+
+					goal : {
+						x : global.app.world.player.goal.x,
+						y : global.app.world.player.goal.y,
+						z : global.app.world.player.goal.z
+					}
 				}
 			}));
 		}

@@ -11,6 +11,8 @@ Game.Views.Player = (function(){
 	return {
 		position : null,
 		mesh : null,
+		goal : goalVector,
+		name : null,
 
 		init : function() {
 			_.bindAll(this, "update", "changeGoalVector");
@@ -24,6 +26,15 @@ Game.Views.Player = (function(){
 			this.mesh.position.y = 15;
 			this.mesh.overdraw = true;
 			this.mesh.castShadow = true;
+
+			if(this.name != null){
+				var text3d = new THREE.TextGeometry( this.name ,{size: 20, height: 1, curveSegments: 1, font:'helvetiker'});
+				THREE.GeometryUtils.center( text3d );
+				var textMaterial = new THREE.MeshBasicMaterial( { color: 0xA10000, overdraw: true } );
+				this.playerTag = new THREE.Mesh( text3d, textMaterial );
+				this.playerTag.position.y += 90;
+                global.app.scene.add(this.playerTag);
+			}
 			global.app.scene.add(this.mesh);
 		},
 
@@ -33,6 +44,11 @@ Game.Views.Player = (function(){
 			dir.normalize();
 			this.mesh.position.x += speed * dir.x;
 			this.mesh.position.z += speed * dir.z;
+			if(this.playerTag){
+				this.playerTag.position.x = this.mesh.position.x;
+				this.playerTag.position.z = this.mesh.position.z;
+				this.playerTag.lookAt(global.app.camera.position);
+			}
 			global.app.client.setPlayerPos();
 		},
 
