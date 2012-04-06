@@ -7,15 +7,6 @@ Game.Views.World = (function(options){
 		init : function() {
 			this.initTerrain();
 			this.initPlayer();
-			this.initMobs();
-		},
-
-		initMobs : function() {
-			for(i = 0; i<100; i++) {
-				var mob = new CubeMob();
-				mob.init();
-				this.objects.push(mob);
-			}
 		},
 
 		initPlayer : function() {

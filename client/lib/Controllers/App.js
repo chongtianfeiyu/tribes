@@ -49,17 +49,14 @@ Game.Controllers.App = (function(options){
 			this.world = new Game.Views.World({});
 			this.world.init();
 
-
-			var pointLight = new THREE.PointLight(0xFFFFFF);
-			pointLight.intensity = 2;
-			pointLight.position = new THREE.Vector3(-4000, 1000, -1000);
-			this.scene.add(pointLight);
+			var ambient = new THREE.AmbientLight( 0x111111 );
+			this.scene.add( ambient );
 
 
-			var pointLight = new THREE.PointLight(0xFFFFFF);
-			pointLight.intensity = 2;
-			pointLight.position = new THREE.Vector3(4000, 1000, 1000);
-			this.scene.add(pointLight);
+			directionalLight = new THREE.DirectionalLight( 0xffffff );
+			directionalLight.position.set( 0, 270, 100 ).normalize();
+			directionalLight.intensity = 1.5;
+			this.scene.add( directionalLight );
 
 			this.cameraController = new CameraController();
 			this.cameraController.init(this.camera, this.world.player);

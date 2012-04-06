@@ -1,7 +1,7 @@
 var CameraController = (function(camera){
 	var CAMERA_OFFSET_Y = 400;
 	var CAMERA_OFFSET_Y_MAX = 640;
-	var CAMERA_OFFSET_Y_MIN = 200;
+	var CAMERA_OFFSET_Y_MIN = 235;
 	var CAMERA_OFFSET_X = 500 * Math.sin(1 * MathHelpers.DEG_TO_RAD);
 	var CAMERA_OFFSET_Z = 500 * Math.cos(1 * MathHelpers.DEG_TO_RAD);
 	return {
@@ -27,7 +27,6 @@ var CameraController = (function(camera){
 				else if(this.accumulatedMouseDeltaY < CAMERA_OFFSET_Y_MIN)
 					this.accumulatedMouseDeltaY = CAMERA_OFFSET_Y_MIN;
 			}
-	
 			var rad = this.accumulatedMouseDeltaX * MathHelpers.DEG_TO_RAD;
 			CAMERA_OFFSET_X = 500 * Math.sin(rad);
 			CAMERA_OFFSET_Z = 500 * Math.cos(rad);
