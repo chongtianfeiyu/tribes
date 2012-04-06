@@ -36,6 +36,7 @@ wsServer.on('request', function(request){
 
 	connection.on('close', function(connection){
 		console.log("Disconnected " + connection.remoteAddress);
+		gameManager.removePlayer(index);
 		clients.splice(index, 1);
 		console.log("Connected clients: " + clients.length);
 	});

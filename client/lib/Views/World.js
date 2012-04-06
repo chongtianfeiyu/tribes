@@ -15,7 +15,6 @@ Game.Views.World = (function(options){
 			this.player = new Game.Views.Player();
 			this.player.name = options.user;
 			this.player.init();
-			this.objects.push(this.player);
 		},
 
 		update : function() {
@@ -24,6 +23,8 @@ Game.Views.World = (function(options){
 				if(o.update)
 					o.update();
 			};
+
+			this.player.update();
 		},
 
 		initTerrain : function() {
@@ -32,7 +33,6 @@ Game.Views.World = (function(options){
 		},
 
 		setState : function(data) {
-			//Add players
 			for (var i = data.players.length - 1; i >= 0; i--) {
 				var player = data.players[i];
 				var found = false;
@@ -55,6 +55,25 @@ Game.Views.World = (function(options){
 					p.name = player.name;
 					p.init();
 					this.objects.push(p);
+				}
+			};
+				
+			for (var i = this.objects.length - 1; i >= 0; i--) {
+				var p = this.objects[i];
+				if(p.name != null) {
+					var remove = true;
+					for(var j = data.players.length - 1; j >= 0; j--) {
+						var q = data.players[j];
+						console.log(q.name + "  " + p.name);
+						if(q.name == p.name) {
+							remove = false;
+							break;
+						}
+					}
+					if(remove == true) {
+						p.destroy();
+						this.objects.splice(i, 1);
+					}
 				}
 			};
 		}

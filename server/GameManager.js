@@ -22,6 +22,16 @@ module.exports = function() {
 
 	return {
 
+		removePlayer : function(index) {
+			for (var i = players.length - 1; i >= 0; i--) {
+				var p = players[i];
+				if(p.getIndex() == index) {
+					players.splice(i, 1);
+					break;
+				}
+			};
+		},
+
 		handleMessage : function(message, index) {
 			switch(message.type) {
 				case "new_player":
