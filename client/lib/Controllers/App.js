@@ -49,12 +49,12 @@ Game.Controllers.App = (function(options){
 			this.world = new Game.Views.World({});
 			this.world.init();
 
-			var ambient = new THREE.AmbientLight( 0x111111 );
+			var ambient = new THREE.AmbientLight( 0xCCCCCCC);
 			this.scene.add( ambient );
 
 
 			directionalLight = new THREE.DirectionalLight( 0xffffff );
-			directionalLight.position.set( 0, 270, 100 ).normalize();
+			directionalLight.position.set( 50, 270, 100 ).normalize();
 			directionalLight.intensity = 1.5;
 			this.scene.add( directionalLight );
 
