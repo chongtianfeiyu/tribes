@@ -50,17 +50,16 @@ Game.Controllers.App = (function(options){
 			this.world.init();
 
 
-			var pointLight = new THREE.PointLight(0xffffff);
-			pointLight.intensity = 4;
-			pointLight.position = new THREE.Vector3(0, 800, 10000);
+			var pointLight = new THREE.PointLight(0xFFFFFF);
+			pointLight.intensity = 2;
+			pointLight.position = new THREE.Vector3(-4000, 1000, -1000);
 			this.scene.add(pointLight);
 
 
-			var pointLight2 = new THREE.PointLight(0xffffff);
-			pointLight2.intensity = 4;
-			pointLight2.position = new THREE.Vector3(800, 800, 10000);
-			this.scene.add(pointLight2);
-
+			var pointLight = new THREE.PointLight(0xFFFFFF);
+			pointLight.intensity = 2;
+			pointLight.position = new THREE.Vector3(4000, 1000, 1000);
+			this.scene.add(pointLight);
 
 			this.cameraController = new CameraController();
 			this.cameraController.init(this.camera, this.world.player);

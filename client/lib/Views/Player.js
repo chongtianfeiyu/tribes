@@ -17,7 +17,7 @@ Game.Views.Player = (function(){
 			Input.addOnClickEvent(this.changeGoalVector);
 			// material
 			var material = new THREE.MeshLambertMaterial({
-				color: 0xFFFFFF
+				color: 0xAADDEE
 			});
 			// cube
 			this.mesh = new THREE.Mesh(new THREE.CubeGeometry(30, 30, 30), material);
