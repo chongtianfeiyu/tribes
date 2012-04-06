@@ -36,10 +36,23 @@ Game.Controllers.Client = (function() {
 		},
 
 		connection_message : function(message) {
-			console.log("Message received");
-			console.log(message.data.toString());
 			var msg = JSON.parse(message.data.toString());
-			console.log(msg.type);
+			
+			switch(msg.type) {
+				case "world_state":
+					global.app.world.setState(msg.data);
+			}
+		},
+
+		setPlayerPos : function() {
+			this.connection.send(JSON.stringify({
+				type : "change_player_pos",
+				data : {
+					x : global.app.world.player.mesh.position.x,
+					y : global.app.world.player.mesh.position.y,
+					z : global.app.world.player.mesh.position.z
+				}
+			}));
 		}
 	}
 });

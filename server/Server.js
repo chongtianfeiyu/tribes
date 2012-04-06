@@ -41,6 +41,6 @@ wsServer.on('request', function(request){
 	});
 
 	setInterval(function() {
-		connection.sendUTF(JSON.stringify(gameManager.worldstate(index)));
+		connection.sendUTF(JSON.stringify({type : "world_state", data : gameManager.worldstate(index)}));
 	}, 60);
 });

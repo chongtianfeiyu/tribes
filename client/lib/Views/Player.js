@@ -33,6 +33,7 @@ Game.Views.Player = (function(){
 			dir.normalize();
 			this.mesh.position.x += speed * dir.x;
 			this.mesh.position.z += speed * dir.z;
+			global.app.client.setPlayerPos();
 		},
 
 		changeGoalVector : function() {

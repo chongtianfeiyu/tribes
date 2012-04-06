@@ -1,8 +1,8 @@
-module.exports = function(name, position, rotation, index) {
-	var name = name;
-	var position = position;
-	var rotation = rotation;
-	var index = index;
+module.exports = function(options) {
+	var name = options.name;
+	var position = options.position;
+	var rotation = options.rotation;
+	var index = options.index;
 	
 	return {
 		getPosition : function() {
@@ -10,6 +10,12 @@ module.exports = function(name, position, rotation, index) {
 		},
 		getName : function() {
 			return name;
+		},
+		getIndex : function() {
+			return index;
+		},
+		setPosition : function(x, y, z) {
+			position = {x : x, y : y, z : z};
 		}
 	}
 };
