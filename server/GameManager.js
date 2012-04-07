@@ -73,6 +73,10 @@ module.exports = function() {
 		*/
 		getTerrain : function(name) {
 			return terrainManager.getTerrain();
+		},
+
+		autoUpdateWorld : function() {
+			terrainManager.update();
 		}
 	}
 }
