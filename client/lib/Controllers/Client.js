@@ -2,7 +2,7 @@ Game.Controllers.Client = (function(options) {
 
 	var URL = "ws://localhost:1337";
 	var USER_NAME = options.user;
-
+	var connectionOpen = false;
 	return {
 		
 		connection : null,
@@ -21,6 +21,7 @@ Game.Controllers.Client = (function(options) {
 		},
 
 		connection_open : function() {
+			connectionOpen = true;
 			console.log("Connection opened");
 			this.connection.send(
 				JSON.stringify(
@@ -45,6 +46,7 @@ Game.Controllers.Client = (function(options) {
 		},
 
 		setPlayerPos : function() {
+			if(connectionOpen == false) return;
 			this.connection.send(JSON.stringify({
 				type : "update_player",
 				data : {
