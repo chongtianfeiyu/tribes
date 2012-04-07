@@ -25,7 +25,6 @@ Game.Views.Player = (function(){
 			this.mesh = new THREE.Mesh(new THREE.CubeGeometry(30, 30, 30), material);
 			this.mesh.position.y = 15;
 			this.mesh.overdraw = true;
-			this.mesh.castShadow = true;
 
 			var text3d = new THREE.TextGeometry( this.name ,{size: 20, height: 1, curveSegments: 1, font:'helvetiker'});
 			THREE.GeometryUtils.center( text3d );

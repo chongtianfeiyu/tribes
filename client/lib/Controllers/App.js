@@ -55,11 +55,11 @@ Game.Controllers.App = (function(options){
 			});
 			this.world.init();
 
-			var ambient = new THREE.AmbientLight( 0xCCCCCCC);
+			var ambient = new THREE.AmbientLight( 0x111111);
 			this.scene.add( ambient );
 
 
-			directionalLight = new THREE.DirectionalLight( 0xffffff );
+			directionalLight = new THREE.DirectionalLight( 0xDDDDDD );
 			directionalLight.position.set( 50, 270, 100 ).normalize();
 			directionalLight.intensity = 1.5;
 			this.scene.add( directionalLight );

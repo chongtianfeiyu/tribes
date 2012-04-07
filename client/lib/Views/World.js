@@ -64,7 +64,6 @@ Game.Views.World = (function(options){
 					var remove = true;
 					for(var j = data.players.length - 1; j >= 0; j--) {
 						var q = data.players[j];
-						console.log(q.name + "  " + p.name);
 						if(q.name == p.name) {
 							remove = false;
 							break;

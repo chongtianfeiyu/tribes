@@ -27,13 +27,48 @@
 
 		<script src="lib/Views/World.js" type="text/javascript"></script>
 		<script src="lib/Views/Terrain.js" type="text/javascript"></script>
+		<script src="lib/Views/TerrainObjects/Tree.js" type="text/javascript"></script>
 		<script src="lib/Views/Player.js" type="text/javascript"></script>
 		
 		<!-- Initializer -->
 		<script src="lib/Main.js" type="text/javascript"></script>
 
-		<script>
-			
+		<!-- Shaders -->
+		<script id="groundVertexShader" type="x-shader/x-fragment">
+		    varying vec2 vUv;
+		    varying vec3 vPosition;
+		    void main( void ) {
+		        vUv = uv;
+		        vPosition = position;
+		        gl_Position = projectionMatrix * modelViewMatrix * vec4(vPosition, 1);
+		    }
+		</script>
+		<script id="groundFragmentShader" type="x-shader/x-vertex">
+		    uniform sampler2D texture_grass;
+		    uniform sampler2D texture_rock;
+		    varying vec2 vUv;
+		    varying vec3 vPosition;
+		    void main() {
+		        // Texture loading
+		        vec4 diffuseGrass = texture2D( texture_grass, vUv );
+		        vec4 diffuseSand = vec4(.8, .8, .7, 1.0);
+		        vec4 diffuseRock = texture2D( texture_rock, vUv );
+		        vec4 color = diffuseGrass; // grass base
+		        // add sand
+		        color = mix(
+		            diffuseSand,
+		            color,
+		            min(abs(.0 - vPosition.z) / 0.9, 1.0) // Start at .0 for .03 units
+		        );
+		        // add rock
+		        color = mix(
+		            diffuseRock,
+		            color,
+		            min(abs(.9 - vPosition.z) / .6, 1.0) // Start at .6 for .6 units
+		        );
+		        
+		        gl_FragColor = color;
+		    }
 		</script>
 	</body>
 </html>	
