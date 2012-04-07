@@ -1,5 +1,5 @@
 
-Game.Views.TerrainObjects.Tree = (function() {
+Game.Views.TerrainObjects.BTree = (function() {
 	var material = new THREE.MeshBasicMaterial({color: 0xffffff});
 	var flower_texture = THREE.ImageUtils.loadTexture( "/resources/textures/terrain/grass.png");
 	var createTree = function(start, branches) {

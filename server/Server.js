@@ -7,8 +7,8 @@ var http = require('http');
 var GameManager = require('./GameManager');
 
 //Globals
-var clients = [];
 var gameManager = new GameManager();
+gameManager.init();
 
 //Setup server
 var server = http.createServer(function(request, response){
@@ -22,26 +22,35 @@ var wsServer = new WebSocketServer({httpServer : server});
 
 wsServer.on('request', function(request){
 
+
+
 	var connection = request.accept(null, request.origin);
 	
-	
-	//The index of the currently connected user is stored in index (used in remove)
-	var index = clients.push(connection) - 1;
-	
-	console.log("Connected clients: " + clients.length);
+	var send = function(type, data){
+		connection.sendUTF(JSON.stringify({type : type, data : data}));
+	}
+
+	var name = null;
 
 	connection.on('message', function(message){
-		gameManager.handleMessage(JSON.parse(message.utf8Data), index);
+		var msg = JSON.parse(message.utf8Data);
+		if(msg.type == "new_player") {
+			var player = gameManager.addPlayer(msg.data);
+			name = player.getName();
+			console.log(name + " is connected");
+			send("terrain", gameManager.getTerrain(name));
+		}
+		else {
+			var res = gameManager.handleMessage(msg, name);
+		}
 	});
 
 	connection.on('close', function(connection){
-		console.log("Disconnected " + connection.remoteAddress);
-		gameManager.removePlayer(index);
-		clients.splice(index, 1);
-		console.log("Connected clients: " + clients.length);
+		gameManager.removePlayer(name);
 	});
 
 	setInterval(function() {
-		connection.sendUTF(JSON.stringify({type : "world_state", data : gameManager.worldstate(index)}));
+		if(name == null) return;
+		send("world_state", gameManager.worldstate(name));
 	}, 60);
 });

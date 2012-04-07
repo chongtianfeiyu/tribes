@@ -32,6 +32,13 @@ Game.Views.World = (function(options){
 			this.terrain.init();
 		},
 
+		setTerrain : function(data) {
+			for (var i = data.trees.length - 1; i >= 0; i--) {
+				var tree = data.trees[i];
+				new Game.Views.TerrainObjects.Tree().init(tree.start, tree.data);
+			};
+		},
+
 		setState : function(data) {
 			for (var i = data.players.length - 1; i >= 0; i--) {
 				var player = data.players[i];
