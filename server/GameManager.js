@@ -5,6 +5,7 @@ module.exports = function() {
 	var worldObjects = [];
 	var players = [];
 	var terrainManager = new TerrainManager();
+	var worldTick = new Date().getTime();
 
 	var addNewPlayer = function(data) {
 		var player = new Player({name : data.name, position : data.position, rotation : data.rotation});
@@ -71,12 +72,17 @@ module.exports = function() {
 		/*
 			Returns the terrain-data needed to render the world
 		*/
-		getTerrain : function(name) {
-			return terrainManager.getTerrain();
+		getTerrain : function(tick) {
+			return terrainManager.getTerrain(tick);
 		},
 
 		autoUpdateWorld : function() {
-			terrainManager.update();
+			worldTick = new Date().getTime();
+			terrainManager.update(worldTick);
+		},
+
+		getWorldTick : function() {
+			return worldTick;
 		}
 	}
 }

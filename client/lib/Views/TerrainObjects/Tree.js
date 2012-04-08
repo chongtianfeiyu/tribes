@@ -2,6 +2,7 @@
 Game.Views.TerrainObjects.Tree = (function() {
 	var material = new THREE.MeshBasicMaterial({color: 0xffffff});
 	var flower_texture = THREE.ImageUtils.loadTexture( "/resources/textures/terrain/grass.png");
+	
 	var createTree = function(start, branches) {
 		var geometry = new THREE.Geometry();
 		var particle = new THREE.Particle(material);
@@ -28,18 +29,19 @@ Game.Views.TerrainObjects.Tree = (function() {
 		var trunkMaterial = new THREE.LineBasicMaterial({color: 0x663208, opacity: 1, linewidth: branches.w})
 		var line = new THREE.Line( geometry, trunkMaterial);
 		global.app.scene.add(line);
+
 		if(branches.c) {
 			for (var i = branches.c.length - 1; i >= 0; i--) {
 				var branch = branches.c[i];
 				createTree({x : newx, y : newy, z : newz}, branch);
 			};
 		}	
-		else if(branches.f) {
+		else if(branches.f && branches.f != null) {
 			// material
 			var material = new THREE.MeshLambertMaterial({
 				map: flower_texture
 			});
-			console.log(flower_texture);
+			console.log(branches.f);
 			// cube
 			var flowerMesh = new THREE.Mesh(
 				new THREE.SphereGeometry(

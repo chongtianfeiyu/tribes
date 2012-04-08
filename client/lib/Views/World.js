@@ -6,7 +6,7 @@ Game.Views.World = (function(options){
 		players : [],
 
 		init : function() {
-			_.bindAll(this, "setState");
+			_.bindAll(this, "setState", "setTerrain");
 			this.initTerrain();
 			this.initPlayer();
 		},
@@ -33,9 +33,16 @@ Game.Views.World = (function(options){
 		},
 
 		setTerrain : function(data) {
-			for (var i = data.trees.length - 1; i >= 0; i--) {
-				var tree = data.trees[i];
-				new Game.Views.TerrainObjects.Tree().init(tree.start, tree.data);
+			for (var i = data.length - 1; i >= 0; i--) {
+				var p = data[i];
+				switch(p.classTag) {
+					case "tree":
+						var tree = new Game.Views.TerrainObjects.Tree()
+						tree.init(p.position, p.data);
+						this.objects.push(tree);
+						break;
+				}
+				
 			};
 		},
 
