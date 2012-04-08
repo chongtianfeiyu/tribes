@@ -32,7 +32,6 @@ module.exports = function(options) {
 			return targetUid;
 		},
 		setTargetUid : function(uid) {
-			console.log("Setting target " + uid);
 			targetUid = uid;
 		}
 	}

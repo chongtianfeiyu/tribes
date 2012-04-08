@@ -54,9 +54,16 @@ Game.Views.Player = (function(){
 		update : function() {
 			var dir = new THREE.Vector3();
 			if(this.targetUid != null) {
-				var targetPos = global.app.world.findFromUid(this.targetUid).position;
-				this.goalVector.set(targetPos.x, targetPos.y, targetPos.z);
-				console.log("Targeting " + this.targetUid);
+				var target = global.app.world.findFromUid(this.targetUid);
+				//Target lost
+				if(target == null) {
+					this.targetUid = null;
+				}
+				else {
+					var targetPos = target.position;
+					this.goalVector.set(targetPos.x, targetPos.y, targetPos.z);
+				}	
+				this.lastChange = new Date().getTime();
 			}
 			dir.sub(this.goalVector, this.mesh.position);
 			dir.normalize();
