@@ -29,7 +29,8 @@ Game.Controllers.Client = (function(options) {
 						type : "new_player", 
 						data : { 
 							name : USER_NAME,
-							position : { x : 0, y : 0, z : 0},
+							position : { x : 0, y : 15, z : 0},
+							goalVector : { x : 0, y : 0, z : 0},
 							rotation : { x : 0, y : 0, z : 0}
 						}
 					}
@@ -51,21 +52,22 @@ Game.Controllers.Client = (function(options) {
 
 		setPlayerPos : function() {
 			if(connectionOpen == false) return;
-			this.connection.send(JSON.stringify({
-				type : "update_player",
-				data : {
+			var data = {
 					position : {
 						x : global.app.world.player.mesh.position.x,
 						y : global.app.world.player.mesh.position.y,
 						z : global.app.world.player.mesh.position.z
 					},
 
-					goal : {
-						x : global.app.world.player.goal.x,
-						y : global.app.world.player.goal.y,
-						z : global.app.world.player.goal.z
+					goalVector : {
+						x : global.app.world.player.goalVector.x,
+						y : global.app.world.player.goalVector.y,
+						z : global.app.world.player.goalVector.z
 					}
-				}
+				};
+			this.connection.send(JSON.stringify({
+				type : "update_player",
+				data : data
 			}));
 		}
 	}

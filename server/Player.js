@@ -3,14 +3,14 @@ module.exports = function(options) {
 	var position = options.position;
 	var rotation = options.rotation;
 	var index = options.index;
-	var goal = options.goal;
+	var goalVector = options.goalVector;
 	
 	return {
 		getPosition : function() {
 			return position;
 		},
-		getGoal : function() {
-			return goal;
+		getGoalVector : function() {
+			return goalVector;
 		},
 		getName : function() {
 			return name;
@@ -21,8 +21,8 @@ module.exports = function(options) {
 		setPosition : function(x, y, z) {
 			position = {x : x, y : y, z : z};
 		},
-		setGoal : function(x, y, z) {
-			goal = {x : x, y : y, z : z};
+		setGoalVector : function(x, y, z) {
+			goalVector = {x : x, y : y, z : z};
 		}
 	}
 };

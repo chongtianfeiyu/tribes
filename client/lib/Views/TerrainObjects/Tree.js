@@ -2,7 +2,7 @@
 Game.Views.TerrainObjects.Tree = (function() {
 	var material = new THREE.MeshBasicMaterial({color: 0xffffff});
 	var flower_texture = THREE.ImageUtils.loadTexture( "/resources/textures/terrain/grass.png");
-	
+	var meshes = [];
 	var createTree = function(start, branches) {
 		var geometry = new THREE.Geometry();
 		var particle = new THREE.Particle(material);
@@ -28,6 +28,7 @@ Game.Views.TerrainObjects.Tree = (function() {
 		//Create the line between points
 		var trunkMaterial = new THREE.LineBasicMaterial({color: 0x663208, opacity: 1, linewidth: branches.w})
 		var line = new THREE.Line( geometry, trunkMaterial);
+		meshes.push(line);
 		global.app.scene.add(line);
 
 		if(branches.c) {
@@ -41,7 +42,6 @@ Game.Views.TerrainObjects.Tree = (function() {
 			var material = new THREE.MeshLambertMaterial({
 				map: flower_texture
 			});
-			console.log(branches.f);
 			// cube
 			var flowerMesh = new THREE.Mesh(
 				new THREE.SphereGeometry(
@@ -51,6 +51,7 @@ Game.Views.TerrainObjects.Tree = (function() {
 			flowerMesh.position.x = newx;
 			flowerMesh.position.y = newy;
 			flowerMesh.position.z = newz;
+			meshes.push(flowerMesh);
 			global.app.scene.add(flowerMesh);
 		}
 	};
@@ -58,6 +59,12 @@ Game.Views.TerrainObjects.Tree = (function() {
 	return {
 		init : function(start, data) {
 			createTree(start, data);
+		},
+
+		destroy : function() {
+			for (var i = meshes.length - 1; i >= 0; i--) {
+				global.app.scene.remove(meshes[i]);
+			};
 		}
 	};
 });

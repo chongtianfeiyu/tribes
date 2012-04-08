@@ -10,15 +10,13 @@ var GameManager = require('./GameManager');
 var gameManager = new GameManager();
 gameManager.init();
 console.log("Simulating world for a bit");
-for (var i = 30 - 1; i >= 0; i--) {
+for (var i = 20 - 1; i >= 0; i--) {
 	gameManager.autoUpdateWorld();
 };
 console.log("Done!");
-global_terrain = 0;
 setInterval(function() {
 	gameManager.autoUpdateWorld();
-	global_terrain = gameManager.getWorldTick();
-}, 60000);
+}, 30000);
 
 //Setup server
 var server = http.createServer(function(request, response){
@@ -33,11 +31,11 @@ var wsServer = new WebSocketServer({httpServer : server});
 wsServer.on('request', function(request){
 
 	var connection = request.accept(null, request.origin);
-	
+	connection.lastPushTick = 0;
 	var send = function(type, data){
 		connection.sendUTF(JSON.stringify({type : type, data : data}));
 	}
-	lastTerrain = 0;
+	
 	var name = null;
 
 	connection.on('message', function(message){
@@ -46,8 +44,7 @@ wsServer.on('request', function(request){
 			var player = gameManager.addPlayer(msg.data);
 			name = player.getName();
 			console.log(name + " is connected");
-			send("terrain", gameManager.getTerrain(0));
-			lastTerrain = global_terrain;
+			send("world_state", gameManager.worldstate(0));
 		}
 		else {
 			var res = gameManager.handleMessage(msg, name);
@@ -60,11 +57,11 @@ wsServer.on('request', function(request){
 
 	setInterval(function() {
 		if(name == null) return;
-		send("world_state", gameManager.worldstate(name));
-		if(lastTerrain!=global_terrain) {
-			var data = gameManager.getTerrain(lastTerrain);
-			lastTerrain = global_terrain;
-			send("terrain", data);
+		var data = gameManager.worldstate(connection.lastPushTick);
+		
+		if(data.players.length > 0 || data.terrain.length > 0) {
+			connection.lastPushTick = new Date().getTime();
+			send("world_state", data);
 		}
 			
 	}, 60);

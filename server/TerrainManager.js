@@ -6,7 +6,6 @@ module.exports = (function(){
 	var objects = [];
 	return {
 		init : function() {
-			console.log("init terrain-manager");
 			var tree = new Tree();
 			var start = {x : 100, y : 0, z : 100};
 			tree.init(start);
@@ -24,11 +23,11 @@ module.exports = (function(){
 			return dx;
 		},
 
-		update : function(worldTick) {
+		update : function() {
 			for (var i = objects.length - 1; i >= 0; i--) {
 				var o = objects[i];
 				if(!o.fullyGrown()){
-					o.tick = worldTick;
+					o.tick =  new Date().getTime();
 					o.grow();
 				}
 
@@ -37,7 +36,7 @@ module.exports = (function(){
 				else if(o.childCount <= 2) {
 					o.childCount += 1;
 					var child = o.breed();
-					child.tick = worldTick;
+					child.tick = new Date().getTime();
 					objects.push(child);
 				}
 			};

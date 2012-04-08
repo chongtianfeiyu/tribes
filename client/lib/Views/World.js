@@ -3,7 +3,6 @@ Game.Views.World = (function(options){
 	return {
 		terrain : null, 
 		objects : [],
-		players : [],
 
 		init : function() {
 			_.bindAll(this, "setState", "setTerrain");
@@ -14,7 +13,9 @@ Game.Views.World = (function(options){
 		initPlayer : function() {
 			this.player = new Game.Views.Player();
 			this.player.name = options.user;
+			this.player.isCurrent = true;
 			this.player.init();
+			this.objects.push(this.player);
 		},
 
 		update : function() {
@@ -35,11 +36,17 @@ Game.Views.World = (function(options){
 		setTerrain : function(data) {
 			for (var i = data.length - 1; i >= 0; i--) {
 				var p = data[i];
+				var existing = this.objects[p.uid];
+				
+				if(existing != undefined) {
+					existing.destroy();
+					existing = null;	
+				}
 				switch(p.classTag) {
 					case "tree":
 						var tree = new Game.Views.TerrainObjects.Tree()
 						tree.init(p.position, p.data);
-						this.objects.push(tree);
+						this.objects[p.uid] = tree;
 						break;
 				}
 				
@@ -47,6 +54,8 @@ Game.Views.World = (function(options){
 		},
 
 		setState : function(data) {
+			this.setTerrain(data.terrain);
+			
 			for (var i = data.players.length - 1; i >= 0; i--) {
 				var player = data.players[i];
 				var found = false;
@@ -57,36 +66,24 @@ Game.Views.World = (function(options){
 						p.mesh.position.x = player.position.x;
 						p.mesh.position.z = player.position.z;
 						p.mesh.position.y = player.position.y;
-						p.goal.x = player.goal.x;
-						p.goal.y = player.goal.y;
-						p.goal.z = player.goal.z;
+						p.goalVector.x = player.goalVector.x;
+						p.goalVector.y = player.goalVector.y;
+						p.goalVector.z = player.goalVector.z;
 						found = true;
 						break;
 					}
 				};
-				if(!found) {
+				if(found == false) {
 					var p = new Game.Views.Player();
 					p.name = player.name;
 					p.init();
+					p.mesh.position.x = player.position.x;
+					p.mesh.position.z = player.position.z;
+					p.mesh.position.y = player.position.y;
+					p.goalVector.x = player.goalVector.x;
+					p.goalVector.y = player.goalVector.y;
+					p.goalVector.z = player.goalVector.z;
 					this.objects.push(p);
-				}
-			};
-				
-			for (var i = this.objects.length - 1; i >= 0; i--) {
-				var p = this.objects[i];
-				if(p.name != null) {
-					var remove = true;
-					for(var j = data.players.length - 1; j >= 0; j--) {
-						var q = data.players[j];
-						if(q.name == p.name) {
-							remove = false;
-							break;
-						}
-					}
-					if(remove == true) {
-						p.destroy();
-						this.objects.splice(i, 1);
-					}
 				}
 			};
 		}

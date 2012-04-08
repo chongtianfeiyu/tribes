@@ -1,4 +1,5 @@
 var Tree = function(){
+	
 	var r = function(r1, r2) {
 		return ((Math.random()*(r2 - r1)) + r1);
 	};
@@ -18,6 +19,7 @@ var Tree = function(){
 
 		//Data for branches
 		data : null,
+		
 		fullyGrown : function() {
 			return this.growGen > this.growPotential;
 		},
@@ -26,10 +28,11 @@ var Tree = function(){
 			this.position = position;
 			this.growGen = 0;
 			this.growPotential = r(3, 7);
+			this.uid = Math.random();
 			//First branch goes straight up
 			var data = {
 				x : 0,
-				y : r(50, 70),
+				y : r(60, 80),
 				z : 0,
 				w : 2,
 				f : r(10, 20)
@@ -39,7 +42,6 @@ var Tree = function(){
 
 		grow : function() {
 			this.growRecursive(this.data, 1);
-			++this.growGen;
 		},
 		growRecursive : function(data, depth) {
 			
@@ -63,19 +65,20 @@ var Tree = function(){
 					x : r(-30, 30),
 					y : r(50, 70)/depth,
 					z : r(-30, 30),
-					f : r(10, 20)
+					f : r(30, 40)
 				});
 				data.c.push({
 					x : r(-30, 30),
 					y : r(20, 30)/depth,
 					z : r(-30, 30),
-					f : r(10, 20)
+					f : r(30, 40)
 				});
 
 				data.f = null;
 			}
+			++this.growGen;
 		},	
-
+		
 		breed : function() {
 
 			var child = new Tree();

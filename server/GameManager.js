@@ -5,10 +5,10 @@ module.exports = function() {
 	var worldObjects = [];
 	var players = [];
 	var terrainManager = new TerrainManager();
-	var worldTick = new Date().getTime();
 
 	var addNewPlayer = function(data) {
-		var player = new Player({name : data.name, position : data.position, rotation : data.rotation});
+		var player = new Player({name : data.name, position : data.position, rotation : data.rotation, goalVector : data.goalVector});
+		player.tick = new Date().getTime();
 		players.push(player);
 		return player;
 	};
@@ -18,7 +18,8 @@ module.exports = function() {
 			var p = players[i];
 			if(p.getName() == name) {
 				p.setPosition(data.position.x, data.position.y, data.position.z);
-				p.setGoal(data.goal.x, data.goal.y, data.goal.z);
+				p.setGoalVector(data.goalVector.x, data.goalVector.y, data.goalVector.z);
+				p.tick = new Date().getTime()
 				break;
 			}
 		};
@@ -54,18 +55,21 @@ module.exports = function() {
 			}
 		},
 
-		worldstate : function(name) {
+		worldstate : function(tick) {
 			var data = {};
 			data.players = [];
 			for (var i = players.length - 1; i >= 0; i--) {
 				var player = players[i];
-				if(player.getName() != name)
+				if(player.tick >= tick) {
 					data.players.push({
 						name : player.getName(),
 						position : player.getPosition(),
-						goal : player.getGoal()
+						goalVector : player.getGoalVector()
 					});
+				}
+					
 			};
+			data.terrain = this.getTerrain(tick);
 			return data;
 		},
 
@@ -77,12 +81,7 @@ module.exports = function() {
 		},
 
 		autoUpdateWorld : function() {
-			worldTick = new Date().getTime();
-			terrainManager.update(worldTick);
-		},
-
-		getWorldTick : function() {
-			return worldTick;
+			terrainManager.update();
 		}
 	}
 }
