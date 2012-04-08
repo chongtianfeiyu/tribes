@@ -79,6 +79,8 @@ Game.Controllers.App = (function(options){
 			//Initialize mouse-selector-controller
 			this.playerController = new Game.Controllers.PlayerController();
 			this.playerController.init();
+			
+
 		},
 
 

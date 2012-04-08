@@ -29,6 +29,7 @@ module.exports = function() {
 			if(p.getUid() == uid) {
 				p.setPosition(data.position.x, data.position.y, data.position.z);
 				p.setGoalVector(data.goalVector.x, data.goalVector.y, data.goalVector.z);
+				p.setTargetUid(data.targetUid);
 				p.tick = new Date().getTime()
 				break;
 			}
@@ -81,7 +82,8 @@ module.exports = function() {
 						name : player.getName(),
 						uid : player.getUid(),
 						position : player.getPosition(),
-						goalVector : player.getGoalVector()
+						goalVector : player.getGoalVector(),
+						targetUid : player.getTargetUid()
 					});
 				}
 					
@@ -116,7 +118,11 @@ module.exports = function() {
 			};
 		},
 
-		autoUpdateWorld : function() {
+		/* 
+			Update world-cycle.
+			Generates new terrain-objects/grows trees etc.
+		*/
+		autoUpdateTerrain : function() {
 			terrainManager.update();
 		}
 	}

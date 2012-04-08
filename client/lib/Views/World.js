@@ -14,13 +14,21 @@ Game.Views.World = (function(options){
 
 		addObject : function(o) {
 			o.objectsIndex = this.objects.push(o)-1;
-			if(o.getIntersectMesh)
-				o.intersectMeshIndex = this.intersectMeshes.push(o.getIntersectMesh())-1;
+			if(o.getIntersectMeshes) {
+				o.intersectMeshIndexes = [];
+				var oIntersectMeshes = o.getIntersectMeshes();
+				for (var i = oIntersectMeshes.length - 1; i >= 0; i--) {
+					o.intersectMeshIndexes.push(this.intersectMeshes.push(oIntersectMeshes[i]) - 1);
+				};
+			}
 		},
 
 		removeObject : function(o) {
 			this.objects.splice(o.objectsIndex, 1);
-			this.intersectMeshes.splice(o.intersectMeshIndex, 1);
+			for (var i = o.intersectMeshIndexes.length - 1; i >= 0; i--) {
+				this.intersectMeshes.splice(o.intersectMeshIndexes[i], 1);
+			};
+			
 		},
 
 		initPlayer : function() {
@@ -90,13 +98,14 @@ Game.Views.World = (function(options){
 					var p = this.objects[j];
 					if(p.uid == player.uid)
 					{
-						console.log("update " + p.name);
+						console.log("update " + p.name + "->" + player.targetUid);
 						p.mesh.position.x = player.position.x;
 						p.mesh.position.z = player.position.z;
 						p.mesh.position.y = player.position.y;
 						p.goalVector.x = player.goalVector.x;
 						p.goalVector.y = player.goalVector.y;
 						p.goalVector.z = player.goalVector.z;
+						p.targetUid = player.targetUid;
 						found = true;
 						break;
 					}
@@ -112,6 +121,7 @@ Game.Views.World = (function(options){
 					p.goalVector.x = player.goalVector.x;
 					p.goalVector.y = player.goalVector.y;
 					p.goalVector.z = player.goalVector.z;
+					p.targetUid = player.targetUid;
 					p.uid = player.uid;
 					this.addObject(p);
 				}

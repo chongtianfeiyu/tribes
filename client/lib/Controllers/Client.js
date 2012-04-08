@@ -33,7 +33,8 @@ Game.Controllers.Client = (function(options) {
 							uid : UID,
 							position : { x : 0, y : 15, z : 0},
 							goalVector : { x : 0, y : 0, z : 0},
-							rotation : { x : 0, y : 0, z : 0}
+							rotation : { x : 0, y : 0, z : 0},
+							targetUid : null
 						}
 					}
 			));
@@ -65,7 +66,9 @@ Game.Controllers.Client = (function(options) {
 						x : global.app.world.player.goalVector.x,
 						y : global.app.world.player.goalVector.y,
 						z : global.app.world.player.goalVector.z
-					}
+					},
+
+					targetUid : global.app.world.player.targetUid
 				};
 			this.connection.send(JSON.stringify({
 				type : "update_player",

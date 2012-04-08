@@ -8,7 +8,7 @@ Game.Views.TerrainObjects.Tree = (function() {
 	//Contains all meshes (as this is a collection of meshes)
 	var meshes = [];
 	
-	var createTree = function(start, branches) {
+	var createTree = function(start, branches, ref) {
 		var geometry = new THREE.Geometry();
 		var particle = new THREE.Particle(material);
 		particle.position.x = start.x;
@@ -33,13 +33,14 @@ Game.Views.TerrainObjects.Tree = (function() {
 		//Create the line between points
 		var trunkMaterial = new THREE.LineBasicMaterial({color: 0x663208, opacity: 1, linewidth: branches.w})
 		var line = new THREE.Line( geometry, trunkMaterial);
+		line.pointer = ref;
 		meshes.push(line);
 		global.app.scene.add(line);
 
 		if(branches.c) {
 			for (var i = branches.c.length - 1; i >= 0; i--) {
 				var branch = branches.c[i];
-				createTree({x : newx, y : newy, z : newz}, branch);
+				createTree({x : newx, y : newy, z : newz}, branch, ref);
 			};
 		}	
 		else if(branches.f && branches.f != null) {
@@ -56,32 +57,22 @@ Game.Views.TerrainObjects.Tree = (function() {
 			flowerMesh.position.x = newx;
 			flowerMesh.position.y = newy;
 			flowerMesh.position.z = newz;
+			flowerMesh.pointer = ref;
 			meshes.push(flowerMesh);
 			global.app.scene.add(flowerMesh);
 		}
 	};
 
-	return {
-		intersectMesh : null,
+	return {	
+		position : null,
 
 		init : function(start, data) {
-			createTree(start, data);
-			
-			var material = new THREE.MeshBasicMaterial({
-				transparent : true,
-				opacity : 0.1
-			});
-			// cube
-			this.intersectMesh = new THREE.Mesh(new THREE.CubeGeometry(50, 300, 50), material);
-			global.app.scene.add(this.intersectMesh);
-			this.intersectMesh.pointer = this;
-			this.intersectMesh.position.x = start.x;
-			this.intersectMesh.position.y = start.y;
-			this.intersectMesh.position.z = start.z;
+			this.position = start;
+			createTree(start, data, this);
 		},
 
-		getIntersectMesh : function() {
-			return this.intersectMesh;
+		getIntersectMeshes : function() {
+			return meshes;
 		},
 
 		getIntersectText : function() {

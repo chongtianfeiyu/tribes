@@ -5,6 +5,7 @@ module.exports = function(options) {
 	var index = options.index;
 	var goalVector = options.goalVector;
 	var uid = options.uid;
+	var targetUid = null;
 	return {
 		getPosition : function() {
 			return position;
@@ -26,6 +27,13 @@ module.exports = function(options) {
 		},
 		setGoalVector : function(x, y, z) {
 			goalVector = {x : x, y : y, z : z};
+		},
+		getTargetUid : function() {
+			return targetUid;
+		},
+		setTargetUid : function(uid) {
+			console.log("Setting target " + uid);
+			targetUid = uid;
 		}
 	}
 };

@@ -19,7 +19,8 @@ Game.Controllers.PlayerController = (function() {
 		mouseClick : function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
-				console.log("click:" + intersect.getIntersectText());
+				global.app.world.player.targetUid = intersect.uid;
+				global.app.world.player.latestChange = new Date().getTime();
 			}
 			else {
 				this.changePlayerGoalVector();
@@ -33,7 +34,6 @@ Game.Controllers.PlayerController = (function() {
 				dirVector = new THREE.Vector3(), 
 				goalVector = new THREE.Vector3(), 
 				t;
-			global.app.world.player.latestChange = new Date().getTime();
 			// Convert screen coordinates to NDC coordinates -1.0 to 1.0
 	  		x = ( MouseInput.mouseX / window.innerWidth ) * 2 - 1;
 	  		y = - ( MouseInput.mouseY / window.innerHeight ) * 2 + 1;
@@ -58,7 +58,10 @@ Game.Controllers.PlayerController = (function() {
 	  			startVector.y + t * dirVector.y,
 	  			startVector.z + t * dirVector.z );
 
+	  		global.app.world.player.targetUid = null;
 	  		global.app.world.player.goalVector = goalVector;
+	  		global.app.world.player.latestChange = new Date().getTime();
+			
 		},
 
 		getIntersect : function() {

@@ -12,6 +12,7 @@ Game.Views.Player = (function(){
 
 		//The current goal-vector (when moving along the terrain)
 		goalVector : null,
+		targetUid : null,
 		//The name of the player
 		name : null,
 		//The unique identifier of the player
@@ -23,8 +24,8 @@ Game.Views.Player = (function(){
 			return this.name;
 		},
 
-		getIntersectMesh : function() {
-			return this.mesh;
+		getIntersectMeshes : function() {
+			return [this.mesh];
 		},
 
 		init : function() {
@@ -52,12 +53,18 @@ Game.Views.Player = (function(){
 
 		update : function() {
 			var dir = new THREE.Vector3();
+			if(this.targetUid != null) {
+				var targetPos = global.app.world.findFromUid(this.targetUid).position;
+				this.goalVector.set(targetPos.x, targetPos.y, targetPos.z);
+				console.log("Targeting " + this.targetUid);
+			}
 			dir.sub(this.goalVector, this.mesh.position);
 			dir.normalize();
 			var dX = speed * dir.x;
 			var dZ = speed * dir.z; 
 			this.mesh.position.x += dX;
 			this.mesh.position.z += dZ;
+			this.position = this.mesh.position;
 			this.playerTag.position.x = this.mesh.position.x;
 			this.playerTag.position.z = this.mesh.position.z;
 			this.playerTag.lookAt(global.app.camera.position);

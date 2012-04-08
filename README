@@ -2,4 +2,7 @@ To start
 	- cd server
 	- node Server.js
 
-Open client/index.html in Chrome
+Open client/index.html in browser.
+NOTE: To run you must bind a host to the client-folder (you cannot use file://)
+
+
