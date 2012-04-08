@@ -2,8 +2,8 @@ var Player = require("./Creatures/Player");
 var TerrainManager = require("./TerrainManager");
 
 module.exports = function() {
-	//Contains all players
-	var players = [];
+	//Contains all objects
+	var objects = [];
 	//Contains all deleted objects
 	var deletes = [];
 	//Manages terrain-objects
@@ -19,17 +19,15 @@ module.exports = function() {
 				uid : data.uid
 			});
 		player.tick = new Date().getTime();
-		players.push(player);
+		objects.push(player);
 		return player;
 	};
 
-	var updatePlayer = function(data, uid) {
-		for (var i = players.length - 1; i >= 0; i--) {
-			var p = players[i];
-			if(p.getUid() == uid) {
-				p.setPosition(data.position.x, data.position.y, data.position.z);
-				p.setGoalVector(data.goalVector.x, data.goalVector.y, data.goalVector.z);
-				p.setTargetUid(data.targetUid);
+	var synchObject = function(data) {
+		for (var i = objects.length - 1; i >= 0; i--) {
+			var p = objects[i];
+			if(p.getUid() == data.uid) {
+				p.synchronize(data);
 				p.tick = new Date().getTime()
 				break;
 			}
@@ -41,10 +39,10 @@ module.exports = function() {
 			terrainManager.init();
 		},
 		removePlayer : function(uid) {
-			for (var i = players.length - 1; i >= 0; i--) {
-				var p = players[i];
+			for (var i = objects.length - 1; i >= 0; i--) {
+				var p = objects[i];
 				if(p.getUid() == uid) {
-					players.splice(i, 1);
+					objects.splice(i, 1);
 					break;
 				}
 			};
@@ -57,8 +55,8 @@ module.exports = function() {
 
 		handleMessage : function(message, uid) {
 			switch(message.type) {
-				case "update_player":
-					updatePlayer(message.data, uid);
+				case "sync_object":
+					synchObject(message.data);
 					break;
 				default:
 					console.log("Don't know what to do with message of type " + message.type);
@@ -75,16 +73,10 @@ module.exports = function() {
 			
 			//Push player-changes to client
 			data.players = [];
-			for (var i = players.length - 1; i >= 0; i--) {
-				var player = players[i];
+			for (var i = objects.length - 1; i >= 0; i--) {
+				var player = objects[i];
 				if(player.tick >= tick) {
-					data.players.push({
-						name : player.getName(),
-						uid : player.getUid(),
-						position : player.getPosition(),
-						goalVector : player.getGoalVector(),
-						targetUid : player.getTargetUid()
-					});
+					data.players.push(player.getSynchData());
 				}
 					
 			};

@@ -53,25 +53,11 @@ Game.Controllers.Client = (function(options) {
 			}
 		},
 
-		setPlayerPos : function() {
+		syncObject : function(data) {
 			if(connectionOpen == false) return;
-			var data = {
-					position : {
-						x : global.app.world.player.mesh.position.x,
-						y : global.app.world.player.mesh.position.y,
-						z : global.app.world.player.mesh.position.z
-					},
-
-					goalVector : {
-						x : global.app.world.player.goalVector.x,
-						y : global.app.world.player.goalVector.y,
-						z : global.app.world.player.goalVector.z
-					},
-
-					targetUid : global.app.world.player.targetUid
-				};
+			
 			this.connection.send(JSON.stringify({
-				type : "update_player",
+				type : "sync_object",
 				data : data
 			}));
 		}

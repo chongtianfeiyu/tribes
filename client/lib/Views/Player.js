@@ -29,7 +29,7 @@ Game.Views.Player = (function(){
 		},
 
 		init : function() {
-			_.bindAll(this, "update", "changeGoalVector");
+			_.bindAll(this, "update",  "syncToServer");
 			this.goalVector = new THREE.Vector3();
 			// material
 			var color = this.isCurrent == true ? 0xFF0066 : 0xAAEEDD;
@@ -41,14 +41,15 @@ Game.Views.Player = (function(){
 			this.mesh.pointer = this;
 			this.mesh.position.y = 15;
 			this.mesh.overdraw = true;
+			global.app.scene.add(this.mesh);
 
 			var text3d = new THREE.TextGeometry( this.name ,{size: 20, height: 1, curveSegments: 1, font:'helvetiker'});
 			THREE.GeometryUtils.center( text3d );
 			var textMaterial = new THREE.MeshBasicMaterial( { color: 0xA10000, overdraw: true } );
 			this.playerTag = new THREE.Mesh( text3d, textMaterial );
 			this.playerTag.position.y += 90;
+            
             global.app.scene.add(this.playerTag);
-			global.app.scene.add(this.mesh);
 		},
 
 		update : function() {
@@ -86,19 +87,30 @@ Game.Views.Player = (function(){
 		syncToServer : function() {
 			if(this.latestChange > latestSync && this.isCurrent) {
 				latestSync = this.latestChange;
-				global.app.client.setPlayerPos();
+				var data = {
+					uid : this.uid,
+
+					position : {
+						x : this.position.x,
+						y : this.position.y,
+						z : this.position.z
+					},
+
+					goalVector : {
+						x : this.goalVector.x,
+						y : this.goalVector.y,
+						z : this.goalVector.z
+					},
+
+					targetUid : this.targetUid
+				};
+				global.app.client.syncObject(data);
 			}
 		},
 
 		destroy : function() {
 			global.app.scene.remove(this.mesh);
 			global.app.scene.remove(this.playerTag);
-		},
-
-		changeGoalVector : function() {
-			
-
-
 		}
 	}
 })

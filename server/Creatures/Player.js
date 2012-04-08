@@ -33,6 +33,22 @@ module.exports = function(options) {
 		},
 		setTargetUid : function(uid) {
 			targetUid = uid;
+		},
+
+		synchronize : function(data) {
+			this.setPosition(data.position.x, data.position.y, data.position.z);
+			this.setGoalVector(data.goalVector.x, data.goalVector.y, data.goalVector.z);
+			this.setTargetUid(data.targetUid);
+		},
+
+		getSynchData : function() {
+			return {
+				name : this.getName(),
+				uid : this.getUid(),
+				position : this.getPosition(),
+				goalVector : this.getGoalVector(),
+				targetUid : this.getTargetUid()
+			};
 		}
 	}
 };
