@@ -67,7 +67,7 @@ wsServer.on('request', function(request){
 		//Get the changes to the state of the world that has occured since the lastPushTick
 		var data = gameManager.worldstate(connection.lastPushTick);
 		
-		if(data.players.length > 0 || data.terrain.length > 0) {
+		if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
 			connection.lastPushTick = new Date().getTime();
 			send("world_state", data);
 		}

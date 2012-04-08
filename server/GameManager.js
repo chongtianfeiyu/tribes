@@ -2,8 +2,11 @@ var Player = require("./Creatures/Player");
 var TerrainManager = require("./TerrainManager");
 
 module.exports = function() {
-	var worldObjects = [];
+	//Contains all players
 	var players = [];
+	//Contains all deleted objects
+	var deletes = [];
+	//Manages terrain-objects
 	var terrainManager = new TerrainManager();
 
 	var addNewPlayer = function(data) {
@@ -34,7 +37,6 @@ module.exports = function() {
 
 	return {
 		init : function() {
-			console.log("init game-manager");
 			terrainManager.init();
 		},
 		removePlayer : function(uid) {
@@ -45,6 +47,7 @@ module.exports = function() {
 					break;
 				}
 			};
+			deletes.push({tick : new Date().getTime(), uid : uid});
 		},
 
 		addPlayer : function(data) {
@@ -62,29 +65,39 @@ module.exports = function() {
 			}
 		},
 
+		/*
+			Collects changes in world state
+			that has occured since the supplied tick.
+		*/
 		worldstate : function(tick) {
 			var data = {};
+			
+			//Push player-changes to client
 			data.players = [];
 			for (var i = players.length - 1; i >= 0; i--) {
 				var player = players[i];
 				if(player.tick >= tick) {
 					data.players.push({
 						name : player.getName(),
+						uid : player.getUid(),
 						position : player.getPosition(),
 						goalVector : player.getGoalVector()
 					});
 				}
 					
 			};
-			data.terrain = this.getTerrain(tick);
-			return data;
-		},
 
-		/*
-			Returns the terrain-data needed to render the world
-		*/
-		getTerrain : function(tick) {
-			return terrainManager.getTerrain(tick);
+			//Push terrain-changes to client
+			data.terrain = terrainManager.getTerrain(tick);
+			
+			//Push deleted objects to client
+			data.deletes = [];
+			for (var i = deletes.length - 1; i >= 0; i--) {
+				var d = deletes[i];
+				if(d.tick >= tick)
+					data.deletes.push(d.uid);
+			};
+			return data;
 		},
 
 		autoUpdateWorld : function() {

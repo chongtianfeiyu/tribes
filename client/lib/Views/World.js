@@ -34,6 +34,9 @@ Game.Views.World = (function(options){
 			this.terrain.init();
 		},
 
+		/*
+			Synchronizes terrain data with server data 
+		*/
 		setTerrain : function(data) {
 			for (var i = data.length - 1; i >= 0; i--) {
 				var p = data[i];
@@ -84,7 +87,21 @@ Game.Views.World = (function(options){
 					p.goalVector.x = player.goalVector.x;
 					p.goalVector.y = player.goalVector.y;
 					p.goalVector.z = player.goalVector.z;
+					p.uid = player.uid;
+					console.log("New player " + player.uid);
 					this.objects.push(p);
+				}
+			};
+
+			for (var i = data.deletes.length - 1; i >= 0; i--) {
+				var d = data.deletes[i];
+				for(var j = this.objects.length - 1; j >= 0; j--) {
+					var o = this.objects[j];
+					console.log(o.uid + "_ " + d);
+					if(o.uid == d) {
+						o.destroy();
+						this.objects.splice(j, 1);
+					}
 				}
 			};
 		}
