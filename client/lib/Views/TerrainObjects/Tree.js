@@ -1,8 +1,13 @@
 
 Game.Views.TerrainObjects.Tree = (function() {
+	
 	var material = new THREE.MeshBasicMaterial({color: 0xffffff});
+	
 	var flower_texture = THREE.ImageUtils.loadTexture( "/resources/textures/terrain/grass.png");
+	
+	//Contains all meshes (as this is a collection of meshes)
 	var meshes = [];
+	
 	var createTree = function(start, branches) {
 		var geometry = new THREE.Geometry();
 		var particle = new THREE.Particle(material);

@@ -19,9 +19,9 @@ Game.Controllers.CameraController = (function(camera){
 		},
 
 		update : function() {
-			if(Input.mouseHold()) {
-				this.accumulatedMouseDeltaX += Input.deltaX * 0.2;
-				this.accumulatedMouseDeltaY += Input.deltaY;
+			if(MouseInput.mouseHold()) {
+				this.accumulatedMouseDeltaX += MouseInput.deltaX * 0.2;
+				this.accumulatedMouseDeltaY += MouseInput.deltaY;
 				if(this.accumulatedMouseDeltaY > CAMERA_OFFSET_Y_MAX)
 					this.accumulatedMouseDeltaY = CAMERA_OFFSET_Y_MAX;
 				else if(this.accumulatedMouseDeltaY < CAMERA_OFFSET_Y_MIN)

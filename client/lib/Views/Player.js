@@ -21,7 +21,7 @@ Game.Views.Player = (function(){
 		init : function() {
 			_.bindAll(this, "update", "changeGoalVector");
 			if(this.isCurrent == true)
-				Input.addOnClickEvent(this.changeGoalVector);
+				MouseInput.addOnClickEvent(this.changeGoalVector);
 			this.goalVector = new THREE.Vector3();
 			// material
 			var color = this.isCurrent == true ? 0xFF0066 : 0xAAEEDD;
@@ -81,8 +81,8 @@ Game.Views.Player = (function(){
 				t;
 			latestChange = new Date().getTime();
 			// Convert screen coordinates to NDC coordinates -1.0 to 1.0
-	  		x = ( Input.mouseX / window.innerWidth ) * 2 - 1;
-	  		y = - ( Input.mouseY / window.innerHeight ) * 2 + 1;
+	  		x = ( MouseInput.mouseX / window.innerWidth ) * 2 - 1;
+	  		y = - ( MouseInput.mouseY / window.innerHeight ) * 2 + 1;
 	  		
 	  		// Obtain one vector at click position for each side of the cube mapping
 	  		startVector.set( x, y, -1.0 );
