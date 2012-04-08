@@ -12,14 +12,14 @@ Game.Controllers.PlayerController = (function() {
 		mouseMove : function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
-				console.log(intersect.intersectText);
+				console.log("hover:" + intersect.getIntersectText());
 			}
 		},
 
 		mouseClick : function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
-				alert("You have clicked a " + intersect.intersectText);
+				console.log("click:" + intersect.getIntersectText());
 			}
 			else {
 				this.changePlayerGoalVector();

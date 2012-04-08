@@ -63,13 +63,13 @@ Game.Views.TerrainObjects.Tree = (function() {
 
 	return {
 		intersectMesh : null,
-		intersectText : "TREE",
+
 		init : function(start, data) {
 			createTree(start, data);
 			
 			var material = new THREE.MeshBasicMaterial({
 				transparent : true,
-				opacity : 0
+				opacity : 0.1
 			});
 			// cube
 			this.intersectMesh = new THREE.Mesh(new THREE.CubeGeometry(50, 300, 50), material);
@@ -82,6 +82,10 @@ Game.Views.TerrainObjects.Tree = (function() {
 
 		getIntersectMesh : function() {
 			return this.intersectMesh;
+		},
+
+		getIntersectText : function() {
+			return "TREE " + this.uid;
 		},
 
 		destroy : function() {

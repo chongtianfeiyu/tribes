@@ -100,6 +100,10 @@ module.exports = function() {
 			return data;
 		},
 
+		cleanUp : function() {
+			
+		},
+
 		autoUpdateWorld : function() {
 			terrainManager.update();
 		}

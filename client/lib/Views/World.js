@@ -72,6 +72,7 @@ Game.Views.World = (function(options){
 					case "tree":
 						var tree = new Game.Views.TerrainObjects.Tree()
 						tree.init(p.position, p.data);
+						tree.uid = p.uid;
 						this.addObject(tree);
 						break;
 				}
@@ -87,8 +88,9 @@ Game.Views.World = (function(options){
 				var found = false;
 				for (var j = this.objects.length - 1; j >= 0; j--) {
 					var p = this.objects[j];
-					if(p.name == player.name)
+					if(p.uid == player.uid)
 					{
+						console.log("update " + p.name);
 						p.mesh.position.x = player.position.x;
 						p.mesh.position.z = player.position.z;
 						p.mesh.position.y = player.position.y;
@@ -100,6 +102,7 @@ Game.Views.World = (function(options){
 					}
 				};
 				if(found == false) {
+					console.log("add " + p.name);
 					var p = new Game.Views.Player();
 					p.name = player.name;
 					p.init();
@@ -110,9 +113,7 @@ Game.Views.World = (function(options){
 					p.goalVector.y = player.goalVector.y;
 					p.goalVector.z = player.goalVector.z;
 					p.uid = player.uid;
-					p.meshesIndex = this.meshes.push(p.mesh);
-					console.log("New player " + player.uid);
-					this.objects.push(p);
+					this.addObject(p);
 				}
 			};
 
@@ -120,8 +121,8 @@ Game.Views.World = (function(options){
 				var d = data.deletes[i];
 				for(var j = this.objects.length - 1; j >= 0; j--) {
 					var o = this.objects[j];
-					console.log(o.uid + "_ " + d);
 					if(o.uid == d) {
+						console.log("delete " + o.name);
 						o.destroy();
 						this.meshes.splice(o.meshesIndex);
 						this.objects.splice(j, 1);

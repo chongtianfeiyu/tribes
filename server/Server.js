@@ -15,10 +15,15 @@ for (var i = 10 - 1; i >= 0; i--) {
 	gameManager.autoUpdateWorld();
 };
 
-//Auto-update game every 10 second
+//Auto-update game every 60 seconds
 setInterval(function() {
 	gameManager.autoUpdateWorld();
-}, 10000);
+}, 60000);
+
+//cleanup-cycle every 5 seconds
+setInterval(function() {
+	gameManager.cleanUp();
+}, 5000);
 
 //Setup server
 var server = http.createServer(function(request, response){
@@ -60,6 +65,7 @@ wsServer.on('request', function(request){
 
 	connection.on('close', function(connection){
 		gameManager.removePlayer(uid);
+		console.log("Delete player " + uid);
 	});
 
 	setInterval(function() {

@@ -2,13 +2,13 @@ Game.Views.Player = (function(){
 	
 	var speed = 10;
 	var rotationSpeed = 0.1;
-	var latestChange = new Date().getTime();
 	var latestSync = 0;
 
 	return {
 		//The current position of the player
 		position : null,
 		mesh : null,
+		latestChange : new Date().getTime(),
 
 		//The current goal-vector (when moving along the terrain)
 		goalVector : null,
@@ -18,7 +18,10 @@ Game.Views.Player = (function(){
 		uid : null,
 		//Indicates whether this is the player that the user is in control of
 		isCurrent : false,
-		intersectText : "Player",
+		
+		getIntersectText : function() {
+			return this.name;
+		},
 
 		getIntersectMesh : function() {
 			return this.mesh;
@@ -59,7 +62,7 @@ Game.Views.Player = (function(){
 			this.playerTag.position.z = this.mesh.position.z;
 			this.playerTag.lookAt(global.app.camera.position);
 			if((dX + dZ) != 0) {
-				lastChange = new Date().getTime();
+				this.lastChange = new Date().getTime();
 			}
 				
 			this.syncToServer();
@@ -67,8 +70,8 @@ Game.Views.Player = (function(){
 		},
 
 		syncToServer : function() {
-			if(latestChange > latestSync && this.isCurrent) {
-				latestSync = latestChange;
+			if(this.latestChange > latestSync && this.isCurrent) {
+				latestSync = this.latestChange;
 				global.app.client.setPlayerPos();
 			}
 		},
