@@ -124,8 +124,7 @@ Game.Views.World = (function(options){
 					if(o.uid == d) {
 						console.log("delete " + o.name);
 						o.destroy();
-						this.meshes.splice(o.meshesIndex);
-						this.objects.splice(j, 1);
+						this.removeObject(o);
 					}
 				}
 			};

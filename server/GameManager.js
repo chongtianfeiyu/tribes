@@ -100,8 +100,20 @@ module.exports = function() {
 			return data;
 		},
 
+		/* 
+			Clean up state variables
+		*/
+
 		cleanUp : function() {
+			var now = new Date().getTime();
 			
+			//Remove all the deletes that are older than 1s.
+			for (var i = deletes.length - 1; i >= 0; i--) {
+				var d = deletes[i];
+				if((now-d.tick)>1000) {
+					deletes.splice(i);
+				}
+			};
 		},
 
 		autoUpdateWorld : function() {
