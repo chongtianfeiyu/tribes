@@ -66,7 +66,7 @@ var MouseInput = {
 		MouseInput.onClickDelegates.push(f);
 	},
 
-	adOnMoveEvent : function(f) {
+	addOnMoveEvent : function(f) {
 		MouseInput.onMoveDelegates.push(f);
 	}
 };

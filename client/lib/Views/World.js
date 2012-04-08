@@ -3,11 +3,24 @@ Game.Views.World = (function(options){
 	return {
 		terrain : null, 
 		objects : [],
+		intersectMeshes : [],
+			
 
 		init : function() {
 			_.bindAll(this, "setState", "setTerrain");
 			this.initTerrain();
 			this.initPlayer();
+		},
+
+		addObject : function(o) {
+			o.objectsIndex = this.objects.push(o)-1;
+			if(o.getIntersectMesh)
+				o.intersectMeshIndex = this.intersectMeshes.push(o.getIntersectMesh())-1;
+		},
+
+		removeObject : function(o) {
+			this.objects.splice(o.objectsIndex, 1);
+			this.intersectMeshes.splice(o.intersectMeshIndex, 1);
 		},
 
 		initPlayer : function() {
@@ -16,7 +29,7 @@ Game.Views.World = (function(options){
 			this.player.uid = options.uid;
 			this.player.isCurrent = true;
 			this.player.init();
-			this.objects.push(this.player);
+			this.addObject(this.player);
 		},
 
 		update : function() {
@@ -34,23 +47,32 @@ Game.Views.World = (function(options){
 			this.terrain.init();
 		},
 
+		findFromUid : function(uid) {
+			for (var i = this.objects.length - 1; i >= 0; i--) {
+				var o = this.objects[i];
+				if(o.uid == uid)
+					return o;
+			};
+		},
+
 		/*
 			Synchronizes terrain data with server data 
 		*/
 		setTerrain : function(data) {
 			for (var i = data.length - 1; i >= 0; i--) {
 				var p = data[i];
-				var existing = this.objects[p.uid];
+				var existing = this.findFromUid(p.uid);
 				
 				if(existing != undefined) {
 					existing.destroy();
+					this.removeObject(existing);
 					existing = null;	
 				}
 				switch(p.classTag) {
 					case "tree":
 						var tree = new Game.Views.TerrainObjects.Tree()
 						tree.init(p.position, p.data);
-						this.objects[p.uid] = tree;
+						this.addObject(tree);
 						break;
 				}
 				
@@ -88,6 +110,7 @@ Game.Views.World = (function(options){
 					p.goalVector.y = player.goalVector.y;
 					p.goalVector.z = player.goalVector.z;
 					p.uid = player.uid;
+					p.meshesIndex = this.meshes.push(p.mesh);
 					console.log("New player " + player.uid);
 					this.objects.push(p);
 				}
@@ -100,6 +123,7 @@ Game.Views.World = (function(options){
 					console.log(o.uid + "_ " + d);
 					if(o.uid == d) {
 						o.destroy();
+						this.meshes.splice(o.meshesIndex);
 						this.objects.splice(j, 1);
 					}
 				}

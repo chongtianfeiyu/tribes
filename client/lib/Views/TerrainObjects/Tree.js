@@ -62,8 +62,26 @@ Game.Views.TerrainObjects.Tree = (function() {
 	};
 
 	return {
+		intersectMesh : null,
+		intersectText : "TREE",
 		init : function(start, data) {
 			createTree(start, data);
+			
+			var material = new THREE.MeshBasicMaterial({
+				transparent : true,
+				opacity : 0
+			});
+			// cube
+			this.intersectMesh = new THREE.Mesh(new THREE.CubeGeometry(50, 300, 50), material);
+			global.app.scene.add(this.intersectMesh);
+			this.intersectMesh.pointer = this;
+			this.intersectMesh.position.x = start.x;
+			this.intersectMesh.position.y = start.y;
+			this.intersectMesh.position.z = start.z;
+		},
+
+		getIntersectMesh : function() {
+			return this.intersectMesh;
 		},
 
 		destroy : function() {

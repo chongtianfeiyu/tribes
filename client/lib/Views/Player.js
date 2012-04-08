@@ -9,6 +9,7 @@ Game.Views.Player = (function(){
 		//The current position of the player
 		position : null,
 		mesh : null,
+
 		//The current goal-vector (when moving along the terrain)
 		goalVector : null,
 		//The name of the player
@@ -17,11 +18,14 @@ Game.Views.Player = (function(){
 		uid : null,
 		//Indicates whether this is the player that the user is in control of
 		isCurrent : false,
+		intersectText : "Player",
+
+		getIntersectMesh : function() {
+			return this.mesh;
+		},
 
 		init : function() {
 			_.bindAll(this, "update", "changeGoalVector");
-			if(this.isCurrent == true)
-				MouseInput.addOnClickEvent(this.changeGoalVector);
 			this.goalVector = new THREE.Vector3();
 			// material
 			var color = this.isCurrent == true ? 0xFF0066 : 0xAAEEDD;
@@ -30,6 +34,7 @@ Game.Views.Player = (function(){
 			});
 			// cube
 			this.mesh = new THREE.Mesh(new THREE.CubeGeometry(30, 30, 30), material);
+			this.mesh.pointer = this;
 			this.mesh.position.y = 15;
 			this.mesh.overdraw = true;
 
@@ -74,35 +79,7 @@ Game.Views.Player = (function(){
 		},
 
 		changeGoalVector : function() {
-			var 
-				startVector = new THREE.Vector3(), 
-				endVector = new THREE.Vector3(), 
-				dirVector = new THREE.Vector3(), 
-				t;
-			latestChange = new Date().getTime();
-			// Convert screen coordinates to NDC coordinates -1.0 to 1.0
-	  		x = ( MouseInput.mouseX / window.innerWidth ) * 2 - 1;
-	  		y = - ( MouseInput.mouseY / window.innerHeight ) * 2 + 1;
-	  		
-	  		// Obtain one vector at click position for each side of the cube mapping
-	  		startVector.set( x, y, -1.0 );
-	  		endVector.set( x, y, 1.0 );
-	  	
-	  		// Convert coordinates back to world coordinates
-	  		startVector = global.app.projector.unprojectVector( startVector, global.app.camera );
-	  		endVector = global.app.projector.unprojectVector( endVector, global.app.camera );
-	  	
-	  		// Get direction from startVector to endVector
-	  		dirVector.sub( endVector, startVector );
-	  		dirVector.normalize();
-	  	
-	  		// Find intersection where y = 0
-	  		t = startVector.y / - ( dirVector.y );
-	  
-	  		// Start walking
-	  		this.goalVector.set( startVector.x + t * dirVector.x,
-	  			startVector.y + t * dirVector.y,
-	  			startVector.z + t * dirVector.z );
+			
 
 
 		}

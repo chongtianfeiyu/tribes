@@ -29,6 +29,7 @@ Game.Controllers.App = (function(options){
 		scene : null,
 		world : null,
 		cameraController : null,
+		mouseSelector : null,
 		client : null,
 
 		init : function() {
@@ -49,6 +50,7 @@ Game.Controllers.App = (function(options){
 			this.renderer.setSize( WIDTH, HEIGHT );
 			document.body.appendChild(this.renderer.domElement);
 
+			//Initialize world
 			this.world = new Game.Views.World({
 				name : options.name,
 				uid : options.uid
@@ -56,6 +58,8 @@ Game.Controllers.App = (function(options){
 			});
 			this.world.init();
 
+
+			//Initialize lighting
 			var ambient = new THREE.AmbientLight( 0x111111);
 			this.scene.add( ambient );
 
@@ -71,6 +75,10 @@ Game.Controllers.App = (function(options){
 			this.cameraController = new Game.Controllers.CameraController();
 			this.cameraController.init(this.camera, this.world.player);
 			this.cameraController.update();
+
+			//Initialize mouse-selector-controller
+			this.playerController = new Game.Controllers.PlayerController();
+			this.playerController.init();
 		},
 
 
