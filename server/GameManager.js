@@ -1,4 +1,4 @@
-var Player = require("./Player");
+var Player = require("./Creatures/Player");
 var TerrainManager = require("./TerrainManager");
 
 module.exports = function() {

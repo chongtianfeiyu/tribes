@@ -6,11 +6,16 @@ Game.Views.Player = (function(){
 	var latestSync = 0;
 
 	return {
+		//The current position of the player
 		position : null,
 		mesh : null,
+		//The current goal-vector (when moving along the terrain)
 		goalVector : null,
+		//The name of the player
 		name : null,
+		//The unique identifier of the player
 		uid : null,
+		//Indicates whether this is the player that the user is in control of
 		isCurrent : false,
 
 		init : function() {
@@ -19,8 +24,9 @@ Game.Views.Player = (function(){
 				Input.addOnClickEvent(this.changeGoalVector);
 			this.goalVector = new THREE.Vector3();
 			// material
+			var color = this.isCurrent == true ? 0xFF0066 : 0xAAEEDD;
 			var material = new THREE.MeshLambertMaterial({
-				color: 0xAADDEE
+				color: color
 			});
 			// cube
 			this.mesh = new THREE.Mesh(new THREE.CubeGeometry(30, 30, 30), material);

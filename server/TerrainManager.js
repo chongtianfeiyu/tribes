@@ -1,6 +1,6 @@
 /* Manages terrain-objects ( trees etc ) */
 
-var Tree = require("./TerrainObjects/Tree");
+var Tree = require("./Terrain/Tree");
 
 module.exports = (function(){
 	var objects = [];
