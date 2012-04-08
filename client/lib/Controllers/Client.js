@@ -1,7 +1,8 @@
 Game.Controllers.Client = (function(options) {
 
 	var URL = "ws://localhost:1337";
-	var USER_NAME = options.user;
+	var USER_NAME = options.name;
+	var UID = options.uid;
 	var connectionOpen = false;
 	return {
 		
@@ -29,6 +30,7 @@ Game.Controllers.Client = (function(options) {
 						type : "new_player", 
 						data : { 
 							name : USER_NAME,
+							uid : UID,
 							position : { x : 0, y : 15, z : 0},
 							goalVector : { x : 0, y : 0, z : 0},
 							rotation : { x : 0, y : 0, z : 0}

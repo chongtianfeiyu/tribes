@@ -10,6 +10,7 @@ Game.Views.Player = (function(){
 		mesh : null,
 		goalVector : null,
 		name : null,
+		uid : null,
 		isCurrent : false,
 
 		init : function() {

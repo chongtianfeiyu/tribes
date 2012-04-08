@@ -4,10 +4,13 @@ module.exports = function(options) {
 	var rotation = options.rotation;
 	var index = options.index;
 	var goalVector = options.goalVector;
-	
+	var uid = options.uid;
 	return {
 		getPosition : function() {
 			return position;
+		},
+		getUid : function() {
+			return uid;
 		},
 		getGoalVector : function() {
 			return goalVector;

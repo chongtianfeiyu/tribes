@@ -12,7 +12,8 @@ Game.Views.World = (function(options){
 
 		initPlayer : function() {
 			this.player = new Game.Views.Player();
-			this.player.name = options.user;
+			this.player.name = options.name;
+			this.player.uid = options.uid;
 			this.player.isCurrent = true;
 			this.player.init();
 			this.objects.push(this.player);

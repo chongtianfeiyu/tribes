@@ -7,16 +7,23 @@ module.exports = function() {
 	var terrainManager = new TerrainManager();
 
 	var addNewPlayer = function(data) {
-		var player = new Player({name : data.name, position : data.position, rotation : data.rotation, goalVector : data.goalVector});
+		var player = new Player(
+			{
+				name : data.name, 
+				position : data.position, 
+				rotation : data.rotation, 
+				goalVector : data.goalVector,
+				uid : data.uid
+			});
 		player.tick = new Date().getTime();
 		players.push(player);
 		return player;
 	};
 
-	var updatePlayer = function(data, name) {
+	var updatePlayer = function(data, uid) {
 		for (var i = players.length - 1; i >= 0; i--) {
 			var p = players[i];
-			if(p.getName() == name) {
+			if(p.getUid() == uid) {
 				p.setPosition(data.position.x, data.position.y, data.position.z);
 				p.setGoalVector(data.goalVector.x, data.goalVector.y, data.goalVector.z);
 				p.tick = new Date().getTime()
@@ -30,10 +37,10 @@ module.exports = function() {
 			console.log("init game-manager");
 			terrainManager.init();
 		},
-		removePlayer : function(name) {
+		removePlayer : function(uid) {
 			for (var i = players.length - 1; i >= 0; i--) {
 				var p = players[i];
-				if(p.getName() == name) {
+				if(p.getUid() == uid) {
 					players.splice(i, 1);
 					break;
 				}
@@ -44,10 +51,10 @@ module.exports = function() {
 			return addNewPlayer(data);
 		},
 
-		handleMessage : function(message, name) {
+		handleMessage : function(message, uid) {
 			switch(message.type) {
 				case "update_player":
-					updatePlayer(message.data, name);
+					updatePlayer(message.data, uid);
 					break;
 				default:
 					console.log("Don't know what to do with message of type " + message.type);

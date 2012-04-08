@@ -10,13 +10,13 @@ var GameManager = require('./GameManager');
 var gameManager = new GameManager();
 gameManager.init();
 console.log("Simulating world for a bit");
-for (var i = 20 - 1; i >= 0; i--) {
+for (var i = 10 - 1; i >= 0; i--) {
 	gameManager.autoUpdateWorld();
 };
 console.log("Done!");
 setInterval(function() {
 	gameManager.autoUpdateWorld();
-}, 30000);
+}, 5000);
 
 //Setup server
 var server = http.createServer(function(request, response){
@@ -36,27 +36,28 @@ wsServer.on('request', function(request){
 		connection.sendUTF(JSON.stringify({type : type, data : data}));
 	}
 	
-	var name = null;
+	//Contains the uid of the current player
+	var uid = null;
 
 	connection.on('message', function(message){
 		var msg = JSON.parse(message.utf8Data);
 		if(msg.type == "new_player") {
 			var player = gameManager.addPlayer(msg.data);
-			name = player.getName();
-			console.log(name + " is connected");
+			uid = player.getUid();
+			console.log(uid + " is connected");
 			send("world_state", gameManager.worldstate(0));
 		}
 		else {
-			var res = gameManager.handleMessage(msg, name);
+			var res = gameManager.handleMessage(msg, uid);
 		}
 	});
 
 	connection.on('close', function(connection){
-		gameManager.removePlayer(name);
+		gameManager.removePlayer(uid);
 	});
 
 	setInterval(function() {
-		if(name == null) return;
+		if(uid == null) return;
 		var data = gameManager.worldstate(connection.lastPushTick);
 		
 		if(data.players.length > 0 || data.terrain.length > 0) {
@@ -64,5 +65,5 @@ wsServer.on('request', function(request){
 			send("world_state", data);
 		}
 			
-	}, 60);
+	}, 10);
 });

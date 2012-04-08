@@ -36,7 +36,7 @@ Game.Controllers.App = (function(options){
 			_.bindAll(this, "animate", "render", "update", "start");
 			
 			//Server-client
-			this.client = new Game.Controllers.Client({user : options.user});
+			this.client = new Game.Controllers.Client({uid : options.uid, name : options.name});
 			this.client.init();
 
 			//Initialize scene
@@ -50,7 +50,8 @@ Game.Controllers.App = (function(options){
 			document.body.appendChild(this.renderer.domElement);
 
 			this.world = new Game.Views.World({
-				user : options.user
+				name : options.name,
+				uid : options.uid
 
 			});
 			this.world.init();
