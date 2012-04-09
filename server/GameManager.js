@@ -19,19 +19,14 @@ module.exports = function() {
 				uid : data.uid
 			});
 		player.tick = new Date().getTime();
-		objects.push(player);
+		objects[player.uid] = player;
 		return player;
 	};
 
 	var synchObject = function(data) {
-		for (var i = objects.length - 1; i >= 0; i--) {
-			var p = objects[i];
-			if(p.uid == data.uid) {
-				p.synchronize(data);
-				p.tick = new Date().getTime()
-				break;
-			}
-		};
+		var o = objects[data.uid];
+		o.synchronize(data);
+		o.tick = new Date().getTime();
 	};
 
 	return {
@@ -41,6 +36,7 @@ module.exports = function() {
 			var start = {x : 100, y : 0, z : 100};
 			tree.init(start);
 			tree.tick = 0;
+			terrainObjects[tree.uid] = tree;
 			terrainObjects.push(tree);
 			for(var i = 0; i<10; i++) {
 				this.autoUpdateTerrain();
@@ -52,22 +48,13 @@ module.exports = function() {
 		},
 
 		update : function() {
-			for (var i = objects.length - 1; i >= 0; i--) {
-				var o = objects[i];
-				if(o.update) {
-					o.update();
-				}
-			};
+			for(uid in objects) {
+				objects[uid].update();
+			}
 		},
 
 		removePlayer : function(uid) {
-			for (var i = objects.length - 1; i >= 0; i--) {
-				var p = objects[i];
-				if(p.uid == uid) {
-					objects.splice(i, 1);
-					break;
-				}
-			};
+			delete objects[uid];
 			deletes.push({tick : new Date().getTime(), uid : uid});
 		},
 
@@ -95,20 +82,20 @@ module.exports = function() {
 			
 			//Push player-changes to client
 			data.players = [];
-			for (var i = objects.length - 1; i >= 0; i--) {
-				var player = objects[i];
+			for(uid in objects){
+				var player = objects[uid];
 				if(player.tick >= tick) {
 					data.players.push(player);
 				}	
-			};
+			}
 
 			//Push terrain-changes to client
 			data.terrain = [];
-			for (var i = terrainObjects.length - 1; i >= 0; i--) {
-				var o = terrainObjects[i];
+			for(uid in terrainObjects){
+				var o = terrainObjects[uid];
 				if(o.tick > tick)
 					data.terrain.push(o);
-			};
+			}
 			
 			//Push deleted objects to client
 			data.deletes = [];
@@ -141,8 +128,8 @@ module.exports = function() {
 			Generates new terrain-objects/grows trees etc.
 		*/
 		autoUpdateTerrain : function() {
-			for (var i = terrainObjects.length - 1; i >= 0; i--) {
-				var o = terrainObjects[i];
+			for(uid in terrainObjects) {
+				var o = terrainObjects[uid];
 				if(!o.fullyGrown()){
 					o.tick =  new Date().getTime();
 					o.grow();
@@ -156,7 +143,7 @@ module.exports = function() {
 					child.tick = new Date().getTime();
 					terrainObjects.push(child);
 				}
-			};
+			}
 		}
 	}
 }

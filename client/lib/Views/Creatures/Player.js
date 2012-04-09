@@ -30,6 +30,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	*/
 	animationUpdate : function() {
 		this.playerTag.lookAt(global.app.camera.position);
+		this.syncToServer();
 	},
 
 	update : function(data) {
@@ -51,6 +52,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 
 	syncToServer : function() {
 		if(this.latestChange > this.latestSync && this.isCurrent) {
+			console.log("Server push");
 			this.latestSync = this.latestChange;
 			var data = {
 				uid : this.uid,
