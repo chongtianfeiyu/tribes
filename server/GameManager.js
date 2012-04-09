@@ -38,11 +38,12 @@ module.exports = function() {
 			tree.tick = 0;
 			terrainObjects[tree.uid] = tree;
 			terrainObjects.push(tree);
+			/*
 			for(var i = 0; i<10; i++) {
 				this.autoUpdateTerrain();
-			}
+			}*/
 
-			setInterval(this.autoUpdateTerrain, 60000);
+			setInterval(this.autoUpdateTerrain, 3000);
 			setInterval(this.update, 10);
 			setInterval(this.cleanUp, 5000);
 		},
