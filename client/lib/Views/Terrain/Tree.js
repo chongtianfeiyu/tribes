@@ -52,8 +52,8 @@ Game.Views.Terrain.Tree = (function() {
 			var flowerMesh = new THREE.Mesh(
 				new THREE.SphereGeometry(
 					branches.f, 
-					10, 
-					10), material);
+					7, 
+					7), material);
 			flowerMesh.position.x = newx;
 			flowerMesh.position.y = newy;
 			flowerMesh.position.z = newz;
