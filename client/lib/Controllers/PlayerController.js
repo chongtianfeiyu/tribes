@@ -61,6 +61,7 @@ Game.Controllers.PlayerController = (function() {
 	  		global.app.world.player.targetUid = null;
 	  		global.app.world.player.goalVector = goalVector;
 	  		global.app.world.player.latestChange = new Date().getTime();
+	  		global.app.world.player.syncToServer();
 			
 		},
 

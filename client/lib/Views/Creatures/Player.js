@@ -52,37 +52,15 @@ Game.Views.Player = (function(){
             global.app.scene.add(this.playerTag);
 		},
 
-		update : function() {
-			var dir = new THREE.Vector3();
-			if(this.targetUid != null) {
-				var target = global.app.world.findFromUid(this.targetUid);
-				//Target lost
-				if(target == null) {
-					this.targetUid = null;
-				}
-				else {
-					var targetPos = target.position;
-					this.goalVector.set(targetPos.x, targetPos.y, targetPos.z);
-				}	
-				this.lastChange = new Date().getTime();
+		update : function(data) {
+			if(data.position) {
+				console.log("Set new pos");
+				this.position = data.position;
+				this.mesh.position.x = data.position.x;
+				this.mesh.position.z = data.position.z;
+				this.playerTag.position.x = data.position.x;
+				this.playerTag.position.z = data.position.z;
 			}
-
-			dir.sub(this.goalVector, this.mesh.position);
-			dir.normalize();
-			var dX = speed * dir.x;
-			var dZ = speed * dir.z; 
-			this.mesh.position.x += dX;
-			this.mesh.position.z += dZ;
-			this.position = this.mesh.position;
-			this.playerTag.position.x = this.mesh.position.x;
-			this.playerTag.position.z = this.mesh.position.z;
-			this.playerTag.lookAt(global.app.camera.position);
-			if((dX + dZ) != 0) {
-				this.lastChange = new Date().getTime();
-			}
-				
-			this.syncToServer();
-			
 		},
 
 		syncToServer : function() {

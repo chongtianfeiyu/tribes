@@ -91,9 +91,7 @@ Game.Controllers.App = (function(options){
 
 		animate : function() {
 			requestAnimationFrame( this.animate );
-			this.world.update();
 			this.cameraController.update();
-			
 			this.render();
 		},
 

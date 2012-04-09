@@ -5,6 +5,9 @@ var SERVER_PORT = 1337;
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var GameManager = require('./GameManager');
+var CreatureBase = require('./Creatures/CreatureBase');
+
+var creature = new CreatureBase({position : "asd"});
 
 //Globals
 
@@ -46,9 +49,9 @@ wsServer.on('request', function(request){
 		// from time 0 for them to get the full list of objects
 		if(msg.type == "new_player") {
 			var player = gameManager.addPlayer(msg.data);
-			uid = player.getUid();
+			uid = player.uid;
 			clients[uid] = connection;
-			console.log(uid + " is connected");
+			console.log(uid + " is connected (" + player.name + ")");
 			send(connection, "world_state", gameManager.worldstate(0));
 		}
 		else {

@@ -39,16 +39,6 @@ Game.Controllers.World = (function(options){
 			this.addObject(this.player);
 		},
 
-		update : function() {
-			for (var i = this.objects.length - 1; i >= 0; i--) {
-				var o = this.objects[i];
-				if(o.update)
-					o.update();
-			};
-
-			this.player.update();
-		},
-
 		initTerrain : function() {
 			this.terrain = new Terrain();
 			this.terrain.init();
@@ -97,14 +87,7 @@ Game.Controllers.World = (function(options){
 					var p = this.objects[j];
 					if(p.uid == player.uid)
 					{
-						console.log("update " + p.name + "->" + player.targetUid);
-						p.mesh.position.x = player.position.x;
-						p.mesh.position.z = player.position.z;
-						p.mesh.position.y = player.position.y;
-						p.goalVector.x = player.goalVector.x;
-						p.goalVector.y = player.goalVector.y;
-						p.goalVector.z = player.goalVector.z;
-						p.targetUid = player.targetUid;
+						p.update(player);
 						found = true;
 						break;
 					}
@@ -113,15 +96,9 @@ Game.Controllers.World = (function(options){
 					console.log("add " + p.name);
 					var p = new Game.Views.Player();
 					p.name = player.name;
-					p.init();
-					p.mesh.position.x = player.position.x;
-					p.mesh.position.z = player.position.z;
-					p.mesh.position.y = player.position.y;
-					p.goalVector.x = player.goalVector.x;
-					p.goalVector.y = player.goalVector.y;
-					p.goalVector.z = player.goalVector.z;
-					p.targetUid = player.targetUid;
 					p.uid = player.uid;
+					p.init();
+					p.update(player);
 					this.addObject(p);
 				}
 			};

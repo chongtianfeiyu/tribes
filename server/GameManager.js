@@ -26,7 +26,7 @@ module.exports = function() {
 	var synchObject = function(data) {
 		for (var i = objects.length - 1; i >= 0; i--) {
 			var p = objects[i];
-			if(p.getUid() == data.uid) {
+			if(p.uid == data.uid) {
 				p.synchronize(data);
 				p.tick = new Date().getTime()
 				break;
@@ -47,13 +47,23 @@ module.exports = function() {
 			}
 
 			setInterval(this.autoUpdateTerrain, 60000);
+			setInterval(this.update, 10);
 			setInterval(this.cleanUp, 5000);
+		},
+
+		update : function() {
+			for (var i = objects.length - 1; i >= 0; i--) {
+				var o = objects[i];
+				if(o.update) {
+					o.update();
+				}
+			};
 		},
 
 		removePlayer : function(uid) {
 			for (var i = objects.length - 1; i >= 0; i--) {
 				var p = objects[i];
-				if(p.getUid() == uid) {
+				if(p.uid == uid) {
 					objects.splice(i, 1);
 					break;
 				}
@@ -88,7 +98,7 @@ module.exports = function() {
 			for (var i = objects.length - 1; i >= 0; i--) {
 				var player = objects[i];
 				if(player.tick >= tick) {
-					data.players.push(player.getSynchData());
+					data.players.push(player);
 				}	
 			};
 
