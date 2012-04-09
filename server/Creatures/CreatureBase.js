@@ -1,0 +1,1 @@
+var cls = require("../packages/Class");

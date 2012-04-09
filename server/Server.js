@@ -24,6 +24,7 @@ server.listen(SERVER_PORT, function(){});
 
 //setup WebSocket-server
 var wsServer = new WebSocketServer({httpServer : server});
+
 //Sends data to client
 var send = function(connection, type, data){
 	connection.sendUTF(JSON.stringify({type : type, data : data}));
@@ -41,6 +42,8 @@ wsServer.on('request', function(request){
 
 	connection.on('message', function(message){
 		var msg = JSON.parse(message.utf8Data);
+		//When we add a new player, we push them to the connection-list, and push the world state
+		// from time 0 for them to get the full list of objects
 		if(msg.type == "new_player") {
 			var player = gameManager.addPlayer(msg.data);
 			uid = player.getUid();
@@ -61,16 +64,19 @@ wsServer.on('request', function(request){
 
 });
 
+//Push-cycle. 
+var lastPushTick = 0;
+
 setInterval(function() {
-	for(uid in clients) {
-		var connection = clients[uid];
-		//Get the changes to the state of the world that has occured since the lastPushTick
-		var data = gameManager.worldstate(connection.lastPushTick);
-		
-		if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
-			connection.lastPushTick = new Date().getTime();
+	//Get the changes to the state of the world that has occured since the lastPushTick
+	var data = gameManager.worldstate(lastPushTick);
+	lastPushTick = new Date().getTime();
+	if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
+		for(uid in clients) {
+			var connection = clients[uid];
 			send(connection, "world_state", data);
 		}
 	}
+	
 }, 5);
 
