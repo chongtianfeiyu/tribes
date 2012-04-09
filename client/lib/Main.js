@@ -1,3 +1,4 @@
+//Contains the global reference to the app-object.
 var global = {
 
 };

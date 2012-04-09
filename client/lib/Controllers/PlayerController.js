@@ -12,7 +12,7 @@ Game.Controllers.PlayerController = (function() {
 		mouseMove : function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
-				console.log("hover:" + intersect.getIntersectText());
+				
 			}
 		},
 

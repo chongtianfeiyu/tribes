@@ -11,19 +11,6 @@ var GameManager = require('./GameManager');
 //Initialize the game and simulate it for 10 turns
 var gameManager = new GameManager();
 gameManager.init();
-for (var i = 10 - 1; i >= 0; i--) {
-	gameManager.autoUpdateTerrain();
-};
-
-//Auto-update game every 60 seconds
-setInterval(function() {
-	gameManager.autoUpdateTerrain();
-}, 60000);
-
-//cleanup-cycle every 5 seconds
-setInterval(function() {
-	gameManager.cleanUp();
-}, 5000);
 
 //Setup server
 var server = http.createServer(function(request, response){
@@ -80,3 +67,4 @@ wsServer.on('request', function(request){
 			
 	}, 10);
 });
+

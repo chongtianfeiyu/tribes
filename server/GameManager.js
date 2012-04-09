@@ -1,13 +1,13 @@
 var Player = require("./Creatures/Player");
-var TerrainManager = require("./TerrainManager");
+var Tree = require("./Terrain/Tree");
 
 module.exports = function() {
-	//Contains all objects
+	//Contains all creature-objects
 	var objects = [];
-	//Contains all deleted objects
+	//Contains all terrain-objects
+	var terrainObjects = [];
+	//Contains all deleted objects uid
 	var deletes = [];
-	//Manages terrain-objects
-	var terrainManager = new TerrainManager();
 
 	var addNewPlayer = function(data) {
 		var player = new Player(
@@ -35,9 +35,21 @@ module.exports = function() {
 	};
 
 	return {
+		
 		init : function() {
-			terrainManager.init();
+			var tree = new Tree();
+			var start = {x : 100, y : 0, z : 100};
+			tree.init(start);
+			tree.tick = 0;
+			terrainObjects.push(tree);
+			for(var i = 0; i<10; i++) {
+				this.autoUpdateTerrain();
+			}
+
+			setInterval(this.autoUpdateTerrain, 3000);
+			setInterval(this.cleanUp, 5000);
 		},
+
 		removePlayer : function(uid) {
 			for (var i = objects.length - 1; i >= 0; i--) {
 				var p = objects[i];
@@ -77,12 +89,16 @@ module.exports = function() {
 				var player = objects[i];
 				if(player.tick >= tick) {
 					data.players.push(player.getSynchData());
-				}
-					
+				}	
 			};
 
 			//Push terrain-changes to client
-			data.terrain = terrainManager.getTerrain(tick);
+			data.terrain = [];
+			for (var i = terrainObjects.length - 1; i >= 0; i--) {
+				var o = terrainObjects[i];
+				if(o.tick > tick)
+					data.terrain.push(o);
+			};
 			
 			//Push deleted objects to client
 			data.deletes = [];
@@ -115,7 +131,22 @@ module.exports = function() {
 			Generates new terrain-objects/grows trees etc.
 		*/
 		autoUpdateTerrain : function() {
-			terrainManager.update();
+			for (var i = terrainObjects.length - 1; i >= 0; i--) {
+				var o = terrainObjects[i];
+				if(!o.fullyGrown()){
+					o.tick =  new Date().getTime();
+					o.grow();
+				}
+
+				else if(o.childCount == undefined)
+					o.childCount = Math.random() * 2;
+				else if(o.childCount <= 2) {
+					o.childCount += 1;
+					var child = o.breed();
+					child.tick = new Date().getTime();
+					terrainObjects.push(child);
+				}
+			};
 		}
 	}
 }

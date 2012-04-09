@@ -66,6 +66,7 @@ Game.Views.Player = (function(){
 				}	
 				this.lastChange = new Date().getTime();
 			}
+
 			dir.sub(this.goalVector, this.mesh.position);
 			dir.normalize();
 			var dX = speed * dir.x;
