@@ -10,7 +10,6 @@ module.exports = CreatureBase = cls.Class.extend({
 	},
 
 	synchronize : function(data) {
-		this.position = data.position;
 		this.goalVector = data.goalVector;
 		this.targetUid = data.targetUid;
 	},

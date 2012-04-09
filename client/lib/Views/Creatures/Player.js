@@ -55,12 +55,6 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 			var data = {
 				uid : this.uid,
 
-				position : {
-					x : this.position.x,
-					y : this.position.y,
-					z : this.position.z
-				},
-
 				goalVector : {
 					x : this.goalVector.x,
 					y : this.goalVector.y,
