@@ -6,9 +6,17 @@ Game.Controllers.World = (function(options){
 		intersectMeshes : [],
 
 		init : function() {
-			_.bindAll(this, "setState", "setTerrain");
+			_.bindAll(this, "setState", "setTerrain", "animationUpdate");
 			this.initTerrain();
 			this.initPlayer();
+		},
+
+		animationUpdate : function() {
+			for (var i = this.objects.length - 1; i >= 0; i--) {
+				var o = this.objects[i];
+				if(o.animationUpdate)
+					o.animationUpdate();
+			};
 		},
 
 		addObject : function(o) {
@@ -31,11 +39,11 @@ Game.Controllers.World = (function(options){
 		},
 
 		initPlayer : function() {
-			this.player = new Game.Views.Player();
-			this.player.name = options.name;
-			this.player.uid = options.uid;
-			this.player.isCurrent = true;
-			this.player.init();
+			this.player = new Game.Views.Creatures.Player({
+				name : options.name,
+				uid : options.uid,
+				isCurrent : true
+			});
 			this.addObject(this.player);
 		},
 
@@ -67,7 +75,7 @@ Game.Controllers.World = (function(options){
 				}
 				switch(p.classTag) {
 					case "tree":
-						var tree = new Game.Views.TerrainObjects.Tree()
+						var tree = new Game.Views.Terrain.Tree()
 						tree.init(p.position, p.data);
 						tree.uid = p.uid;
 						this.addObject(tree);
@@ -82,22 +90,11 @@ Game.Controllers.World = (function(options){
 			
 			for (var i = data.players.length - 1; i >= 0; i--) {
 				var player = data.players[i];
-				var found = false;
-				for (var j = this.objects.length - 1; j >= 0; j--) {
-					var p = this.objects[j];
-					if(p.uid == player.uid)
-					{
-						p.update(player);
-						found = true;
-						break;
-					}
-				};
-				if(found == false) {
-					console.log("add " + p.name);
-					var p = new Game.Views.Player();
-					p.name = player.name;
-					p.uid = player.uid;
-					p.init();
+				var p = this.findFromUid(player.uid);
+				if(p != null) {
+					p.update(player);
+				} else {
+					var p = new Game.Views.Creatures.Player({name : player.name, uid : player.uid});
 					p.update(player);
 					this.addObject(p);
 				}

@@ -25,7 +25,6 @@ module.exports = CreatureBase = cls.Class.extend({
 		if( (dx + dz) != 0 ){
 			this.position.x += dx;
 			this.position.z += dz;
-			console.log(this.name + " updated position");
 			this.tick = new Date().getTime();
 		}
 	}

@@ -1,5 +1,5 @@
 
-Game.Views.TerrainObjects.Tree = (function() {
+Game.Views.Terrain.Tree = (function() {
 	
 	var material = new THREE.MeshBasicMaterial({color: 0xffffff});
 	
