@@ -1,4 +1,4 @@
-Game.Views.World = (function(options){
+Game.Controllers.World = (function(options){
 	
 	return {
 		terrain : null, 

@@ -51,7 +51,7 @@ Game.Controllers.App = (function(options){
 			document.body.appendChild(this.renderer.domElement);
 
 			//Initialize world
-			this.world = new Game.Views.World({
+			this.world = new Game.Controllers.World({
 				name : options.name,
 				uid : options.uid
 
