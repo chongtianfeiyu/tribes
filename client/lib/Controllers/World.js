@@ -4,7 +4,6 @@ Game.Controllers.World = (function(options){
 		terrain : null, 
 		objects : [],
 		intersectMeshes : [],
-			
 
 		init : function() {
 			_.bindAll(this, "setState", "setTerrain");
