@@ -46,7 +46,7 @@ module.exports = function() {
 				this.autoUpdateTerrain();
 			}
 
-			setInterval(this.autoUpdateTerrain, 3000);
+			setInterval(this.autoUpdateTerrain, 60000);
 			setInterval(this.cleanUp, 5000);
 		},
 

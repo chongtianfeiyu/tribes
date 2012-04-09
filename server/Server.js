@@ -17,10 +17,17 @@ var server = http.createServer(function(request, response){
 	//No implementation
 });
 
+//Contains all connected clients
+var clients = [];
+
 server.listen(SERVER_PORT, function(){});
 
 //setup WebSocket-server
 var wsServer = new WebSocketServer({httpServer : server});
+//Sends data to client
+var send = function(connection, type, data){
+	connection.sendUTF(JSON.stringify({type : type, data : data}));
+}
 
 wsServer.on('request', function(request){
 
@@ -28,11 +35,6 @@ wsServer.on('request', function(request){
 	var connection = request.accept(null, request.origin);
 	//Contains the latest tick when a push occured
 	connection.lastPushTick = 0;
-
-	//Sends data to client
-	var send = function(type, data){
-		connection.sendUTF(JSON.stringify({type : type, data : data}));
-	}
 	
 	//Contains the uid of the current player
 	var uid = null;
@@ -42,8 +44,9 @@ wsServer.on('request', function(request){
 		if(msg.type == "new_player") {
 			var player = gameManager.addPlayer(msg.data);
 			uid = player.getUid();
+			clients[uid] = connection;
 			console.log(uid + " is connected");
-			send("world_state", gameManager.worldstate(0));
+			send(connection, "world_state", gameManager.worldstate(0));
 		}
 		else {
 			var res = gameManager.handleMessage(msg, uid);
@@ -51,20 +54,23 @@ wsServer.on('request', function(request){
 	});
 
 	connection.on('close', function(connection){
+		delete clients[uid];
 		gameManager.removePlayer(uid);
 		console.log("Delete player " + uid);
 	});
 
-	setInterval(function() {
-		if(uid == null) return;
+});
+
+setInterval(function() {
+	for(uid in clients) {
+		var connection = clients[uid];
 		//Get the changes to the state of the world that has occured since the lastPushTick
 		var data = gameManager.worldstate(connection.lastPushTick);
 		
 		if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
 			connection.lastPushTick = new Date().getTime();
-			send("world_state", data);
+			send(connection, "world_state", data);
 		}
-			
-	}, 10);
-});
+	}
+}, 5);
 

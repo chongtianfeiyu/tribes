@@ -14,3 +14,4 @@ window.onload = function() {
 	//Start running.
 	global.app.start();
 };
+
