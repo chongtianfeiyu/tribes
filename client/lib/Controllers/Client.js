@@ -47,9 +47,6 @@ Game.Controllers.Client = (function(options) {
 				case "world_state":
 					global.app.world.setState(msg.data);
 					break;
-				case "terrain":
-					global.app.world.setTerrain(msg.data);
-					break;
 			}
 		},
 

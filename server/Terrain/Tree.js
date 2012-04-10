@@ -1,3 +1,4 @@
+
 var Tree = function(){
 	
 	var r = function(r1, r2) {
@@ -87,6 +88,7 @@ var Tree = function(){
 			newPos.y = this.position.y;
 			newPos.z = this.position.z+ r(-1000, 1000);
 			child.init(newPos);
+			child.uid = Math.random();
 			return child;
 		}
 	}

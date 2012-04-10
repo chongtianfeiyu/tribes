@@ -36,6 +36,10 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	update : function(data) {
 		this._super(data);
 		//Move meshes
+		this.mesh.rotation.x = this.rotation.x;
+		this.mesh.rotation.y = this.rotation.y;
+		this.mesh.rotation.z = this.rotation.z;
+
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;
 		this.playerTag.position.x = this.position.x;

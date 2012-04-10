@@ -7,13 +7,10 @@ var http = require('http');
 var GameManager = require('./GameManager');
 var CreatureBase = require('./Creatures/CreatureBase');
 
-var creature = new CreatureBase({position : "asd"});
-
 //Globals
 
 //Initialize the game and simulate it for 10 turns
 var gameManager = new GameManager();
-gameManager.init();
 
 //Setup server
 var server = http.createServer(function(request, response){
@@ -48,11 +45,11 @@ wsServer.on('request', function(request){
 		//When we add a new player, we push them to the connection-list, and push the world state
 		// from time 0 for them to get the full list of objects
 		if(msg.type == "new_player") {
-			var player = gameManager.addPlayer(msg.data);
+			var player = gameManager.addNewPlayer(msg.data);
 			uid = player.uid;
 			clients[uid] = connection;
 			console.log(uid + " is connected (" + player.name + ")");
-			send(connection, "world_state", gameManager.worldstate(0));
+			send(connection, "world_state", gameManager.worldStateDelta(0));
 		}
 		else {
 			var res = gameManager.handleMessage(msg, uid);
@@ -72,7 +69,7 @@ var lastPushTick = 0;
 
 setInterval(function() {
 	//Get the changes to the state of the world that has occured since the lastPushTick
-	var data = gameManager.worldstate(lastPushTick);
+	var data = gameManager.worldStateDelta(lastPushTick);
 	lastPushTick = new Date().getTime();
 	if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
 		for(uid in clients) {
