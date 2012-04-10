@@ -16,7 +16,7 @@ module.exports = CreatureBase = cls.Class.extend({
 	},
 
 	update : function() {
-		var speed = 10;
+		var speed = 5;
 		var goal = new Vector3(this.goalVector.x, this.goalVector.y, this.goalVector.z);
 		var position = new Vector3(this.position.x, this.position.y, this.position.z);
 		var direction = goal.subtract(position).normalize();

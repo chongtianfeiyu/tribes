@@ -21,7 +21,7 @@ module.exports = GameManager = cls.Class.extend({
 		}
 
 		_.bindAll(this, "autoUpdateTerrain", "update", "cleanUp");
-		setInterval(this.autoUpdateTerrain, 5000);
+		setInterval(this.autoUpdateTerrain, 60000);
 		setInterval(this.update, 10);
 		setInterval(this.cleanUp, 5000);
 	},
