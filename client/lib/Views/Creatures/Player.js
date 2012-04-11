@@ -31,13 +31,10 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	animationUpdate : function() {
 		this.playerTag.lookAt(global.app.camera.position);
 		if(this.goalVector != null) {
-			var distance = new THREE.Vector3().sub(this.mesh.position, this.goalVector).length();
-			console.log(distance);
-			if(distance > 20) {
-			this.mesh.lookAt(this.goalVector);
-			this.mesh.rotation.x = this.mesh.rotation.z = 0;
-				
-			}
+			var lookAtGoal = new THREE.Vector3(this.goalVector.x, 15, this.goalVector.z);
+			this.mesh.lookAt(lookAtGoal);
+				//Don't rotate around x/z-axis
+				this.mesh.rotation.x = this.mesh.rotation.z = 0;
 		}
 		this.syncToServer();
 	},

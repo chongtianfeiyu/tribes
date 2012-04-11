@@ -5,7 +5,6 @@ module.exports = CreatureBase = cls.Class.extend({
 	init : function(options) {
 		this.position = options.position;
 		this.uid = options.uid;
-		this.rotation = options.rotation;
 		this.goalVector = options.goalVector;
 		this.targetUid = options.targetUid;
 	},
