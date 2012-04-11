@@ -5,22 +5,26 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this.name = options.name;
 		this.latestSync = 0;
 		// material
-		var color = this.isCurrent == true ? 0xFF0066 : 0xAAEEDD;
-		var material = new THREE.MeshLambertMaterial({
-			color: color
-		});
+		var texture  = THREE.ImageUtils.loadTexture("resources/sprites/mobs/GM_Robot_noBG.png");
+		
 		// cube
-		this.mesh = new THREE.Mesh(new THREE.CubeGeometry(30, 30, 30), material);
+		this.mesh = new THREE.Sprite( { map: texture, useScreenCoordinates: false, affectedByDistance: true } );
+		this.mesh.scale.y = 0.2;
+		this.mesh.scale.x = 0.2;
+		// Set offset to first sprite of 24 images
+		this.mesh.uvScale.x = 0.11;
+		this.mesh.uvScale.y = 0.13;
+		this.mesh.uvOffset.x = 0;
+		this.mesh.position.y = 60;
+	
 		this.mesh.pointer = this;
-		this.mesh.position.y = 15;
-		this.mesh.overdraw = true;
 		global.app.scene.add(this.mesh);
 
 		var text3d = new THREE.TextGeometry( this.name ,{size: 20, height: 1, curveSegments: 1, font:'helvetiker'});
 		THREE.GeometryUtils.center( text3d );
 		var textMaterial = new THREE.MeshBasicMaterial( { color: 0xA10000, overdraw: true } );
 		this.playerTag = new THREE.Mesh( text3d, textMaterial );
-		this.playerTag.position.y += 90;
+		this.playerTag.position.y += 150;
         
         global.app.scene.add(this.playerTag);
 	},
@@ -32,7 +36,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this.playerTag.lookAt(global.app.camera.position);
 		if(this.goalVector != null) {
 			var lookAtGoal = new THREE.Vector3(this.goalVector.x, 15, this.goalVector.z);
-			this.mesh.lookAt(lookAtGoal);
+			//this.mesh.lookAt(lookAtGoal);
 				//Don't rotate around x/z-axis
 				this.mesh.rotation.x = this.mesh.rotation.z = 0;
 		}

@@ -25,7 +25,7 @@ var Terrain = (function() {
 			
 
 			this.terrain = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-				map: grassTexture
+				map : grassTexture
 			}));
 			this.terrain.rotation.x = -90  * MathHelpers.DEG_TO_RAD;
 			global.app.scene.add(this.terrain);
