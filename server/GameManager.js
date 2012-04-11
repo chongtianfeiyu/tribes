@@ -5,6 +5,9 @@ var cls = require("./packages/Class");
 
 module.exports = GameManager = cls.Class.extend({
 
+	/*
+		
+	*/
 	init : function() {
 		this.objects = [];
 		this.terrainObjects = [];
