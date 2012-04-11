@@ -12,9 +12,10 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this.mesh.scale.y = 0.2;
 		this.mesh.scale.x = 0.2;
 		// Set offset to first sprite of 24 images
-		this.mesh.uvScale.x = 0.11;
-		this.mesh.uvScale.y = 0.13;
+		this.mesh.uvScale.x = 0.10;
+		this.mesh.uvScale.y = 0.12;
 		this.mesh.uvOffset.x = 0;
+		this.mesh.uvOffset.y = 0.87;
 		this.mesh.position.y = 60;
 	
 		this.mesh.pointer = this;
@@ -25,6 +26,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		var textMaterial = new THREE.MeshBasicMaterial( { color: 0xA10000, overdraw: true } );
 		this.playerTag = new THREE.Mesh( text3d, textMaterial );
 		this.playerTag.position.y += 150;
+		this.animFramCount = 0;
         
         global.app.scene.add(this.playerTag);
 	},
@@ -34,12 +36,13 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	*/
 	animationUpdate : function() {
 		this.playerTag.lookAt(global.app.camera.position);
-		if(this.goalVector != null) {
-			var lookAtGoal = new THREE.Vector3(this.goalVector.x, 15, this.goalVector.z);
-			//this.mesh.lookAt(lookAtGoal);
-				//Don't rotate around x/z-axis
-				this.mesh.rotation.x = this.mesh.rotation.z = 0;
+		if(++this.animFramCount == 10) {
+			this.mesh.uvOffset.x += 0.5692;
+			this.animFramCount = 0;
+
 		}
+		if(this.mesh.uvOffset.x > 1)
+			this.mesh.uvOffset.x = 0;
 		this.syncToServer();
 	},
 
