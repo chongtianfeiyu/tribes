@@ -6,7 +6,7 @@ var cls = require("./packages/Class");
 module.exports = GameManager = cls.Class.extend({
 
 	/*
-		
+
 	*/
 	init : function() {
 		this.objects = [];
@@ -39,7 +39,7 @@ module.exports = GameManager = cls.Class.extend({
 	addNewPlayer : function(data) {
 		var player = new Player({
 			name : data.name,
-			position : data.position,
+			position : data.position || {x:0,y:0,z:0},
 			rotation : data.rotation,
 			goalVector : data.goalVector,
 			uid : data.uid

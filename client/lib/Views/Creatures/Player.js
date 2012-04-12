@@ -9,15 +9,16 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		
 		// cube
 		this.mesh = new THREE.Sprite( { map: texture, useScreenCoordinates: false, affectedByDistance: true } );
-		this.mesh.scale.y = 0.2;
-		this.mesh.scale.x = 0.2;
+		this.mesh.scale.y = 0.125;
+		this.mesh.scale.x = 0.125;
+		this.mesh.alignment = THREE.SpriteAlignment.topRight;
 		// Set offset to first sprite of 24 images
-		this.mesh.uvScale.x = 0.10;
-		this.mesh.uvScale.y = 0.12;
+		this.mesh.position.y = 90;
 		this.mesh.uvOffset.x = 0;
 		this.mesh.uvOffset.y = 0.87;
-		this.mesh.position.y = 60;
-	
+		this.mesh.uvScale.x = 0.118;
+		this.mesh.uvScale.y = 0.118;
+
 		this.mesh.pointer = this;
 		global.app.scene.add(this.mesh);
 
@@ -29,6 +30,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this.animFramCount = 0;
         
         global.app.scene.add(this.playerTag);
+        this.globalCount = 0;
 	},
 
 	/*
@@ -36,19 +38,30 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	*/
 	animationUpdate : function() {
 		this.playerTag.lookAt(global.app.camera.position);
-		if(++this.animFramCount == 10) {
-			this.mesh.uvOffset.x += 0.5692;
+		
+		if(this.moving == true) {
+			this.mesh.uvOffset.x += 0.109999;
+			console.log(this.mesh.uvOffset.x);
 			this.animFramCount = 0;
+			if(this.mesh.uvOffset.x >= 0.766)
+				this.mesh.uvOffset.x = 0;
+		} else {
 
 		}
-		if(this.mesh.uvOffset.x > 1)
-			this.mesh.uvOffset.x = 0;
+		
 		this.syncToServer();
 	},
 
 	update : function(data) {
-		this._super(data);
+		if(this.position != undefined) {
+			var dx = this.position.x - data.position.x;
+			var dz = this.position.z - data.position.z;
+			this.moving = Math.abs(dx + dz) > 0.2;
+		}
 		//Move meshes
+		this._super(data);
+
+
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;
 		this.playerTag.position.x = this.position.x;
