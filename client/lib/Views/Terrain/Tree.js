@@ -59,7 +59,7 @@ Game.Views.Terrain.Tree = (function() {
 			flowerMesh.position.z = newz;
 			flowerMesh.pointer = ref;
 			meshes.push(flowerMesh);
-			global.app.scene.add(flowerMesh);
+			global.app.scene.add(flowerMesh); 
 		}
 	};
 
