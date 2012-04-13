@@ -15,6 +15,7 @@ Game.Controllers.Client = (function(options) {
 			this.connection.onopen = this.connection_open;
 			this.connection.onmessage = this.connection_message;
 			this.connection.onerror = this.connection_error;
+			this.latestSync = 0;
 		},
 
 		connection_error : function() {
@@ -48,6 +49,23 @@ Game.Controllers.Client = (function(options) {
 					global.app.world.setState(msg.data);
 					break;
 			}
+		},
+
+		playerSync : function() {
+			var p = global.app.world.player;
+			this.latestSync = this.latestChange;
+			var data = {
+				uid : p.uid,
+
+				goalVector : {
+					x : p.goalVector.x,
+					y : p.goalVector.y,
+					z : p.goalVector.z
+				},
+
+				targetUid : p.targetUid
+			};
+			this.syncObject(data);
 		},
 
 		syncObject : function(data) {

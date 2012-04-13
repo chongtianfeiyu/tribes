@@ -20,7 +20,7 @@ Game.Controllers.PlayerController = (function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
 				global.app.world.player.targetUid = intersect.uid;
-				global.app.world.player.latestChange = new Date().getTime();
+				global.app.client.playerSync();
 			}
 			else {
 				this.changePlayerGoalVector();
@@ -60,7 +60,7 @@ Game.Controllers.PlayerController = (function() {
 
 	  		global.app.world.player.targetUid = null;
 	  		global.app.world.player.goalVector = goalVector;
-	  		global.app.world.player.latestChange = new Date().getTime();
+			global.app.client.playerSync();
 			
 		},
 
