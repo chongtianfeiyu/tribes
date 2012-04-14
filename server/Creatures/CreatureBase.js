@@ -39,7 +39,7 @@ module.exports = CreatureBase = cls.Class.extend({
 		var dz = speed * direction.z;
 		var diffx = this.goalVector.x - this.position.x;
 		var diffz = this.goalVector.z - this.position.z;
-		if( Math.abs(diffx+diffz) > 2){
+		if( Math.abs(diffx) > 1 || Math.abs(diffz) > 1){
 			this.position.x += dx;
 			this.position.z += dz;
 			this.tick = new Date().getTime();
