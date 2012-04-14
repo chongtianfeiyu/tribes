@@ -20,12 +20,11 @@ module.exports = CreatureBase = cls.Class.extend({
 	},
 
 	update : function() {
+		//Ensure that this.position is a proper Vector3
+		this.position = new Vector3(this.position.x, this.position.y, this.position.z);
 		if(this.targetUid != null) {
-			var targetObject = this.gameManager.findFromUid(this.targetUid);
-			if(targetObject != undefined) {
-				this.goalVector = targetObject.position;
-				targetObject.onTargetedBy(this);
-			}
+			this.setGoalVectorFromTarget();
+			
 		}
 
 		if(this.goalVector == null)
@@ -33,8 +32,7 @@ module.exports = CreatureBase = cls.Class.extend({
 		
 		var speed = this.speed;
 		var goal = new Vector3(this.goalVector.x, this.goalVector.y, this.goalVector.z);
-		var position = new Vector3(this.position.x, this.position.y, this.position.z);
-		var direction = goal.subtract(position).normalize();
+		var direction = goal.subtract(this.position).normalize();
 		var dx = speed * direction.x;
 		var dz = speed * direction.z;
 		var diffx = this.goalVector.x - this.position.x;
@@ -46,6 +44,28 @@ module.exports = CreatureBase = cls.Class.extend({
 		}
 		else {
 			this.goalVector = null;
+		}
+	},
+
+	/*
+		Sets the goalVector to the position of the target.
+		If the target is out of viewing-range, the
+		target is lost, and the goal-vector is set to null.
+	*/
+	setGoalVectorFromTarget : function() {
+		var targetObject = this.gameManager.findFromUid(this.targetUid);
+		if(targetObject != undefined) {
+			if(	
+				this.viewDistance != undefined 
+				&& this.position.distanceTo(
+					new Vector3(targetObject.position.x, targetObject.position.y, targetObject.position.z)) > this.viewDistance) {
+				this.targetUid = null;
+				this.goalVector = null;
+			}
+			else {
+				this.goalVector = targetObject.position;
+				targetObject.onTargetedBy(this);
+			}
 		}
 	}
 });

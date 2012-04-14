@@ -12,6 +12,7 @@ module.exports = Mob = CreatureBase.extend({
 		//indicates whether it should wait to choose a random target.
 		this.randomTargetChosen = false;
 		this.classTag = "mob";
+		this.viewDistance = 1000;
 		_.bindAll(this, "chooseRandomTarget", "onTargetedBy");
 	},
 
