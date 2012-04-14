@@ -11,10 +11,31 @@ Game.Controllers.World = (function(options){
 			this.initPlayer();
 		},
 
+		getArea : function(position) {
+			return {
+				x : Math.round(position.x / 3000),
+				z : Math.round(position.z / 3000)
+			}
+		},
+
+		areaEquals : function(a1, a2){
+			return a1.x == a2.x && a1.z == a2.z;
+		},
+
 		animationUpdate : function() {
+			if(this.player.position == undefined) return;
+			var playerArea = this.getArea(this.player.position);
+
 			for (var i = this.objects.length - 1; i >= 0; i--) {
 				var o = this.objects[i];
-				if(o.animationUpdate)
+				var oArea = this.getArea(o.position);
+				if(!this.areaEquals(oArea, playerArea)) {
+					o.destroy();
+					this.removeObject(o);
+					console.log(oArea);
+					console.log(playerArea);
+				}
+				else if(o.animationUpdate)
 					o.animationUpdate();
 			};
 		},

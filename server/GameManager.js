@@ -2,6 +2,7 @@ var Player = require("./Creatures/Player");
 var Tree = require("./Terrain/Tree");
 var _ = require("Underscore");
 var cls = require("./packages/Class");
+var Vector3 = require("./packages/Vector3");
 
 module.exports = GameManager = cls.Class.extend({
 
@@ -12,6 +13,9 @@ module.exports = GameManager = cls.Class.extend({
 		this.objects = [];
 		this.terrainObjects = [];
 		this.deletes = [];
+
+		this.playerTicks = [];
+		this.viewDistance = 1500;
 
 		//Plant a tree, save the world.
 		var tree = new Tree();
@@ -24,7 +28,7 @@ module.exports = GameManager = cls.Class.extend({
 		}
 
 		_.bindAll(this, "autoUpdateTerrain", "update", "cleanUp");
-		setInterval(this.autoUpdateTerrain, 60000);
+		setInterval(this.autoUpdateTerrain, 2000);
 		setInterval(this.update, 10);
 		setInterval(this.cleanUp, 5000);
 	},
@@ -80,15 +84,48 @@ module.exports = GameManager = cls.Class.extend({
 		}
 	},
 
-	worldStateDelta : function(tick) {
+	getArea : function(position) {
+		return {
+			x : Math.round(position.x / this.viewDistance),
+			z : Math.round(position.z / this.viewDistance)
+		}
+	},
+
+	areaEquals : function(a1, a2){
+		return a1.x == a2.x && a1.z == a2.z;
+	},
+
+	getPlayerTick : function(player) {
+		var playerTick = this.playerTicks[player.uid];
+		var area = this.getArea(player.position);
+		if(playerTick == undefined
+			|| (!this.areaEquals(area, playerTick.area))) {
+			this.playerTicks[uid] 
+				= playerTick 
+				= {
+					area : area,
+					tick : 0};
+		}
+
+		return playerTick;
+	},
+
+	setPlayerTick : function(player, tick) {
+		this.getPlayerTick(player).tick = tick;
+	},
+
+	worldStateDelta : function(uid) {
 		var data = {};
-		
+		var player = this.objects[uid];
+		var playerPos = new Vector3(player.position.x, player.position.y, player.position.z);
+		var playerTick = this.getPlayerTick(player);
 		//Push player-changes to client
 		data.players = [];
 		for(uid in this.objects){
-			var player = this.objects[uid];
-			if(player.tick >= tick) {
-				data.players.push(player);
+			var o = this.objects[uid];
+			var objPos = new Vector3(o.position.x, o.position.y, o.position.z);
+			if(this.areaEquals(this.getArea(objPos), playerTick.area) && o.tick >= playerTick.tick) {
+				data.players.push(o);
 			}	
 		}
 
@@ -96,7 +133,8 @@ module.exports = GameManager = cls.Class.extend({
 		data.terrain = [];
 		for(uid in this.terrainObjects){
 			var o = this.terrainObjects[uid];
-			if(o.tick > tick)
+			var objPos = new Vector3(o.position.x, o.position.y, o.position.z);
+			if(this.areaEquals(this.getArea(objPos), playerTick.area) && o.tick >= playerTick.tick)
 				data.terrain.push(o);
 		}
 		
@@ -104,9 +142,10 @@ module.exports = GameManager = cls.Class.extend({
 		data.deletes = [];
 		for (var i = this.deletes.length - 1; i >= 0; i--) {
 			var d = this.deletes[i];
-			if(d.tick >= tick)
+			if(d.tick >= playerTick.tick)
 				data.deletes.push(d.uid);
 		};
+		this.setPlayerTick(player, new Date().getTime());
 		return data;
 	},
 

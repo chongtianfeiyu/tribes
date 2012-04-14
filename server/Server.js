@@ -49,7 +49,6 @@ wsServer.on('request', function(request){
 			uid = player.uid;
 			clients[uid] = connection;
 			console.log(uid + " is connected (" + player.name + ")");
-			send(connection, "world_state", gameManager.worldStateDelta(0));
 		}
 		else {
 			var res = gameManager.handleMessage(msg, uid);
@@ -68,12 +67,12 @@ wsServer.on('request', function(request){
 var lastPushTick = 0;
 
 setInterval(function() {
-	//Get the changes to the state of the world that has occured since the lastPushTick
-	var data = gameManager.worldStateDelta(lastPushTick);
-	lastPushTick = new Date().getTime();
-	if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
-		for(uid in clients) {
-			var connection = clients[uid];
+	for(uid in clients) {
+		var connection = clients[uid];
+		//Get the changes to the state of the world that has occured since the lastPushTick
+		var data = gameManager.worldStateDelta(uid, connection.lastPushTick || 0);
+		connection.lastPushTick = new Date().getTime();
+		if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
 			send(connection, "world_state", data);
 		}
 	}
