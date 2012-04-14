@@ -12,7 +12,13 @@ module.exports = Mob = CreatureBase.extend({
 		//indicates whether it should wait to choose a random target.
 		this.randomTargetChosen = false;
 		this.classTag = "mob";
-		_.bindAll(this, "chooseRandomTarget");
+		_.bindAll(this, "chooseRandomTarget", "onTargetedBy");
+	},
+
+	onTargetedBy : function(enemy) {
+		this._super(enemy);
+		console.log("Enemy targets " + enemy.targetUid);
+		this.targetUid = enemy.uid;
 	},
 
 	synchronize : function(data) {
@@ -34,9 +40,9 @@ module.exports = Mob = CreatureBase.extend({
 	chooseRandomTarget : function() {
 		console.log("Choosing random target");
 		this.goalVector = {
-				x : this.position.x + r(-1000, 1000),
+				x : this.position.x + r(-300, 300),
 				y : this.position.y,
-				z : this.position.x + r(-1000, 1000)
+				z : this.position.x + r(-300, 300)
 			};
 		this.randomTargetChosen = false;
 	}

@@ -10,6 +10,10 @@ module.exports = CreatureBase = cls.Class.extend({
 		this.targetUid = options.targetUid;
 	},
 
+	onTargetedBy : function(other) {
+
+	},
+
 	synchronize : function(data) {
 		this.goalVector = data.goalVector;
 		this.targetUid = data.targetUid;
@@ -17,10 +21,13 @@ module.exports = CreatureBase = cls.Class.extend({
 
 	update : function() {
 		if(this.targetUid != null) {
-			this.goalVector = this.gameManager.findFromUid(this.targetUid).position;
-			console.log("Following " + this.targetUid);
+			var targetObject = this.gameManager.findFromUid(this.targetUid);
+			if(targetObject != undefined) {
+				this.goalVector = targetObject.position;
+				targetObject.onTargetedBy(this);
+			}
 		}
-		
+
 		if(this.goalVector == null)
 			return;
 		
