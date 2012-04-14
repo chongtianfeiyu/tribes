@@ -11,37 +11,25 @@ Game.Controllers.World = (function(options){
 			this.initPlayer();
 		},
 
-		getArea : function(position) {
-			return {
-				x : Math.round(position.x / 3000),
-				z : Math.round(position.z / 3000)
-			}
-		},
-
-		areaEquals : function(a1, a2){
-			return a1.x == a2.x && a1.z == a2.z;
-		},
-
 		animationUpdate : function() {
 			if(this.player.position == undefined) return;
-			var playerArea = this.getArea(this.player.position);
+			var playerPos = this.player.position;
 
-			for (var i = this.objects.length - 1; i >= 0; i--) {
-				var o = this.objects[i];
-				var oArea = this.getArea(o.position);
-				if(!this.areaEquals(oArea, playerArea)) {
+			for(uid in this.objects){
+				var o = this.objects[uid];
+				var distance = new THREE.Vector3().sub(playerPos, o.position).length();
+				if(distance > 3000) {
 					o.destroy();
 					this.removeObject(o);
-					console.log(oArea);
-					console.log(playerArea);
 				}
 				else if(o.animationUpdate)
 					o.animationUpdate();
-			};
+			}
 		},
 
 		addObject : function(o) {
-			o.objectsIndex = this.objects.push(o)-1;
+			this.objects[o.uid] = o;
+			console.log("Adding object " + o.uid);
 			if(o.getIntersectMeshes) {
 				o.intersectMeshIndexes = [];
 				var oIntersectMeshes = o.getIntersectMeshes();
@@ -52,7 +40,8 @@ Game.Controllers.World = (function(options){
 		},
 
 		removeObject : function(o) {
-			this.objects.splice(o.objectsIndex, 1);
+			console.log("Removing object "+ o.uid);
+			delete this.objects[o.uid];
 			for (var i = o.intersectMeshIndexes.length - 1; i >= 0; i--) {
 				this.intersectMeshes.splice(o.intersectMeshIndexes[i], 1);
 			};
@@ -74,11 +63,7 @@ Game.Controllers.World = (function(options){
 		},
 
 		findFromUid : function(uid) {
-			for (var i = this.objects.length - 1; i >= 0; i--) {
-				var o = this.objects[i];
-				if(o.uid == uid)
-					return o;
-			};
+			return this.objects[uid];
 		},
 
 		/*
@@ -123,13 +108,11 @@ Game.Controllers.World = (function(options){
 
 			for (var i = data.deletes.length - 1; i >= 0; i--) {
 				var d = data.deletes[i];
-				for(var j = this.objects.length - 1; j >= 0; j--) {
-					var o = this.objects[j];
-					if(o.uid == d) {
-						console.log("delete " + o.name);
-						o.destroy();
-						this.removeObject(o);
-					}
+				var o = this.findFromUid(d);
+				if(o != undefined) {
+					console.log("delete " + o.name);
+					o.destroy();
+					this.removeObject(o);
 				}
 			};
 		}

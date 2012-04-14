@@ -15,7 +15,7 @@ module.exports = GameManager = cls.Class.extend({
 		this.deletes = [];
 
 		this.playerTicks = [];
-		this.viewDistance = 1500;
+		this.viewDistance = 3000;
 
 		//Plant a tree, save the world.
 		var tree = new Tree();
@@ -28,7 +28,7 @@ module.exports = GameManager = cls.Class.extend({
 		}
 
 		_.bindAll(this, "autoUpdateTerrain", "update", "cleanUp");
-		setInterval(this.autoUpdateTerrain, 2000);
+		setInterval(this.autoUpdateTerrain, 60000);
 		setInterval(this.update, 10);
 		setInterval(this.cleanUp, 5000);
 	},
@@ -86,8 +86,8 @@ module.exports = GameManager = cls.Class.extend({
 
 	getArea : function(position) {
 		return {
-			x : Math.round(position.x / this.viewDistance),
-			z : Math.round(position.z / this.viewDistance)
+			x : Math.round(position.x / (this.viewDistance / 2)),
+			z : Math.round(position.z / (this.viewDistance / 2))
 		}
 	},
 
@@ -124,7 +124,7 @@ module.exports = GameManager = cls.Class.extend({
 		for(uid in this.objects){
 			var o = this.objects[uid];
 			var objPos = new Vector3(o.position.x, o.position.y, o.position.z);
-			if(this.areaEquals(this.getArea(objPos), playerTick.area) && o.tick >= playerTick.tick) {
+			if(playerPos.distanceTo(objPos) < this.viewDistance && o.tick >= playerTick.tick) {
 				data.players.push(o);
 			}	
 		}
@@ -134,7 +134,7 @@ module.exports = GameManager = cls.Class.extend({
 		for(uid in this.terrainObjects){
 			var o = this.terrainObjects[uid];
 			var objPos = new Vector3(o.position.x, o.position.y, o.position.z);
-			if(this.areaEquals(this.getArea(objPos), playerTick.area) && o.tick >= playerTick.tick)
+			if(playerPos.distanceTo(objPos) < this.viewDistance && o.tick >= playerTick.tick)
 				data.terrain.push(o);
 		}
 		
