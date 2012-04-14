@@ -21,7 +21,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		THREE.GeometryUtils.center( text3d );
 		var textMaterial = new THREE.MeshBasicMaterial( { color: 0xA10000, overdraw: true } );
 		this.playerTag = new THREE.Mesh( text3d, textMaterial );
-		this.playerTag.position.y += 150;
+		this.playerTag.position.y += 80;
 		
         
         global.app.scene.add(this.playerTag);

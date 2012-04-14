@@ -3,6 +3,7 @@ var Tree = require("./Terrain/Tree");
 var _ = require("Underscore");
 var cls = require("./packages/Class");
 var Vector3 = require("./packages/Vector3");
+var Mob = require("./Creatures/Mob")
 
 module.exports = GameManager = cls.Class.extend({
 
@@ -27,10 +28,23 @@ module.exports = GameManager = cls.Class.extend({
 			this.autoUpdateTerrain();
 		}
 
+		var mob = new Mob(
+			{
+				position : {x : -100, y : 0, z : -100},
+				goalVector : null,
+				uid : Math.random()
+		});
+
+		this.addObject(mob);
+
 		_.bindAll(this, "autoUpdateTerrain", "update", "cleanUp");
 		setInterval(this.autoUpdateTerrain, 60000);
 		setInterval(this.update, 10);
 		setInterval(this.cleanUp, 5000);
+	},
+
+	findFromUid : function (uid) {
+		return this.objects[uid];
 	},
 
 	//Update-loop for this game
@@ -54,6 +68,7 @@ module.exports = GameManager = cls.Class.extend({
 
 	addObject : function(o) {
 		o.tick = new Date().getTime();
+		o.gameManager = this;
 		this.objects[o.uid] = o;
 	},
 
@@ -119,13 +134,13 @@ module.exports = GameManager = cls.Class.extend({
 		var player = this.objects[uid];
 		var playerPos = new Vector3(player.position.x, player.position.y, player.position.z);
 		var playerTick = this.getPlayerTick(player);
-		//Push player-changes to client
-		data.players = [];
+		//Push object-changes to client
+		data.objects = [];
 		for(uid in this.objects){
 			var o = this.objects[uid];
 			var objPos = new Vector3(o.position.x, o.position.y, o.position.z);
 			if(playerPos.distanceTo(objPos) < this.viewDistance && o.tick >= playerTick.tick) {
-				data.players.push(o);
+				data.objects.push(o);
 			}	
 		}
 

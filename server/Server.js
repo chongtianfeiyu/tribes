@@ -72,7 +72,7 @@ setInterval(function() {
 		//Get the changes to the state of the world that has occured since the lastPushTick
 		var data = gameManager.worldStateDelta(uid, connection.lastPushTick || 0);
 		connection.lastPushTick = new Date().getTime();
-		if(data.players.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
+		if(data.objects.length > 0 || data.terrain.length > 0 || data.deletes.length > 0) {
 			send(connection, "world_state", data);
 		}
 	}

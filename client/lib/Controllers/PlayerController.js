@@ -12,13 +12,14 @@ Game.Controllers.PlayerController = (function() {
 		mouseMove : function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
-				
+					
 			}
 		},
 
 		mouseClick : function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
+				console.log("Set intersect " + intersect.uid);
 				global.app.world.player.targetUid = intersect.uid;
 				global.app.client.playerSync();
 			}

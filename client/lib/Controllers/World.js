@@ -94,17 +94,33 @@ Game.Controllers.World = (function(options){
 		setState : function(data) {
 			this.setTerrain(data.terrain);
 			
-			for (var i = data.players.length - 1; i >= 0; i--) {
-				var player = data.players[i];
-				var p = this.findFromUid(player.uid);
-				if(p != null) {
-					p.update(player);
-				} else {
-					var p = new Game.Views.Creatures.Player({name : player.name, uid : player.uid});
-					p.update(player);
-					this.addObject(p);
+			for (var i = data.objects.length - 1; i >= 0; i--) {
+				var o = data.objects[i];
+				var existing = this.findFromUid(o.uid);
+				if(existing != null) {
+					existing.update(o);
 				}
+				else{
+					var newObject = null;
+					switch(o.classTag) {
+						case "player":
+							newObject = new Game.Views.Creatures.Player({name : o.name, uid : o.uid});
+							break;
+						case "mob":
+							newObject = new Game.Views.Creatures.Mob({ uid : o.uid});
+							break;
+						default:
+							console.log("Can't find oject of type " + o.classTag);
+							break;
+					}
+
+					if(newObject != null) {
+						newObject.update(o);
+						this.addObject(newObject);
+					}
+				}	
 			};
+
 
 			for (var i = data.deletes.length - 1; i >= 0; i--) {
 				var d = data.deletes[i];
