@@ -1,3 +1,5 @@
+var cls = require("./LevellingLogic");
+
 var r = function(r1, r2) {
 	return ((Math.random()*(r2 - r1)) + r1);
 };
@@ -8,7 +10,6 @@ module.exports = BattleLogic = {
 			console.log(attacker.classTag + " attacks " + defender.classTag);
 
 			if(BattleLogic.isHit(attacker, defender)) {
-				console.log("HIT!");
 				var atk = attacker.stats.attackPower();
 				var softDefense = defender.stats.softDefense();
 				var hardDefense = defender.stats.hardDefense();
@@ -16,9 +17,15 @@ module.exports = BattleLogic = {
 				hardDefense = hardDefense == 0 ? 1 : hardDefense;
 				var damage = atk - (atk/100/hardDefense) - softDefense;
 				damage = damage < 0 ? 0 : damage;
+				defender.stats.receiveDamage(damage);
+				
+				console.log("HIT!");
 				console.log("Damage dealt: " + damage);
-				attacker.stats.receiveDamage(damage);
 				console.log("Defenders hp: " + defender.stats.hp());
+				
+				if(!defender.stats.isAlive()) {
+					BattleLogic.win(attacker, defender);
+				}
 			}
 			else {
 				console.log("Miss!");
@@ -26,7 +33,21 @@ module.exports = BattleLogic = {
 
 			//Set the lastAttackTime to now.
 			attacker.lastAttackTime = new Date().getTime();
+			attacker.tick = new Date().getTime();
+			defender.tick = new Date().getTime();
 		}
+	},
+
+	win : function(attacker, defender) {
+		defender.die(attacker);
+		if(attacker.classTag == "player") {
+			var exp = LevellingLogic.getExpFromMob(defender);
+			console.log("Player gains " + exp + " experience");
+			attacker.stats.addExperience(exp);
+
+		}
+		attacker.targetUid = null;
+		attacker.targetIntent = null;
 	},
 
 	/*

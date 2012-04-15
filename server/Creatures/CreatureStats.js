@@ -22,6 +22,9 @@ module.exports = CreatureStats = cls.Class.extend({
 		this.luck = options.luck;
 		//The currently equipped weapon (used to determine total ATK)
 		this.equippedWeapon = options.equippedWeapon;
+		//Accumulated EXP
+		this.accumulatedExperience = options.accumulatedExperience;
+
 		//An array of Armor-items
 		this.equippedArmor = options.equippedArmor;
 		this.currentHp = options.currentHp || null;
@@ -36,8 +39,13 @@ module.exports = CreatureStats = cls.Class.extend({
 			"hardDefense",
 			"accuracy",
 			"dodge",
-			"attackSpeed"
+			"attackSpeed",
+			"addExperience"
 			);
+	},
+
+	addExperience : function(exp) {
+		this.accumulatedExperience += exp;
 	},
 
 	changeArmor : function(armor) {
@@ -56,14 +64,16 @@ module.exports = CreatureStats = cls.Class.extend({
 		if(this.currentHp == null) {
 			this.currentHp = this.maxHp();
 		}
+		console.log("this.currentHp == " + this.currentHp);
 		return this.currentHp;
 	},
 
 	receiveDamage : function(damage) {
-		var currentHp = this.hp();
-		var result = currentHp - damage;
+		var hp = this.hp();
+		var result = hp - damage;
 		if(result < 0) result = 0;
-		this.currentHp = result;
+
+		this.currentHp = Math.round(result);
 	},
 
 	/*	
@@ -100,6 +110,10 @@ module.exports = CreatureStats = cls.Class.extend({
 
 	dodge : function() {
 		return this.level + this.agility;
+	},
+
+	isAlive : function() {
+		return this.hp() > 0;
 	},
 
 	/*

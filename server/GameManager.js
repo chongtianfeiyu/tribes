@@ -47,7 +47,14 @@ module.exports = GameManager = cls.Class.extend({
 	//Update-loop for this game
 	update : function() {
 		for(uid in this.objects){
-			this.objects[uid].update();
+			var o = this.objects[uid];
+			o.update();
+			if(!o.alive){
+				var diff = new Date().getTime() - o.dieTime;
+				if(diff > 5000 && o.classTag != "player") {
+					this.removeObject(uid);
+				}
+			}
 		}
 	},
 
@@ -74,7 +81,7 @@ module.exports = GameManager = cls.Class.extend({
 		this.terrainObjects[o.uid] = o;
 	},
 
-	removePlayer : function(uid) {
+	removeObject : function(uid) {
 		delete this.objects[uid];
 		this.deletes.push({tick : new Date().getTime(), uid : uid});
 	},

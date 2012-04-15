@@ -57,7 +57,7 @@ wsServer.on('request', function(request){
 
 	connection.on('close', function(connection){
 		delete clients[uid];
-		gameManager.removePlayer(uid);
+		gameManager.removeObject(uid);
 		console.log("Delete player " + uid);
 	});
 

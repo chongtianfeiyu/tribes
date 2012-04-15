@@ -22,6 +22,13 @@ module.exports = CreatureBase = cls.Class.extend({
 		//The intent of the targeting
 		//Possible values: "attack" | "harvest" | "pickup"
 		this.targetIntent = null;
+		this.alive = true;
+		this.spawnTime = new Date().getTime();
+	},
+
+	die : function(attacker) {
+		this.dieTime = new Date().getTime();
+		this.alive = false;
 	},
 
 	/*
@@ -44,6 +51,8 @@ module.exports = CreatureBase = cls.Class.extend({
 		The main update loop for this creature
 	*/
 	update : function() {
+		if(this.alive == false)
+			return;
 		//Ensure that this.position is a proper Vector3
 		this.position = new Vector3(this.position.x, this.position.y, this.position.z);
 		if(this.targetUid != null) {

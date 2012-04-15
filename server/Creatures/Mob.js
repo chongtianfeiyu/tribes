@@ -11,7 +11,7 @@ module.exports = Mob = CreatureBase.extend({
 		this._super(options);
 		this.stats = new CreatureStats({
 			level : 1,
-			strength : 10,
+			strength : 12,
 			agility : 10,
 			vitality : 10,
 			intelligence : 10,

@@ -7,12 +7,12 @@ module.exports = Player = CreatureBase.extend({
 		this._super(options);
 		this.stats = new CreatureStats({
 			level : 1,
-			strength : 10,
-			agility : 20,
-			vitality : 5,
+			strength : 13,
+			agility : 10,
+			vitality : 10,
 			intelligence : 10,
 			dexterity : 10,
-			luck : 5
+			luck : 10
 		});
 		this.classTag = "player";
 		this.name = options.name;
