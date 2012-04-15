@@ -51,16 +51,26 @@ module.exports = CreatureBase = cls.Class.extend({
 		The main update loop for this creature
 	*/
 	update : function() {
-		if(this.alive == false)
+		if(this.alive == false) {
+			//If dead for > 5 seconds, remove from world.
+			var diff = new Date().getTime() - this.dieTime;
+			if(diff > 5000 && this.classTag != "player") {
+				this.gameManager.removeObject(uid);
+				this.gameManager.decreaseMobCount();
+			}
 			return;
+		}
 		//Ensure that this.position is a proper Vector3
 		this.position = new Vector3(this.position.x, this.position.y, this.position.z);
 		if(this.targetUid != null) {
 			this.setGoalVectorFromTarget();
 		}
 
-		if(this.goalVector == null)
+		if(this.goalVector == null){
+			//Nothing to do - regen
+			this.stats.update();
 			return;
+		}
 		
 		var speed = this.speed;
 		var goal = new Vector3(this.goalVector.x, this.goalVector.y, this.goalVector.z);
@@ -75,6 +85,8 @@ module.exports = CreatureBase = cls.Class.extend({
 			this.position.x += dx;
 			this.position.z += dz;
 			this.tick = new Date().getTime();
+			//Regen while walking.
+			this.stats.update();
 		}
 		else {
 			//We have reached our destination.

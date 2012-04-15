@@ -32,6 +32,9 @@ module.exports = GameManager = cls.Class.extend({
 				uid : Math.random()
 		});
 
+		this.mobCount = 1;
+		this.mobSpawnTime = new Date().getTime();
+
 		this.addObject(mob);
 
 		_.bindAll(this, "autoUpdateTerrain", "update", "cleanUp");
@@ -49,13 +52,24 @@ module.exports = GameManager = cls.Class.extend({
 		for(uid in this.objects){
 			var o = this.objects[uid];
 			o.update();
-			if(!o.alive){
-				var diff = new Date().getTime() - o.dieTime;
-				if(diff > 5000 && o.classTag != "player") {
-					this.removeObject(uid);
-				}
-			}
 		}
+		if((new Date().getTime() - this.mobSpawnTime) > 10000 && this.mobCount < 20) {
+			var mob = new Mob(
+			{
+					position : {x : -100, y : 0, z : -100},
+					goalVector : null,
+					uid : Math.random()
+			});
+
+			++this.mobCount;
+			this.mobSpawnTime = new Date().getTime();
+
+			this.addObject(mob);
+		}
+	},
+
+	decreaseMobCount : function() {
+		--this.mobCount; 
 	},
 
 	addNewPlayer : function(data) {

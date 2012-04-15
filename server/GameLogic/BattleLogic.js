@@ -41,9 +41,7 @@ module.exports = BattleLogic = {
 	win : function(attacker, defender) {
 		defender.die(attacker);
 		if(attacker.classTag == "player") {
-			var exp = LevellingLogic.getExpFromMob(defender);
-			console.log("Player gains " + exp + " experience");
-			attacker.stats.addExperience(exp);
+			LevellingLogic.addBattleWinExperience(attacker, defender);
 
 		}
 		attacker.targetUid = null;

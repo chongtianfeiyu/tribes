@@ -23,7 +23,9 @@ module.exports = CreatureStats = cls.Class.extend({
 		//The currently equipped weapon (used to determine total ATK)
 		this.equippedWeapon = options.equippedWeapon;
 		//Accumulated EXP
-		this.accumulatedExperience = options.accumulatedExperience;
+		this.accumulatedExperience = options.accumulatedExperience || 0;
+
+		this.latestUpdate = new Date().getTime();
 
 		//An array of Armor-items
 		this.equippedArmor = options.equippedArmor;
@@ -42,6 +44,20 @@ module.exports = CreatureStats = cls.Class.extend({
 			"attackSpeed",
 			"addExperience"
 			);
+	},
+
+	update : function() {
+		var diff = new Date().getTime() - this.latestUpdate;
+		if(diff > 1000) {
+			if(this.hp() < this.maxHp()) {
+				this.currentHp += this.maxHp() / 30;
+				if(this.currentHp > this.maxHp()) {
+					this.currentHp = this.maxHp();
+				}
+				console.log("Regenerates hp to " + this.currentHp);
+			}
+			this.latestUpdate = new Date().getTime();
+		}
 	},
 
 	addExperience : function(exp) {
@@ -64,7 +80,6 @@ module.exports = CreatureStats = cls.Class.extend({
 		if(this.currentHp == null) {
 			this.currentHp = this.maxHp();
 		}
-		console.log("this.currentHp == " + this.currentHp);
 		return this.currentHp;
 	},
 

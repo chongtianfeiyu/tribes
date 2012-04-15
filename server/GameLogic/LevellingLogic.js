@@ -27,10 +27,36 @@ module.exports = LevellingLogic = {
 		return sum;
 	},
 
+	getLevelFromExperience : function(experience) {
+		var sum = 0;
+		for(var i = 0; i < LevellingLogic.levelUpTable.length; i++) {
+			sum += LevellingLogic.levelUpTable[i];
+			if(experience < sum) {
+				console.log("Level from experience " + experience + " is " + i);
+				return i + 1;
+			}
+		}
+	},
+
 	getExpFromMob : function(mob) {
 		var lvlExp = LevellingLogic.getMobExperienceFromLevel(mob.stats.level);
-		console.log("lvlexp:" + lvlExp + ",lvl:" + mob.stats.level);
 		return lvlExp / (mob.stats.level * 20);
+	},
+
+	addBattleWinExperience : function(attacker, defender) {
+		var exp = LevellingLogic.getExpFromMob(defender);
+		exp = 300;
+		var currentExperience = attacker.stats.accumulatedExperience;
+		var sum = currentExperience + exp;
+		var sumLevel = this.getLevelFromExperience(sum);
+		if(sumLevel > attacker.stats.level) {
+			attacker.stats.level += 1;
+			attacker.tick = new Date().getTime();
+			console.log("Level up, FTW!!");
+			console.log("New level " + attacker.stats.level);
+		}
+		attacker.stats.addExperience(exp);
+		console.log("Gained " + exp + " and total is now " + attacker.stats.accumulatedExperience);
 	}
 };
 
