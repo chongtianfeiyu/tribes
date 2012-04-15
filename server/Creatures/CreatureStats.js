@@ -1,4 +1,5 @@
 var cls = require("../packages/Class");
+var _ = require("Underscore");
 module.exports = CreatureStats = cls.Class.extend({
 	init : function(options) {
 		this.level = options.level;
@@ -23,6 +24,20 @@ module.exports = CreatureStats = cls.Class.extend({
 		this.equippedWeapon = options.equippedWeapon;
 		//An array of Armor-items
 		this.equippedArmor = options.equippedArmor;
+		this.currentHp = options.currentHp || null;
+		_.bindAll(this, 
+			"changeArmor", 
+			"changeWeapon", 
+			"hp", 
+			"maxHp", 
+			"receiveDamage", 
+			"attackPower",
+			"softDefense",
+			"hardDefense",
+			"accuracy",
+			"dodge",
+			"attackSpeed"
+			);
 	},
 
 	changeArmor : function(armor) {
@@ -35,6 +50,20 @@ module.exports = CreatureStats = cls.Class.extend({
 
 	maxHp : function() {
 		return Math.ceil((Math.log(this.level) * 100) + 10);
+	},
+
+	hp : function() {
+		if(this.currentHp == null) {
+			this.currentHp = this.maxHp();
+		}
+		return this.currentHp;
+	},
+
+	receiveDamage : function(damage) {
+		var currentHp = this.hp();
+		var result = currentHp - damage;
+		if(result < 0) result = 0;
+		this.currentHp = result;
 	},
 
 	/*	
@@ -67,11 +96,6 @@ module.exports = CreatureStats = cls.Class.extend({
 
 	accuracy : function() {
 		return this.level + this.dexterity;
-	},
-
-	hitChance : function(enemyDodge) {
-		var hitChance =  (80 + this.accuracy - enemyDoge) / 100;
-		return hitChance < 0.05 ? 0.05 : hitChance;
 	},
 
 	dodge : function() {
