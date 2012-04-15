@@ -45,7 +45,6 @@ module.exports = LevellingLogic = {
 
 	addBattleWinExperience : function(attacker, defender) {
 		var exp = LevellingLogic.getExpFromMob(defender);
-		exp = 300;
 		var currentExperience = attacker.stats.accumulatedExperience;
 		var sum = currentExperience + exp;
 		var sumLevel = this.getLevelFromExperience(sum);
