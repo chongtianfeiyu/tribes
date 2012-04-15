@@ -7,9 +7,6 @@ var Mob = require("./Creatures/Mob")
 
 module.exports = GameManager = cls.Class.extend({
 
-	/*
-
-	*/
 	init : function() {
 		this.objects = [];
 		this.terrainObjects = [];
@@ -110,6 +107,10 @@ module.exports = GameManager = cls.Class.extend({
 		return a1.x == a2.x && a1.z == a2.z;
 	},
 
+	/*
+		Returns the latest tick that an update was sent to a player
+		within a certain region.
+	*/
 	getPlayerTick : function(player) {
 		var playerTick = this.playerTicks[player.uid];
 		var area = this.getArea(player.position);

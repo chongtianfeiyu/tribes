@@ -21,6 +21,7 @@ Game.Controllers.PlayerController = (function() {
 			if(intersect != null) {
 				console.log("Set intersect " + intersect.uid);
 				global.app.world.player.targetUid = intersect.uid;
+				global.app.world.player.targetIntent = "attack";
 				global.app.client.playerSync();
 			}
 			else {

@@ -1,30 +1,53 @@
 var cls = require("../packages/Class");
 var Vector3 = require("../packages/Vector3");
+var BattleLogic = require("../GameLogic/BattleLogic");
 
 module.exports = CreatureBase = cls.Class.extend({
+	
 	init : function(options) {
+		//Stats (CreatureStats.js)
+		this.stats = options.stats;
+		//Movement speed
 		this.speed = 3;
+		//Initial speed
 		this.position = options.position;
+		//How far the weapon reaches
+		this.attackRange = 30;
+		//Unique identifier.
 		this.uid = options.uid;
+		//The vector that the creature is walking towards.
 		this.goalVector = options.goalVector;
+		//The targeted entity (if any) that the creature is chasing.
 		this.targetUid = options.targetUid;
+		//The intent of the targeting
+		//Possible values: "attack" | "harvest" | "pickup"
+		this.targetIntent = null;
 	},
 
+	/*
+		Triggered when the creature is targeted by another creature.
+	*/
 	onTargetedBy : function(other) {
 
 	},
 
+	/*
+		Synchronizes data from another source.
+	*/
 	synchronize : function(data) {
 		this.goalVector = data.goalVector;
 		this.targetUid = data.targetUid;
+		this.targetIntent = data.targetIntent;
 	},
 
+	/*
+		The main update loop for this creature
+	*/
 	update : function() {
 		//Ensure that this.position is a proper Vector3
 		this.position = new Vector3(this.position.x, this.position.y, this.position.z);
 		if(this.targetUid != null) {
 			this.setGoalVectorFromTarget();
-			
 		}
 
 		if(this.goalVector == null)
@@ -37,13 +60,17 @@ module.exports = CreatureBase = cls.Class.extend({
 		var dz = speed * direction.z;
 		var diffx = this.goalVector.x - this.position.x;
 		var diffz = this.goalVector.z - this.position.z;
-		if( Math.abs(diffx) > 1 || Math.abs(diffz) > 1){
+		var distanceRequired = this.targetUid != null ? this.attackRange : 1;
+
+		if( Math.abs(diffx) > distanceRequired || Math.abs(diffz) > distanceRequired){
 			this.position.x += dx;
 			this.position.z += dz;
 			this.tick = new Date().getTime();
 		}
 		else {
+			//We have reached our destination.
 			this.goalVector = null;
+			this.handleGoalVectorReached();
 		}
 	},
 
@@ -65,6 +92,21 @@ module.exports = CreatureBase = cls.Class.extend({
 			else {
 				this.goalVector = targetObject.position;
 				targetObject.onTargetedBy(this);
+			}
+		} else {
+			//Target has dissapeared for some reason.
+			this.targetUid = null;
+			this.goalVector = null;
+		}
+	},
+
+	handleGoalVectorReached : function() {
+		if(this.targetUid != null) {
+			var targetObject = this.gameManager.findFromUid(this.targetUid);
+			switch(this.targetIntent) {
+				case "attack":
+					BattleLogic.handleBattle(this, targetObject);
+					break;
 			}
 		}
 	}

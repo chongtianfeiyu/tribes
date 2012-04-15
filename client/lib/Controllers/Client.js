@@ -63,7 +63,8 @@ Game.Controllers.Client = (function(options) {
 					z : p.goalVector.z
 				},
 
-				targetUid : p.targetUid
+				targetUid : p.targetUid,
+				targetIntent : p.targetIntent
 			};
 			this.syncObject(data);
 		},
