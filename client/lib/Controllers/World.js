@@ -31,21 +31,38 @@ Game.Controllers.World = (function(options){
 			this.objects[o.uid] = o;
 			console.log("Adding object " + o.uid);
 			if(o.getIntersectMeshes) {
-				o.intersectMeshIndexes = [];
 				var oIntersectMeshes = o.getIntersectMeshes();
 				for (var i = oIntersectMeshes.length - 1; i >= 0; i--) {
-					o.intersectMeshIndexes.push(this.intersectMeshes.push(oIntersectMeshes[i]) - 1);
+					var intersectMeshUid = o.uid + ":" + i;
+					this.intersectMeshes[intersectMeshUid] = oIntersectMeshes[i];
+					this.cachedIntersectList = null;
 				};
 			}
+		},
+
+		cachedIntersectList : null,
+
+		getIntersectMeshes : function() {
+			if(this.cachedIntersectList == null) {
+				this.cachedIntersectList = [];
+				for(id  in this.intersectMeshes) {
+					this.cachedIntersectList.push(this.intersectMeshes[id]);
+				}
+			}
+			
+			return this.cachedIntersectList;
 		},
 
 		removeObject : function(o) {
 			console.log("Removing object "+ o.uid);
 			delete this.objects[o.uid];
-			for (var i = o.intersectMeshIndexes.length - 1; i >= 0; i--) {
-				this.intersectMeshes.splice(o.intersectMeshIndexes[i], 1);
-			};
-			
+			if(o.getIntersectMeshes) {
+				var oIntersectMeshes = o.getIntersectMeshes();
+				for (var i = oIntersectMeshes.length - 1; i >= 0; i--) {
+					var intersectMeshUid = o.uid + ":" + i;
+					delete this.intersectMeshes[intersectMeshUid];
+				};
+			}
 		},
 
 		initPlayer : function() {

@@ -106,8 +106,7 @@ Game.Controllers.PlayerController = (function() {
             global.app.projector.unprojectVector( vector, global.app.camera );
 
             var ray = new THREE.Ray( global.app.camera.position, vector.subSelf( global.app.camera.position ).normalize() );
-
-            var intersects = ray.intersectObjects( global.app.world.intersectMeshes );
+            var intersects = ray.intersectObjects( global.app.world.getIntersectMeshes() );
             for (var i = intersects.length - 1; i >= 0; i--) {
             	var intersect = intersects[i].object.pointer;
             	if(intersect != undefined)
