@@ -47,6 +47,22 @@ module.exports = CreatureBase = cls.Class.extend({
 		this.targetIntent = data.targetIntent;
 	},
 
+	synchData : function() {
+		return {
+			uid : this.uid,
+			classTag : this.classTag,
+			position : this.position,
+			goalVector : this.goalVector,
+			targetUid : this.targetUid,
+			targetIntent : this.targetIntent,
+			stats : {
+				hp : this.stats.hp(),
+				maxHp : this.stats.maxHp()
+			},
+			name : this.name
+		}
+	},
+
 	/*
 		The main update loop for this creature
 	*/

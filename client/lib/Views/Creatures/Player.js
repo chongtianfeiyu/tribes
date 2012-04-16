@@ -11,7 +11,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 
 		}
 		// cube
-		this.mesh = new THREE.Mesh( new THREE.CubeGeometry( 20, 20, 20, 1, 1, 1, materials ), new THREE.MeshFaceMaterial() );
+		this.mesh = new THREE.Mesh( new THREE.CubeGeometry( 30, 30, 30, 1, 1, 1, materials ), new THREE.MeshFaceMaterial() );
 		this.mesh.position.y = 15;
 
 		this.mesh.pointer = this;
@@ -39,6 +39,9 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		//Move meshes
 		this._super(data);
 
+		//Players recieve HP-data
+		this.currentHp = data.currentHp;
+		this.maxHp = data.maxHp;
 
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;

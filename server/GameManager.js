@@ -162,7 +162,7 @@ module.exports = GameManager = cls.Class.extend({
 			var o = this.objects[uid];
 			var objPos = new Vector3(o.position.x, o.position.y, o.position.z);
 			if(playerPos.distanceTo(objPos) < this.viewDistance && o.tick >= playerTick.tick) {
-				data.objects.push(o);
+				data.objects.push(o.synchData());
 			}	
 		}
 

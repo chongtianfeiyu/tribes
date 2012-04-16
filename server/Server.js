@@ -42,6 +42,7 @@ wsServer.on('request', function(request){
 
 	connection.on('message', function(message){
 		var msg = JSON.parse(message.utf8Data);
+		console.log("message from " + uid + ", of type " + msg.type);
 		//When we add a new player, we push them to the connection-list, and push the world state
 		// from time 0 for them to get the full list of objects
 		if(msg.type == "new_player") {

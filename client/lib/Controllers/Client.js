@@ -40,7 +40,7 @@ Game.Controllers.Client = (function(options) {
 					}
 			));
 		},
-
+		
 		connection_message : function(message) {
 			var msg = JSON.parse(message.data.toString());
 			
@@ -57,15 +57,18 @@ Game.Controllers.Client = (function(options) {
 			var data = {
 				uid : p.uid,
 
-				goalVector : {
-					x : p.goalVector.x,
-					y : p.goalVector.y,
-					z : p.goalVector.z
-				},
+				
 
 				targetUid : p.targetUid,
 				targetIntent : p.targetIntent
 			};
+			if(p.goalVector != null) {
+				data.goalVector = {
+					x : p.goalVector.x,
+					y : p.goalVector.y,
+					z : p.goalVector.z
+				};
+			}
 			this.syncObject(data);
 		},
 

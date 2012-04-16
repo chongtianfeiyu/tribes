@@ -5,14 +5,45 @@ Game.Controllers.PlayerController = (function() {
 	return {
 		init : function() {
 			_.bindAll(this, "mouseMove", "mouseClick");
+			this.initCursors();
 			MouseInput.addOnMoveEvent(this.mouseMove);
 			MouseInput.addOnClickEvent(this.mouseClick);
+		},
+
+		initCursors : function() {
+			var myCursor = $('<div id="mycursor"></div>');
+			myCursor.css('width','97px');
+			myCursor.css('height','137px');
+			myCursor.css('background','background: url("/img/cursor-hand.png") no-repeat left top');
+			myCursor.css('top','0');
+			myCursor.css('position', 'absolute');
+			myCursor.css('left','0');
+			myCursor.css('z-index','10000');
+			$('body').prepend(myCursor);
+			$(document).mousemove(function(e){
+		  		$('body').css('cursor', 'none');
+		       	$('#mycursor').css('left', e.clientX).css('top', e.clientY);
+		  	});
+		},
+
+		setCursor : function(str) {
+			switch(str) {
+				case "attack":
+					$('#mycursor').css('background', 'url(/img/cursor-sword.png) no-repeat left top' );
+					break;
+				default:
+				case "hand":
+					$('#mycursor').css('background', 'url(/img/cursor-hand.png) no-repeat left top' );
+					break;
+			}
 		},
 
 		mouseMove : function() {
 			var intersect = this.getIntersect();
 			if(intersect != null) {
-					
+				this.setCursor('attack');
+			} else {
+				this.setCursor('hand');
 			}
 		},
 

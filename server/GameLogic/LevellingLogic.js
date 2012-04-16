@@ -32,7 +32,6 @@ module.exports = LevellingLogic = {
 		for(var i = 0; i < LevellingLogic.levelUpTable.length; i++) {
 			sum += LevellingLogic.levelUpTable[i];
 			if(experience < sum) {
-				console.log("Level from experience " + experience + " is " + i);
 				return i + 1;
 			}
 		}
