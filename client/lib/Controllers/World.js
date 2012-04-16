@@ -18,7 +18,7 @@ Game.Controllers.World = (function(options){
 			for(uid in this.objects){
 				var o = this.objects[uid];
 				var distance = new THREE.Vector3().sub(playerPos, o.position).length();
-				if(distance > 3000) {
+				if(distance > 4000) {
 					o.destroy();
 					this.removeObject(o);
 				}

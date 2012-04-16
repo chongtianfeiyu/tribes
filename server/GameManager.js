@@ -13,18 +13,19 @@ module.exports = GameManager = cls.Class.extend({
 		this.deletes = [];
 
 		this.playerTicks = [];
-		this.viewDistance = 3000;
+		this.viewDistance = 4000;
 
 		//Plant a tree, save the world.
 		var tree = new Tree();
 		var start = {x : 100, y : 0, z : 100};
 		tree.init(start);
 		this.addTerrainObject(tree);
-		for(var i = 0; i<20;i++) 
+		console.log("Simulating world...");
+		for(var i = 0; i<200;i++) 
 		{
 			this.autoUpdateTerrain();
 		}
-
+		console.log("Done!");
 		var mob = new Mob(
 			{
 				position : {x : -100, y : 0, z : -100},
@@ -92,7 +93,9 @@ module.exports = GameManager = cls.Class.extend({
 
 	addTerrainObject : function(o) {
 		o.tick = new Date().getTime();
+		o.gameManager = this;
 		this.terrainObjects[o.uid] = o;
+
 	},
 
 	removeObject : function(uid) {
@@ -128,6 +131,19 @@ module.exports = GameManager = cls.Class.extend({
 		return a1.x == a2.x && a1.z == a2.z;
 	},
 
+	getTerrainObjectsFromArea : function(position) {
+		var area = this.getArea(position);
+		var list = [];
+		for(uid in this.terrainObjects) {
+			var o = this.terrainObjects[uid];
+			var oArea = this.getArea(o.position);
+			if(this.areaEquals(area, oArea)) {
+				list.push(o);
+			}
+		}
+		return list;
+	},
+
 	/*
 		Returns the latest tick that an update was sent to a player
 		within a certain region.
@@ -146,6 +162,7 @@ module.exports = GameManager = cls.Class.extend({
 
 		return playerTick;
 	},
+
 
 	setPlayerTick : function(player, tick) {
 		this.getPlayerTick(player).tick = tick;
@@ -172,7 +189,7 @@ module.exports = GameManager = cls.Class.extend({
 			var o = this.terrainObjects[uid];
 			var objPos = new Vector3(o.position.x, o.position.y, o.position.z);
 			if(playerPos.distanceTo(objPos) < this.viewDistance && o.tick >= playerTick.tick)
-				data.terrain.push(o);
+				data.terrain.push(o.synchData());
 		}
 		
 		//Push deleted objects to client
@@ -218,8 +235,9 @@ module.exports = GameManager = cls.Class.extend({
 			else if(o.childCount <= 2) {
 				o.childCount += 1;
 				var child = o.breed();
-				child.tick = new Date().getTime();
-				this.terrainObjects[child.uid] = child;
+				if(child != null) {
+					this.addTerrainObject(child);
+				}
 			}
 		}
 	}

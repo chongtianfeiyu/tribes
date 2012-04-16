@@ -56,9 +56,6 @@ Game.Controllers.Client = (function(options) {
 			this.latestSync = this.latestChange;
 			var data = {
 				uid : p.uid,
-
-				
-
 				targetUid : p.targetUid,
 				targetIntent : p.targetIntent
 			};

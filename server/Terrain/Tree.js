@@ -24,11 +24,20 @@ var Tree = function(){
 		fullyGrown : function() {
 			return this.growGen > this.growPotential;
 		},
+
+		synchData : function() {
+			return {
+				classTag : this.classTag,
+				position : this.position,
+				data : this.data,
+				uid : this.uid
+			}
+		},
 		
 		init : function(position) {
 			this.position = position;
 			this.growGen = 0;
-			this.growPotential = r(3, 7);
+			this.growPotential = 1;
 			this.uid = Math.random();
 			//First branch goes straight up
 			var data = {
@@ -75,7 +84,7 @@ var Tree = function(){
 					f : r(30, 40)
 				});
 
-				data.f = null;
+				delete data.f;
 			}
 			++this.growGen;
 		},	
@@ -87,6 +96,11 @@ var Tree = function(){
 			newPos.x = this.position.x + r(-1000, 1000);
 			newPos.y = this.position.y;
 			newPos.z = this.position.z+ r(-1000, 1000);
+			var areaList = this.gameManager.getTerrainObjectsFromArea(newPos);
+			console.log("Breed - check for density: " + areaList.length);
+			if(areaList.length >= 5)
+				return null;
+
 			child.init(newPos);
 			child.uid = Math.random();
 			return child;

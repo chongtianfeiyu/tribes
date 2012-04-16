@@ -66,8 +66,7 @@ wsServer.on('request', function(request){
 
 //Push-cycle. 
 var lastPushTick = 0;
-
-setInterval(function() {
+function loop() {
 	for(uid in clients) {
 		var connection = clients[uid];
 		//Get the changes to the state of the world that has occured since the lastPushTick
@@ -77,6 +76,8 @@ setInterval(function() {
 			send(connection, "world_state", data);
 		}
 	}
-	
-}, 5);
+	setTimeout(loop, 5);
+}
+
+loop();
 
