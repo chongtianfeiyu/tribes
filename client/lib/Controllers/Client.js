@@ -15,6 +15,7 @@ Game.Controllers.Client = (function(options) {
 			this.connection.onopen = this.connection_open;
 			this.connection.onmessage = this.connection_message;
 			this.connection.onerror = this.connection_error;
+			this.connected = false;
 			this.latestSync = 0;
 		},
 
@@ -32,8 +33,6 @@ Game.Controllers.Client = (function(options) {
 						data : { 
 							name : USER_NAME,
 							uid : UID,
-							position : { x : 0, y : 15, z : 0},
-							goalVector : { x : 0, y : 0, z : 0},
 							rotation : { x : 0, y : 0, z : 0},
 							targetUid : null
 						}
@@ -47,8 +46,13 @@ Game.Controllers.Client = (function(options) {
 			switch(msg.type) {
 				case "world_state":
 					global.app.world.setState(msg.data);
+					this.connected = true;
 					break;
 			}
+		},
+
+		hasConnected : function() {
+			return this.connected;
 		},
 
 		playerSync : function() {

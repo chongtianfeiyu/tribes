@@ -3,7 +3,8 @@ var Tree = require("./Terrain/Tree");
 var _ = require("Underscore");
 var cls = require("./packages/Class");
 var Vector3 = require("./packages/Vector3");
-var Mob = require("./Creatures/Mob")
+var Mob = require("./Creatures/Mob");
+var Map = require("./Terrain/Map");
 
 module.exports = GameManager = cls.Class.extend({
 
@@ -14,21 +15,17 @@ module.exports = GameManager = cls.Class.extend({
 
 		this.playerTicks = [];
 		this.viewDistance = 4000;
+		this.map = new Map(100000,100000);
 
 		//Plant a tree, save the world.
 		var tree = new Tree();
-		var start = {x : 100, y : 0, z : 100};
+		var start = this.map.nearCenter();
 		tree.init(start);
 		this.addTerrainObject(tree);
-		console.log("Simulating world...");
-		for(var i = 0; i<200;i++) 
-		{
-			this.autoUpdateTerrain();
-		}
-		console.log("Done!");
+
 		var mob = new Mob(
 			{
-				position : {x : -100, y : 0, z : -100},
+				position : this.map.nearCenter(),
 				goalVector : null,
 				uid : Math.random()
 		});
@@ -37,6 +34,15 @@ module.exports = GameManager = cls.Class.extend({
 		this.mobSpawnTime = new Date().getTime();
 
 		this.addObject(mob);
+
+		console.log("Simulating world...");
+		for(var i = 0; i<200;i++) 
+		{
+			this.autoUpdateTerrain();
+			this.update();
+		}
+		console.log("Done!");
+		
 
 		_.bindAll(this, "autoUpdateTerrain", "update", "cleanUp");
 		setInterval(this.autoUpdateTerrain, 10 * 60000);
@@ -57,7 +63,7 @@ module.exports = GameManager = cls.Class.extend({
 		if((new Date().getTime() - this.mobSpawnTime) > 10000 && this.mobCount < 20) {
 			var mob = new Mob(
 			{
-					position : {x : -100, y : 0, z : -100},
+					position : this.map.nearCenter(),
 					goalVector : null,
 					uid : Math.random()
 			});
@@ -76,9 +82,9 @@ module.exports = GameManager = cls.Class.extend({
 	addNewPlayer : function(data) {
 		var player = new Player({
 			name : data.name,
-			position : data.position || {x:0,y:0,z:0},
+			position : data.position || this.map.center(),
 			rotation : data.rotation,
-			goalVector : data.goalVector,
+			goalVector : null,
 			uid : data.uid
 		});	
 		this.addObject(player);

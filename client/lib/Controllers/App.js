@@ -11,7 +11,7 @@ Game.Controllers.App = (function(options){
 	//Camera-constants
 	var CAMERA_FOV = 45;
 	var CAMERA_NEAR = 1;
-	var CAMERA_FAR = 10000;
+	var CAMERA_FAR = 1000000;
 	
 
 	//Renderer-constants
@@ -74,8 +74,7 @@ Game.Controllers.App = (function(options){
 
 			this.cameraController = new Game.Controllers.CameraController();
 			this.cameraController.init(this.camera, this.world.player);
-			this.cameraController.update();
-
+			
 			//Initialize mouse-selector-controller
 			this.playerController = new Game.Controllers.PlayerController();
 			this.playerController.init();
@@ -92,7 +91,8 @@ Game.Controllers.App = (function(options){
 		animate : function() {
 			requestAnimationFrame( this.animate );
 			this.world.animationUpdate();
-			this.cameraController.update();
+			if(this.client.hasConnected())
+				this.cameraController.update();
 			this.render();
 		},
 

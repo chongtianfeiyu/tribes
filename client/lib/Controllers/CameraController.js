@@ -10,9 +10,9 @@ Game.Controllers.CameraController = (function(camera){
 			//Camera-position (relative to player)
 			this.camera = camera;
 			this.player = player;
-			this.camera.position.y = CAMERA_OFFSET_Y;
-			this.camera.position.x = CAMERA_OFFSET_X;
-			this.camera.position.z = CAMERA_OFFSET_Z;
+			this.camera.position.y = -100;
+			this.camera.position.x = 0;
+			this.camera.position.z = 0;
 			this.accumulatedMouseDeltaX = 0;
 			this.accumulatedMouseDeltaY = CAMERA_OFFSET_Y;
 			_.bindAll(this, "update");
@@ -34,7 +34,7 @@ Game.Controllers.CameraController = (function(camera){
 			
 			this.camera.position.x = this.player.mesh.position.x + CAMERA_OFFSET_X;
 			this.camera.position.z = this.player.mesh.position.z + CAMERA_OFFSET_Z;
-			this.camera.position.y = this.accumulatedMouseDeltaY;
+			this.camera.position.y = this.player.mesh.position.y + this.accumulatedMouseDeltaY;
 			this.camera.lookAt(this.player.mesh.position); 
 		}
 	}

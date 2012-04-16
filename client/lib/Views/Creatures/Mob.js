@@ -29,6 +29,7 @@ Game.Views.Creatures.Mob = Game.Views.Creatures.CreatureBase.extend({
 		}
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;
+		this.mesh.position.y = this.position.y + 15;
 	},
 
 	getIntersectText : function() {

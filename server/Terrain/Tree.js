@@ -98,8 +98,12 @@ var Tree = function(){
 			newPos.z = this.position.z+ r(-1000, 1000);
 			var areaList = this.gameManager.getTerrainObjectsFromArea(newPos);
 			console.log("Breed - check for density: " + areaList.length);
-			if(areaList.length >= 5)
+			if(areaList.length >= 5 || !this.gameManager.map.isInBounds(newPos)) {
 				return null;
+				if(!this.gameManager.map.isInBounds(newPos))
+					console.log("Tree out of bounds");
+
+			}
 
 			child.init(newPos);
 			child.uid = Math.random();

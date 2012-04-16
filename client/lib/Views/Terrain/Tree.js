@@ -9,8 +9,9 @@ Game.Views.Terrain.Tree = (function() {
 	var createTree = function(start, branches, ref) {
 		var geometry = new THREE.Geometry();
 		var particle = new THREE.Particle(material);
+		var yOffset = global.app.world.terrain.getTerrainHeight(start.x, start.z);
 		particle.position.x = start.x;
-		particle.position.y = start.y;
+		particle.position.y = start.y + yOffset;
 		particle.position.z = start.z;
 		geometry.vertices.push( new THREE.Vertex( particle.position ) );
 
@@ -21,7 +22,7 @@ Game.Views.Terrain.Tree = (function() {
 		//Create the second point
 		particle = new THREE.Particle(material);
 		particle.position.x = newx;
-		particle.position.y = newy;
+		particle.position.y = newy + yOffset;
 		particle.position.z = newz;
 		
 		//Add the particle position into the geometry object
@@ -53,7 +54,7 @@ Game.Views.Terrain.Tree = (function() {
 					7, 
 					7), material);
 			flowerMesh.position.x = newx;
-			flowerMesh.position.y = newy;
+			flowerMesh.position.y = newy + yOffset;
 			flowerMesh.position.z = newz;
 			flowerMesh.pointer = ref;
 			meshes.push(flowerMesh);
