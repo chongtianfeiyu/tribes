@@ -38,13 +38,20 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		
 		//Move meshes
 		this._super(data);
-
 		//Players recieve HP-data
 		this.currentHp = data.currentHp;
 		this.maxHp = data.maxHp;
 
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;
+		
+		if(this.goalVector) {
+			this.mesh.lookAt(this.goalVector);
+			this.mesh.rotation.z = 0;
+			this.mesh.rotation.x = 0;
+		}
+		
+
 		this.playerTag.position.x = this.position.x;
 		this.playerTag.position.z = this.position.z;
 	},

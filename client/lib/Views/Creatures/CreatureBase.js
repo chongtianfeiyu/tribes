@@ -8,5 +8,6 @@ Game.Views.Creatures.CreatureBase = Class.extend({
 
 	update : function(data) {
 		this.position = data.position;
+		this.goalVector = data.goalVector;
 	}
 });

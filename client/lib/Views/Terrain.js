@@ -12,7 +12,7 @@ var Terrain = (function() {
 		water : "/resources/textures/terrain/water.png",
 
 		init : function() {
-			var grassTexture = THREE.ImageUtils.loadTexture(this.grass);
+			var grassTexture = THREE.ImageUtils.loadTexture(this.desert);
 
 			grassTexture.wrapS = THREE.RepeatWrapping;
 			grassTexture.wrapT = THREE.RepeatWrapping;

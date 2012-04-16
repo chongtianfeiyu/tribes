@@ -7,7 +7,7 @@ window.onload = function() {
 	var name = Math.round(Math.random() * 1000);
 	//Construct global objects.
 	global.app = new Game.Controllers.App({uid : uid, name : name});
-
+	global.cache = new MicroCache();
 	//Initialize global objects.
 	global.app.init();
 

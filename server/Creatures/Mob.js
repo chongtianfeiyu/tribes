@@ -53,6 +53,7 @@ module.exports = Mob = CreatureBase.extend({
 			this.randomTargetChosen = true;
 			setTimeout(this.chooseRandomTarget, 3000);
 		}
+		
 	},
 
 	chooseRandomTarget : function() {

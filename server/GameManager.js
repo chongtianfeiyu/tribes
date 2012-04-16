@@ -20,7 +20,7 @@ module.exports = GameManager = cls.Class.extend({
 		var start = {x : 100, y : 0, z : 100};
 		tree.init(start);
 		this.addTerrainObject(tree);
-		for(var i = 0; i<10;i++) 
+		for(var i = 0; i<20;i++) 
 		{
 			this.autoUpdateTerrain();
 		}
@@ -38,7 +38,7 @@ module.exports = GameManager = cls.Class.extend({
 		this.addObject(mob);
 
 		_.bindAll(this, "autoUpdateTerrain", "update", "cleanUp");
-		setInterval(this.autoUpdateTerrain, 60000);
+		setInterval(this.autoUpdateTerrain, 10 * 60000);
 		setInterval(this.update, 10);
 		setInterval(this.cleanUp, 5000);
 	},
