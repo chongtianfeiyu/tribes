@@ -9,6 +9,7 @@ Game.Controllers.World = (function(options){
 			_.bindAll(this, "setState", "setTerrain", "animationUpdate");
 			this.initTerrain();
 			this.initPlayer();
+			Logger.log("Init world");
 		},
 
 		animationUpdate : function() {
@@ -29,7 +30,7 @@ Game.Controllers.World = (function(options){
 
 		addObject : function(o) {
 			this.objects[o.uid] = o;
-			console.log("Adding object " + o.uid);
+			Logger.log("Adding " + o.uid);
 			if(o.getIntersectMeshes) {
 				var oIntersectMeshes = o.getIntersectMeshes();
 				for (var i = oIntersectMeshes.length - 1; i >= 0; i--) {
@@ -54,7 +55,7 @@ Game.Controllers.World = (function(options){
 		},
 
 		removeObject : function(o) {
-			console.log("Removing object "+ o.uid);
+			Logger.log("Removing object "+ o.uid);
 			delete this.objects[o.uid];
 			if(o.getIntersectMeshes) {
 				var oIntersectMeshes = o.getIntersectMeshes();

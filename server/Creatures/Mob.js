@@ -16,7 +16,8 @@ module.exports = Mob = CreatureBase.extend({
 			vitality : 10,
 			intelligence : 10,
 			dexterity : 10,
-			luck : 10
+			luck : 10,
+			creature : this
 		});
 		this.speed = 2;
 		//indicates whether it should wait to choose a random target.

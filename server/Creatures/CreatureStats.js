@@ -3,6 +3,7 @@ var _ = require("Underscore");
 module.exports = CreatureStats = cls.Class.extend({
 	init : function(options) {
 		this.level = options.level;
+		this.creature = options.creature;
 		/*
 			These are the basic stats that can be controlled.
 
@@ -42,7 +43,8 @@ module.exports = CreatureStats = cls.Class.extend({
 			"accuracy",
 			"dodge",
 			"attackSpeed",
-			"addExperience"
+			"addExperience",
+			"update"
 			);
 	},
 
@@ -54,6 +56,7 @@ module.exports = CreatureStats = cls.Class.extend({
 				if(this.currentHp > this.maxHp()) {
 					this.currentHp = this.maxHp();
 				}
+				this.creature.tick = new Date().getTime();
 				console.log("Regenerates hp to " + this.currentHp);
 			}
 			this.latestUpdate = new Date().getTime();

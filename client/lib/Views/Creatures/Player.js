@@ -38,9 +38,12 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		
 		//Super update
 		this._super(data);
-		//Players recieve HP-data
-		this.currentHp = data.currentHp;
-		this.maxHp = data.maxHp;
+		//Current player recieve HP-data
+		if(this.isCurrent) {
+			this.hp = data.stats.hp;
+			this.maxHp = data.stats.maxHp;
+			Logger.log(this.hp);
+		}
 
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;
@@ -54,6 +57,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this.playerTag.position.x = this.position.x;
 		this.playerTag.position.z = this.position.z;
 		this.playerTag.position.y = this.mesh.position.y + 80;
+
 	},
 
 	getIntersectText : function() {

@@ -1,6 +1,7 @@
 var cls = require("../packages/Class");
 var Vector3 = require("../packages/Vector3");
 var BattleLogic = require("../GameLogic/BattleLogic");
+var _ = require("Underscore");
 
 module.exports = CreatureBase = cls.Class.extend({
 	
@@ -56,10 +57,6 @@ module.exports = CreatureBase = cls.Class.extend({
 			goalVector : this.goalVector,
 			targetUid : this.targetUid,
 			targetIntent : this.targetIntent,
-			stats : {
-				hp : this.stats.hp(),
-				maxHp : this.stats.maxHp()
-			},
 			name : this.name
 		}
 	},

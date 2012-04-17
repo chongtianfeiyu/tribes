@@ -12,12 +12,17 @@ module.exports = Player = CreatureBase.extend({
 			vitality : 10,
 			intelligence : 10,
 			dexterity : 10,
-			luck : 10
+			luck : 10,
+			creature : this
 		});
 		this.classTag = "player";
 		this.name = options.name;
 	},
-
+	
+	update : function() {
+		this._super();
+	},
+	
 	synchronize : function(data) {
 		this._super(data);
 	}

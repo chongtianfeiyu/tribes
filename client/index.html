@@ -7,10 +7,23 @@
 			    cursor: none;
 			    overflow:hidden;
 			}
+			#log-window {
+				position:absolute;
+				background-color:#000;
+				bottom:0px;
+				height:100px;
+				z-index:10000;
+				width:50%;
+				filter: alpha(opacity=65);
+				-moz-opacity: 0.65;
+				opacity: 0.65;
+				color:#FFF;
+			}
 		</style>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	</head>
 	<body>
+		<div id="log-window"></div>
 		<!-- Dependencies -->
 		<script src="packages/Underscore.js" type="text/javascript"></script>
 		<script src="packages/Three.js" type="text/javascript"></script>
@@ -24,6 +37,7 @@
 		<!-- Helpers -->
 		<script src="lib/helpers/MouseInput.js" type="text/javascript"></script>
 		<script src="lib/helpers/MathHelpers.js" type="text/javascript"></script>
+		<script src="lib/helpers/Logger.js" type="text/javascript"></script>
 		
 		<!-- Game library -->
 		<script src="lib/Controllers/App.js" type="text/javascript"></script>
