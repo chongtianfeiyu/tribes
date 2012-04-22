@@ -7,6 +7,7 @@ var r = function(r1, r2) {
 module.exports = BattleLogic = {
 	handleBattle : function(attacker, defender) {
 		if(BattleLogic.isTimeToAttack(attacker)) {
+			defender.onAttackedBy(attacker);
 			console.log(attacker.classTag + " attacks " + defender.classTag);
 
 			if(BattleLogic.isHit(attacker, defender)) {
@@ -15,9 +16,11 @@ module.exports = BattleLogic = {
 				var hardDefense = defender.stats.hardDefense();
 				//Check for divide-by-zero-errors
 				hardDefense = hardDefense == 0 ? 1 : hardDefense;
-				var damage = atk - (atk/100/hardDefense) - softDefense;
+				var damage = Math.round(atk - (atk/100/hardDefense) - softDefense);
 				damage = damage < 0 ? 0 : damage;
 				defender.stats.receiveDamage(damage);
+				defender.messageList.push({type: "attack", damage: damage});
+				console.log(defender.messageList);
 				
 				console.log("HIT!");
 				console.log("Damage dealt: " + damage);
@@ -28,6 +31,7 @@ module.exports = BattleLogic = {
 				}
 			}
 			else {
+				defender.messageList.push({type: "attack_miss"});
 				console.log("Miss!");
 			}
 

@@ -76,6 +76,8 @@ function loop() {
 			send(connection, "world_state", data);
 		}
 	}
+	//Clean up messages on all the objects every cycle.
+	gameManager.cleanMessageLists();
 	setTimeout(loop, 5);
 }
 

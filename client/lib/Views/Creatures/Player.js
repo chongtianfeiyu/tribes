@@ -17,9 +17,9 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this.mesh.pointer = this;
 		global.app.scene.add(this.mesh);
 
-		var text3d = new THREE.TextGeometry( this.name ,{size: 10, height: 1, curveSegments: 1, font:'helvetiker'});
+		var text3d = new THREE.TextGeometry( this.name ,{size: 5, height: 1, curveSegments: 1, font:'helvetiker'});
 		THREE.GeometryUtils.center( text3d );
-		var textMaterial = new THREE.MeshBasicMaterial( { color: 0xA10000, overdraw: true } );
+		var textMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: true } );
 		this.playerTag = new THREE.Mesh( text3d, textMaterial );
 		this.playerTag.position.y += 30;
         global.app.scene.add(this.playerTag);
@@ -29,6 +29,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		No data-change update
 	*/
 	animationUpdate : function() {
+		this._super();
 		this.playerTag.lookAt(global.app.camera.position);
 	},
 
@@ -60,6 +61,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	},
 
 	destroy : function() {
+		this._super();
 		global.app.scene.remove(this.mesh);
 		global.app.scene.remove(this.playerTag);
 	}

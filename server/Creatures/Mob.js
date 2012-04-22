@@ -28,9 +28,9 @@ module.exports = Mob = CreatureBase.extend({
 	},
 
 	/*
-		When the mob gets targeted, it charges back at the attacker.
+		When the mob gets attacked, it charges back at the attacker.
 	*/
-	onTargetedBy : function(enemy) {
+	onAttackedBy : function(enemy) {
 		this._super(enemy);
 		if(this.targetUid == null) {
 			this.targetUid = enemy.uid;

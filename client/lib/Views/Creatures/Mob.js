@@ -36,6 +36,7 @@ Game.Views.Creatures.Mob = Game.Views.Creatures.CreatureBase.extend({
 	},
 
 	destroy : function() {
+		this._super();
 		global.app.scene.remove(this.mesh);
 	}
 });

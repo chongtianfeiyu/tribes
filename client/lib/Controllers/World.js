@@ -30,7 +30,6 @@ Game.Controllers.World = (function(options){
 
 		addObject : function(o) {
 			this.objects[o.uid] = o;
-			Logger.log("Adding " + o.uid);
 			if(o.getIntersectMeshes) {
 				var oIntersectMeshes = o.getIntersectMeshes();
 				for (var i = oIntersectMeshes.length - 1; i >= 0; i--) {
@@ -55,7 +54,6 @@ Game.Controllers.World = (function(options){
 		},
 
 		removeObject : function(o) {
-			Logger.log("Removing object "+ o.uid);
 			delete this.objects[o.uid];
 			if(o.getIntersectMeshes) {
 				var oIntersectMeshes = o.getIntersectMeshes();
@@ -109,6 +107,22 @@ Game.Controllers.World = (function(options){
 			};
 		},
 
+		/*
+			HAndles a single message-item related to the object
+		*/
+		handleObjectMessage : function(object, message) {
+			Logger.log(message.type);
+
+			switch(message.type) {
+				case "attack_miss":
+					object.flare("Miss");
+					break;
+				case "attack":
+					object.flare(message.damage);
+					break;
+			}
+		},
+
 		setState : function(data) {
 			this.setTerrain(data.terrain);
 			
@@ -119,24 +133,27 @@ Game.Controllers.World = (function(options){
 					existing.update(o);
 				}
 				else{
-					var newObject = null;
 					switch(o.classTag) {
 						case "player":
-							newObject = new Game.Views.Creatures.Player({name : o.name, uid : o.uid});
+							existing = new Game.Views.Creatures.Player({name : o.name, uid : o.uid});
 							break;
 						case "mob":
-							newObject = new Game.Views.Creatures.Mob({ uid : o.uid});
+							existing = new Game.Views.Creatures.Mob({ uid : o.uid});
 							break;
 						default:
 							console.log("Can't find oject of type " + o.classTag);
 							break;
 					}
 
-					if(newObject != null) {
-						newObject.update(o);
-						this.addObject(newObject);
+					if(existing != null) {
+						existing.update(o);
+						this.addObject(existing);
 					}
-				}	
+				}
+
+				for (var j = o.messageList.length - 1; j >= 0; j--) {
+					this.handleObjectMessage(existing, o.messageList[j]);
+				};	
 			};
 
 
@@ -144,7 +161,6 @@ Game.Controllers.World = (function(options){
 				var d = data.deletes[i];
 				var o = this.findFromUid(d);
 				if(o != undefined) {
-					console.log("delete " + o.name);
 					o.destroy();
 					this.removeObject(o);
 				}

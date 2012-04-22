@@ -174,6 +174,16 @@ module.exports = GameManager = cls.Class.extend({
 		this.getPlayerTick(player).tick = tick;
 	},
 
+	/*
+		Erases all the previous messages from all the objects.
+		
+	*/
+	cleanMessageLists : function() {
+		for(uid in this.objects) {
+			this.objects[uid].messageList = [];
+		}
+	},
+
 	worldStateDelta : function(uid) {
 		var data = {};
 		var player = this.objects[uid];

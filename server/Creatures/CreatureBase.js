@@ -6,6 +6,7 @@ var _ = require("Underscore");
 module.exports = CreatureBase = cls.Class.extend({
 	
 	init : function(options) {
+		this.messageList = [];
 		//Stats (CreatureStats.js)
 		this.stats = options.stats;
 		//Movement speed
@@ -32,6 +33,10 @@ module.exports = CreatureBase = cls.Class.extend({
 		this.alive = false;
 	},
 
+	onAttackedBy : function(other) {
+
+	},
+
 	/*
 		Triggered when the creature is targeted by another creature.
 	*/
@@ -56,7 +61,8 @@ module.exports = CreatureBase = cls.Class.extend({
 			goalVector : this.goalVector,
 			targetUid : this.targetUid,
 			targetIntent : this.targetIntent,
-			name : this.name
+			name : this.name,
+			messageList : this.messageList
 		}
 	},
 
