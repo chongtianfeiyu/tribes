@@ -3,6 +3,7 @@ var _ = require("Underscore");
 module.exports = CreatureStats = cls.Class.extend({
 	init : function(options) {
 		this.level = options.level;
+		//Points to the creature that owns the stats
 		this.creature = options.creature;
 		/*
 			These are the basic stats that can be controlled.

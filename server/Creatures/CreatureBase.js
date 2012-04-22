@@ -10,7 +10,6 @@ module.exports = CreatureBase = cls.Class.extend({
 		this.stats = options.stats;
 		//Movement speed
 		this.speed = 3;
-		this.currentSpeed = this.speed;
 		//Initial speed
 		this.position = options.position;
 		//How far the weapon reaches
@@ -86,7 +85,7 @@ module.exports = CreatureBase = cls.Class.extend({
 			return;
 		}
 		
-		var speed = this.currentSpeed;
+		var speed = this.speed;
 		var goal = new Vector3(this.goalVector.x, this.goalVector.y, this.goalVector.z);
 		var direction = goal.subtract(this.position).normalize();
 		var dx = speed * direction.x;
@@ -99,17 +98,12 @@ module.exports = CreatureBase = cls.Class.extend({
 			this.position.x += dx;
 			this.position.z += dz;
 			this.tick = new Date().getTime();
-			//Slow down before we reach target to prevent "Earthquakes"
-			if(Math.abs(diffx) < speed || Math.abs(diffz) < speed)
-			{
-				this.currentSpeed = Math.abs(diffx + diffz);
-			}
+			
 			//Regen while walking.
 			this.stats.update();
 		}
 		else {
 			//We have reached our destination.
-			this.currentSpeed = this.speed;
 			this.goalVector = null;
 			this.handleGoalVectorReached();
 		}

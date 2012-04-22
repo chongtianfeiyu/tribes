@@ -1,4 +1,4 @@
-module.exports = LevellingLogic = {
+module.exports = LevelingLogic = {
 	levelUpTable : [
 		//1
 		550,
@@ -19,18 +19,18 @@ module.exports = LevellingLogic = {
 	*/
 	getMobExperienceFromLevel : function(level) {
 		var sum = 0;
-		for (var i = 0; i < LevellingLogic.levelUpTable.length; i++) {
+		for (var i = 0; i < LevelingLogic.levelUpTable.length; i++) {
 			if(i == level)
 				break;
-			sum += LevellingLogic.levelUpTable[i];
+			sum += LevelingLogic.levelUpTable[i];
 		};
 		return sum;
 	},
 
 	getLevelFromExperience : function(experience) {
 		var sum = 0;
-		for(var i = 0; i < LevellingLogic.levelUpTable.length; i++) {
-			sum += LevellingLogic.levelUpTable[i];
+		for(var i = 0; i < LevelingLogic.levelUpTable.length; i++) {
+			sum += LevelingLogic.levelUpTable[i];
 			if(experience < sum) {
 				return i + 1;
 			}
@@ -38,12 +38,12 @@ module.exports = LevellingLogic = {
 	},
 
 	getExpFromMob : function(mob) {
-		var lvlExp = LevellingLogic.getMobExperienceFromLevel(mob.stats.level);
+		var lvlExp = LevelingLogic.getMobExperienceFromLevel(mob.stats.level);
 		return lvlExp / (mob.stats.level * 20);
 	},
 
 	addBattleWinExperience : function(attacker, defender) {
-		var exp = LevellingLogic.getExpFromMob(defender);
+		var exp = LevelingLogic.getExpFromMob(defender);
 		var currentExperience = attacker.stats.accumulatedExperience;
 		var sum = currentExperience + exp;
 		var sumLevel = this.getLevelFromExperience(sum);

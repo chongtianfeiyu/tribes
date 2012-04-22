@@ -1,4 +1,4 @@
-var cls = require("./LevellingLogic");
+var cls = require("./LevelingLogic");
 
 var r = function(r1, r2) {
 	return ((Math.random()*(r2 - r1)) + r1);
@@ -41,7 +41,7 @@ module.exports = BattleLogic = {
 	win : function(attacker, defender) {
 		defender.die(attacker);
 		if(attacker.classTag == "player") {
-			LevellingLogic.addBattleWinExperience(attacker, defender);
+			LevelingLogic.addBattleWinExperience(attacker, defender);
 
 		}
 		attacker.targetUid = null;
