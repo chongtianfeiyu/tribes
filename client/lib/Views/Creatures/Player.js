@@ -17,13 +17,11 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this.mesh.pointer = this;
 		global.app.scene.add(this.mesh);
 
-		var text3d = new THREE.TextGeometry( this.name ,{size: 20, height: 1, curveSegments: 1, font:'helvetiker'});
+		var text3d = new THREE.TextGeometry( this.name ,{size: 10, height: 1, curveSegments: 1, font:'helvetiker'});
 		THREE.GeometryUtils.center( text3d );
 		var textMaterial = new THREE.MeshBasicMaterial( { color: 0xA10000, overdraw: true } );
 		this.playerTag = new THREE.Mesh( text3d, textMaterial );
-		this.playerTag.position.y += 80;
-		
-        
+		this.playerTag.position.y += 30;
         global.app.scene.add(this.playerTag);
 	},
 
@@ -40,23 +38,16 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this._super(data);
 		//Current player recieve HP-data
 		if(this.isCurrent) {
-			this.hp = data.stats.hp;
-			this.maxHp = data.stats.maxHp;
-			Logger.log(this.hp);
+			Game.Controllers.HUD.setHP(data.stats.hp, data.stats.maxHp);
 		}
 
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;
 		this.mesh.position.y = this.position.y  + 15;
-		if(this.goalVector) {
-			this.mesh.lookAt(this.goalVector);
-			this.mesh.rotation.z = 0;
-			this.mesh.rotation.x = 0;
-		}
 		
 		this.playerTag.position.x = this.position.x;
 		this.playerTag.position.z = this.position.z;
-		this.playerTag.position.y = this.mesh.position.y + 80;
+		this.playerTag.position.y = this.mesh.position.y + 30;
 
 	},
 

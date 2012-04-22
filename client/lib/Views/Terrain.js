@@ -59,6 +59,7 @@ var Terrain = (function() {
 		},
 
 		getTerrainHeight : function(xPos, zPos) {
+			return 0;
 			var x = Math.round(xPos / this.scaleFactor);
 			var z = Math.round(zPos / this.scaleFactor);
 			var xPlusOne = x + 1;
