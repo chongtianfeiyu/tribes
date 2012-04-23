@@ -63,7 +63,7 @@ module.exports = Mob = CreatureBase.extend({
 			this.goalVector = {
 				x : this.position.x + r(-300, 300),
 				y : this.position.y,
-				z : this.position.x + r(-300, 300)
+				z : this.position.z + r(-300, 300)
 			};
 			this.randomTargetChosen = false;
 		}

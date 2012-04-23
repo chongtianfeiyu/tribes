@@ -2,6 +2,7 @@ Game.Views.Creatures.Mob = Game.Views.Creatures.CreatureBase.extend({
 	init : function(options) {
 		this._super(options);
 		
+
 		var materials = [];
 		for ( var i = 0; i < 6; i ++ ) {
 

@@ -10,6 +10,8 @@ Game.Controllers.World = (function(options){
 			this.initTerrain();
 			this.initPlayer();
 			Logger.log("Init world");
+
+			
 		},
 
 		animationUpdate : function() {
@@ -167,4 +169,4 @@ Game.Controllers.World = (function(options){
 			};
 		}
 	}
-})
+});
