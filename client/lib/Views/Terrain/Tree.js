@@ -45,7 +45,7 @@ Game.Views.Terrain.Tree = (function() {
 		else if(branches.f && branches.f != null) {
 			// material
 			var material = new THREE.MeshLambertMaterial({
-				map: global.cache.getSet("tree_flower_texture", THREE.ImageUtils.loadTexture( "/resources/textures/terrain/grass.png"))
+				map: global.cache.getSet("tree_flower_texture", THREE.ImageUtils.loadTexture( "resources/textures/terrain/grass.png"))
 			});
 			// cube
 			var flowerMesh = new THREE.Mesh(

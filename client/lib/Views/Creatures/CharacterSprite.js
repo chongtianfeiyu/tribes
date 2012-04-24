@@ -15,7 +15,7 @@ Game.Views.CharacterSprite = Class.extend({
 		//The animation-speed (in milliseconds)
 		animationSpeed : 100,
 		//The url to the sprite-sheet
-		sheetUrl : "/resources/sprites/character/basic.png",
+		sheetUrl : "resources/sprites/character/basic.png",
 
 		//List of available animations and their indexes
 		animations : {
