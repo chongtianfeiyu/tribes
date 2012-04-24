@@ -35,7 +35,7 @@ Game.Views.Creatures.CreatureBase = Class.extend({
 		var flare = new THREE.Mesh( text3d, textMaterial );
 		flare.position = this.position;
 		
-		flare.position.y += 30;
+		flare.position.y += 70;
 		flare.originalY = flare.position.y;
 		this.flares.push(flare);
 		global.app.scene.add(flare);
