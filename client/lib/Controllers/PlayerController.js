@@ -12,11 +12,11 @@ Game.Controllers.PlayerController = (function() {
 		setCursor : function(str) {
 			switch(str) {
 				case "attack":
-					$('body').css('cursor', 'url(/img/cursor-sword.gif), auto' );
+					$('body').css('cursor', 'url(/resources/images/cursor-sword.gif), auto' );
 					break;
 				default:
 				case "hand":
-					$('body').css('cursor', 'url(/img/cursor-hand.gif), auto' );
+					$('body').css('cursor', 'url(/resources/images/cursor-hand.gif), auto' );
 					break;
 			}
 		},

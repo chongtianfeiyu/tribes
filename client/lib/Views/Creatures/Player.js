@@ -3,17 +3,12 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		this._super(options);
 		this.isCurrent = options.isCurrent;
 		this.name = options.name;
+		this.yOffset = 30;
+		this.playerTagYOffset = 40;
 		
-		var materials = [];
-		for ( var i = 0; i < 6; i ++ ) {
-
-			materials.push( new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } ) );
-
-		}
-		// cube
-		this.mesh = new THREE.Mesh( new THREE.CubeGeometry( 30, 30, 30, 1, 1, 1, materials ), new THREE.MeshFaceMaterial() );
-		this.mesh.position.y =  15;
-
+		this.sprite = new Game.Views.CharacterSprite();
+		this.mesh = this.sprite.mesh;
+		this.mesh.position.y =  this.yOffset;
 		this.mesh.pointer = this;
 		global.app.scene.add(this.mesh);
 
@@ -21,7 +16,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		THREE.GeometryUtils.center( text3d );
 		var textMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: true } );
 		this.playerTag = new THREE.Mesh( text3d, textMaterial );
-		this.playerTag.position.y += 30;
+		this.playerTag.position.y += this.playerTagYOffset;
         global.app.scene.add(this.playerTag);
 	},
 
@@ -30,6 +25,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	*/
 	animationUpdate : function() {
 		this._super();
+		this.sprite.animate();
 		this.playerTag.lookAt(global.app.camera.position);
 	},
 
@@ -44,11 +40,11 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 
 		this.mesh.position.x = this.position.x;
 		this.mesh.position.z = this.position.z;
-		this.mesh.position.y = this.position.y  + 15;
+		this.mesh.position.y = this.position.y  + this.yOffset;
 		
 		this.playerTag.position.x = this.position.x;
 		this.playerTag.position.z = this.position.z;
-		this.playerTag.position.y = this.mesh.position.y + 30;
+		this.playerTag.position.y = this.mesh.position.y + this.playerTagYOffset;
 
 	},
 

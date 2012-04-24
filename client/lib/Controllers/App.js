@@ -86,6 +86,15 @@ Game.Controllers.App = (function(options){
 		start : function() {
 			this.animate();
 		},
+
+		getWidth : function()
+		{
+			return WIDTH;
+		},
+
+		getHeight : function() {
+			return HEIGHT;
+		},
 		
 
 		animate : function() {
