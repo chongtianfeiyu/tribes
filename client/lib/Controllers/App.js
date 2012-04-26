@@ -11,7 +11,7 @@ Game.Controllers.App = (function(options){
 	//Camera-constants
 	var CAMERA_FOV = 45;
 	var CAMERA_NEAR = 1;
-	var CAMERA_FAR = 1000000;
+	var CAMERA_FAR = 5200;
 	
 
 	//Renderer-constants

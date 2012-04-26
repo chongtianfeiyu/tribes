@@ -3,7 +3,6 @@ Game.Views.Creatures.CreatureBase = Class.extend({
 	init : function(options) {
 		_.bindAll(this, "animationUpdate");
 		this.position = options.position;
-		this.rotation = options.rotation;
 		this.flares = [];
 		this.uid = options.uid;
 	},
@@ -16,9 +15,12 @@ Game.Views.Creatures.CreatureBase = Class.extend({
 	},
 
 	animationUpdate : function() {
+		this.animateFlares();
+	},
+
+	animateFlares : function() {
 		for (var i = this.flares.length - 1; i >= 0; i--) {
 			var flare = this.flares[i];
-
 			flare.position.y += 0.5;
 			flare.lookAt(global.app.camera.position);
 			var yDiff = Math.abs(flare.position.y - flare.originalY);
