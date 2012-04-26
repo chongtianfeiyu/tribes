@@ -45,6 +45,14 @@ Game.Views.CharacterSprite = Class.extend({
 			this.updateMesh();
 			global.app.scene.add(this.mesh);
 		},
+		
+		flipSpriteEast : function() {
+			this.mesh.scale.x = -0.1
+		},
+
+		flipSpriteWest : function() {
+			this.mesh.scale.x = 0.1
+		},
 
 		setAngle : function(angle) {
 			if(angle < 18)
@@ -53,7 +61,7 @@ Game.Views.CharacterSprite = Class.extend({
 				this.currentAngularOffset = 1;
 			else if(angle < 114)
 				this.currentAngularOffset = 2;
-			else if(angle < 160)
+			else if(angle < 160) 
 				this.currentAngularOffset = 3;
 			else 
 				this.currentAngularOffset = 4;

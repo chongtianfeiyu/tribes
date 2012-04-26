@@ -35,7 +35,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 		if(this.position != null && this.goalVector != null) {
 			var len = new THREE.Vector3().sub(this.position, this.goalVector).length();
 			var gv = this.goalVector;
-			if(len < 2) {
+			if(len < 5) {
 				this.moving = false;
 				gv = this.prevGv;
 			} else {
@@ -49,6 +49,7 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 					gv.z,
 					this.position.x,
 					this.position.z) * 180/Math.PI;
+			Logger.log(angle);
 			this.sprite.setAngle(angle);
 			
 		}	
