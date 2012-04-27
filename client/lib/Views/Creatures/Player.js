@@ -25,35 +25,11 @@ Game.Views.Creatures.Player = Game.Views.Creatures.CreatureBase.extend({
 	*/
 	animationUpdate : function() {
 		this._super();
-		this.updateAngleInRelationToCamera();
-		if(this.moving == true)
-			this.sprite.animate();
+		this.sprite.setAngle(this.angleInRelationToCamera);
+		this.sprite.animate();
 		this.playerTag.lookAt(global.app.camera.position);
 	},
 
-	updateAngleInRelationToCamera : function() {
-		if(this.position != null && this.goalVector != null) {
-			var len = new THREE.Vector3().sub(this.position, this.goalVector).length();
-			var gv = this.goalVector;
-			if(len < 5) {
-				this.moving = false;
-				gv = this.prevGv;
-			} else {
-				this.moving = true;
-			}
-			this.prevGv = gv;
-			var angle = MathHelpers.findAngleBetweenThreePoints(
-					global.app.camera.position.x, 
-					global.app.camera.position.z,
-					gv.x,
-					gv.z,
-					this.position.x,
-					this.position.z) * 180/Math.PI;
-			Logger.log(angle);
-			this.sprite.setAngle(angle);
-			
-		}	
-	},
 
 	update : function(data) {
 		

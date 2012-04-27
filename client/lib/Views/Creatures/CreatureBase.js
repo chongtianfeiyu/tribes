@@ -16,6 +16,25 @@ Game.Views.Creatures.CreatureBase = Class.extend({
 
 	animationUpdate : function() {
 		this.animateFlares();
+		this.updateAngleInRelationToCamera();
+	},
+
+	updateAngleInRelationToCamera : function() {
+		if(this.position != null && this.goalVector != null) {
+			var len = new THREE.Vector3().sub(this.position, this.goalVector).length();
+			var gv = this.goalVector;
+			if(len < 10) {
+				gv = this.prevGv;
+			} 
+			this.prevGv = gv;
+			this.angleInRelationToCamera = MathHelpers.angleSigned(
+					global.app.camera.position.x, 
+					global.app.camera.position.z,
+					gv.x,
+					gv.z,
+					this.position.x,
+					this.position.z);			
+		}	
 	},
 
 	animateFlares : function() {

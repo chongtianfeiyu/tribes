@@ -55,16 +55,21 @@ Game.Views.CharacterSprite = Class.extend({
 		},
 
 		setAngle : function(angle) {
-			if(angle < 18)
+			var absAngle = Math.abs(angle);
+			if(absAngle < 18)
 				this.currentAngularOffset = 0;
-			else if(angle < 60)
+			else if(absAngle < 60)
 				this.currentAngularOffset = 1;
-			else if(angle < 114)
+			else if(absAngle < 114)
 				this.currentAngularOffset = 2;
-			else if(angle < 160) 
+			else if(absAngle < 160) 
 				this.currentAngularOffset = 3;
 			else 
 				this.currentAngularOffset = 4;
+			if(angle > 0)
+				this.flipSpriteWest();
+			else
+				this.flipSpriteEast();
 			this.mesh.uvOffset.y = (this.currentAnimation + this.currentAngularOffset)/this.animationSlots;
 		},
 
