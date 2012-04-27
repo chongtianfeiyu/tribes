@@ -16,12 +16,12 @@ var MathHelpers = {
 	 */
 	findAngleBetweenThreePoints : function(xA, yA, xB, yB, xC, yC) {
 		
-		var p0c = Math.sqrt(Math.pow(xC-xA,2)+
-		    		Math.pow(yC-yA,2)); // p0->c (b)   
-		var p1c = Math.sqrt(Math.pow(xC-xB,2)+
-		    		Math.pow(yC-yB,2)); // p1->c (a)
-		var p0p1 = Math.sqrt(Math.pow(xB-xA,2)+
-		     		Math.pow(yB-yA,2)); // p0->p1 (c)
-		return Math.acos((p1c*p1c+p0c*p0c-p0p1*p0p1)/(2*p1c*p0c)); 
+		var ac = Math.sqrt(Math.pow(xC-xA,2)+
+		    		Math.pow(yC-yA,2)); // len a-c
+		var bc = Math.sqrt(Math.pow(xC-xB,2)+
+		    		Math.pow(yC-yB,2)); // len b-c
+		var ab = Math.sqrt(Math.pow(xB-xA,2)+
+		     		Math.pow(yB-yA,2)); // len a-b
+		return Math.acos((bc*bc+ac*ac-ab*ab)/(2*bc*ac)); 
 	}
 };
