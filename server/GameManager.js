@@ -94,14 +94,15 @@ module.exports = GameManager = cls.Class.extend({
 	addObject : function(o) {
 		o.tick = new Date().getTime();
 		o.gameManager = this;
+		o.position = this.map.gridifyPosition(o.position);
 		this.objects[o.uid] = o;
 	},
 
 	addTerrainObject : function(o) {
 		o.tick = new Date().getTime();
 		o.gameManager = this;
+		o.position = this.map.gridifyPosition(o.position);
 		this.terrainObjects[o.uid] = o;
-
 	},
 
 	removeObject : function(uid) {

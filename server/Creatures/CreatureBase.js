@@ -10,7 +10,7 @@ module.exports = CreatureBase = cls.Class.extend({
 		//Stats (CreatureStats.js)
 		this.stats = options.stats;
 		//Movement speed
-		this.speed = 3;
+		this.speed = 2;
 		//Initial speed
 		this.position = options.position;
 		//How far the weapon reaches
@@ -48,7 +48,7 @@ module.exports = CreatureBase = cls.Class.extend({
 		Synchronizes data from another source.
 	*/
 	synchronize : function(data) {
-		this.goalVector = data.goalVector;
+		this.goalVector = this.gameManager.map.gridifyPosition(data.goalVector);
 		this.targetUid = data.targetUid;
 		this.targetIntent = data.targetIntent;
 	},
