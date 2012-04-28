@@ -23,7 +23,7 @@ Game.Views.Creatures.CreatureBase = Class.extend({
 		if(this.position != null && this.goalVector != null) {
 			var len = new THREE.Vector3().sub(this.position, this.goalVector).length();
 			var gv = this.goalVector;
-			if(len < 10) {
+			if(len < 10 && this.prevGv != null) {
 				gv = this.prevGv;
 			} 
 			this.prevGv = gv;
