@@ -1,6 +1,7 @@
 var cls = require("../packages/Class");
 var Vector3 = require("../packages/Vector3");
 var BattleLogic = require("../GameLogic/BattleLogic");
+var MovementHelper = require("../GameLogic/MovementHelper");
 var _ = require("Underscore");
 
 module.exports = CreatureBase = cls.Class.extend({
@@ -91,22 +92,19 @@ module.exports = CreatureBase = cls.Class.extend({
 			return;
 		}
 		
-		var speed = this.speed;
-		var goal = new Vector3(this.goalVector.x, this.goalVector.y, this.goalVector.z);
-		var direction = goal.subtract(this.position).normalize();
-		var dx = speed * direction.x;
-		var dz = speed * direction.z;
-		var diffx = this.goalVector.x - this.position.x;
-		var diffz = this.goalVector.z - this.position.z;
-		var distanceRequired = this.targetUid != null ? this.attackRange : 1;
+		//If we are chasing a monster, we only need to be in an adjacent square.
+		var proximityRange = this.targetUid != null ? this.attackRange : 1;
+		var newPosition = MovementHelper.getNewPosition(
+			this.speed, 
+			this.position, 
+			this.goalVector, 
+			proximityRange,
+			this.gameManager.map);
 
-		if( Math.abs(diffx) > distanceRequired || Math.abs(diffz) > distanceRequired){
-			this.position.x += dx;
-			this.position.z += dz;
+		if(newPosition != null) {
+			this.position.x += newPosition.x;
+			this.position.z += newPosition.z;
 			this.tick = new Date().getTime();
-			
-			//Regen while walking.
-			this.stats.update();
 		}
 		else {
 			//We have reached our destination.
@@ -123,15 +121,15 @@ module.exports = CreatureBase = cls.Class.extend({
 	setGoalVectorFromTarget : function() {
 		var targetObject = this.gameManager.findFromUid(this.targetUid);
 		if(targetObject != undefined) {
+			var targetPosition = new Vector3(targetObject.position.x, targetObject.position.y, targetObject.position.z);
 			if(	
 				this.viewDistance != undefined 
-				&& this.position.distanceTo(
-					new Vector3(targetObject.position.x, targetObject.position.y, targetObject.position.z)) > this.viewDistance) {
+				&& this.position.distanceTo(targetPosition) > this.viewDistance) {
 				this.targetUid = null;
 				this.goalVector = null;
 			}
 			else {
-				this.goalVector = targetObject.position;
+				this.goalVector = targetPosition;
 				targetObject.onTargetedBy(this);
 			}
 		} else {

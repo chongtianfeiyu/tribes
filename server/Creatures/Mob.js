@@ -19,7 +19,7 @@ module.exports = Mob = CreatureBase.extend({
 			luck : 10,
 			creature : this
 		});
-		this.speed = 2;
+		this.speed = 1;
 		//indicates whether it should wait to choose a random target.
 		this.randomTargetChosen = false;
 		this.classTag = "mob";

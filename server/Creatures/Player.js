@@ -15,6 +15,7 @@ module.exports = Player = CreatureBase.extend({
 			luck : 10,
 			creature : this
 		});
+		this.speed = 2;
 		this.classTag = "player";
 		this.name = options.name;
 	},
