@@ -12,7 +12,18 @@ module.exports = MovementHelper = {
 		- Sista item i listan är slutpositionen.
 		- När spelaren är framme vid slutposition, returnera null (för att indikera till cb att spelaren inte rör sig.)
 	*/
-
+	getPathVector : function(originVector, goalVector, map) {
+		var movementGrid = map.getMovementGrid();
+		var w = map.getMovementGridWidth();
+		var h = map.getMovementGridHeight();
+		var grid = new PF.Grid(w, h, movementGrid);
+		var finder = new PF.AStarFinder();
+		var start = map.getGridCellFromPosition(originVector);
+		var end = map.getGridCellFromPosition(goalVector);
+		var path = finder.findPath(start.x, start.z, end.x, end.z, grid);
+		console.log(path);
+		return path;
+	},
 	
 	getNewPosition : function(speed, position, goalVector, proximityRange, map) {
 		var goal = new Vector3(goalVector.x, goalVector.y, goalVector.z);

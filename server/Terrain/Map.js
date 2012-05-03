@@ -5,6 +5,7 @@ module.exports = Map = cls.Class.extend({
 	height : null,
 
 	init : function(width, height) {
+		console.log("Map init, w:" + width + ", h:" + height);
 		this.width = width;
 		this.height = height;
 		this.initializeMovementGrid();
@@ -12,8 +13,8 @@ module.exports = Map = cls.Class.extend({
 
 	initializeMovementGrid : function() {
 		this.movementGridDivident = 100;
-		var w = this.width / this.movementGridDivident;
-		var h = this.height / this.movementGridDivident;
+		var w = this.getMovementGridWidth();
+		var h = this.getMovementGridHeight();
 		this.movementGrid = [];
 		for(var i = 0; i < h; i++) {
 			this.movementGrid[i] = [];
@@ -21,6 +22,18 @@ module.exports = Map = cls.Class.extend({
 				this.movementGrid[i][j] = 0;
 			}
 		}
+	},
+
+	getMovementGrid : function() {
+		return this.movementGrid;
+	},
+
+	getMovementGridWidth : function() {
+		return this.width / this.movementGridDivident;
+	},
+
+	getMovementGridHeight : function() {
+		return	this.height / this.movementGridDivident;
 	},
 
 	/*
@@ -34,6 +47,13 @@ module.exports = Map = cls.Class.extend({
 			y : v.y,
 			z : Math.floor(v.z/this.movementGridDivident) * this.movementGridDivident + this.movementGridDivident / 2
 		};
+	},
+
+	getGridCellFromPosition : function(p) {
+		return {
+			x : Math.floor(p.x/this.movementGridDivident),
+			z : Math.floor(p.z/this.movementGridDivident)
+		}
 	},
 
 	/*

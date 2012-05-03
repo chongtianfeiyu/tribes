@@ -50,6 +50,8 @@ module.exports = CreatureBase = cls.Class.extend({
 	*/
 	synchronize : function(data) {
 		this.goalVector = this.gameManager.map.gridifyPosition(data.goalVector);
+		if(this.position != null && this.goalVector != null)
+			this.path = MovementHelper.getPathVector(this.position, this.goalVector, this.gameManager.map);
 		this.targetUid = data.targetUid;
 		this.targetIntent = data.targetIntent;
 	},
