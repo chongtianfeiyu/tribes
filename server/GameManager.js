@@ -15,7 +15,7 @@ module.exports = GameManager = cls.Class.extend({
 
 		this.playerTicks = [];
 		this.viewDistance = 4000;
-		this.map = new Map(100000,100000);
+		this.map = new Map(1000,1000);
 
 		//Plant a tree, save the world.
 		var tree = new Tree();

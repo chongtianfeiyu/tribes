@@ -12,7 +12,7 @@ module.exports = Map = cls.Class.extend({
 	},
 
 	initializeMovementGrid : function() {
-		this.movementGridDivident = 100;
+		this.movementGridDivident = 50;
 		var w = this.getMovementGridWidth();
 		var h = this.getMovementGridHeight();
 		this.movementGrid = [];
@@ -60,11 +60,12 @@ module.exports = Map = cls.Class.extend({
 		Returns a 
 	*/
 	getPositionFromGridCell : function(x, z) {
-		return {
-			x : x * this.movementGridDivident + this.movementGridDivident / 2,
+		var pos = {
+			x : x * this.movementGridDivident,
 			y : 0,
-			z : z * this.movementGridDivident + this.movementGridDivident / 2
-		}
+			z : z * this.movementGridDivident
+		};
+		return this.gridifyPosition(pos);
 	},
 
 	center : function() {

@@ -49,11 +49,16 @@ module.exports = CreatureBase = cls.Class.extend({
 		Synchronizes data from another source.
 	*/
 	synchronize : function(data) {
-		this.goalVector = this.gameManager.map.gridifyPosition(data.goalVector);
-		if(this.position != null && this.goalVector != null)
-			this.path = MovementHelper.getPathVector(this.position, this.goalVector, this.gameManager.map);
+		this.setGoal(data.goalVector);
 		this.targetUid = data.targetUid;
 		this.targetIntent = data.targetIntent;
+	},
+
+	setGoal : function(goalVector) {
+		this.goalVector = this.gameManager.map.gridifyPosition(goalVector);
+		if(this.position != null && this.goalVector != null) {
+			this.path = MovementHelper.getPathVector(this.position, this.goalVector, this.gameManager.map);
+		}
 	},
 
 	synchData : function() {
@@ -99,7 +104,7 @@ module.exports = CreatureBase = cls.Class.extend({
 		var newPosition = MovementHelper.getNewPosition(
 			this.speed, 
 			this.position, 
-			this.goalVector, 
+			this.path, 
 			proximityRange,
 			this.gameManager.map);
 
@@ -131,7 +136,7 @@ module.exports = CreatureBase = cls.Class.extend({
 				this.goalVector = null;
 			}
 			else {
-				this.goalVector = targetPosition;
+				this.setGoal(targetPosition);
 				targetObject.onTargetedBy(this);
 			}
 		} else {
