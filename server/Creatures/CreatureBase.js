@@ -1,7 +1,6 @@
 var cls = require("../packages/Class");
 var Vector3 = require("../packages/Vector3");
 var BattleLogic = require("../GameLogic/BattleLogic");
-var MovementHelper = require("../GameLogic/MovementHelper");
 var _ = require("Underscore");
 
 module.exports = CreatureBase = cls.Class.extend({
@@ -11,7 +10,7 @@ module.exports = CreatureBase = cls.Class.extend({
 		//Stats (CreatureStats.js)
 		this.stats = options.stats;
 		//Movement speed
-		this.speed = 2;
+		this.speed = 3;
 		//Initial speed
 		this.position = options.position;
 		//How far the weapon reaches
@@ -49,16 +48,9 @@ module.exports = CreatureBase = cls.Class.extend({
 		Synchronizes data from another source.
 	*/
 	synchronize : function(data) {
-		this.setGoal(data.goalVector);
+		this.goalVector = data.goalVector;
 		this.targetUid = data.targetUid;
 		this.targetIntent = data.targetIntent;
-	},
-
-	setGoal : function(goalVector) {
-		this.goalVector = this.gameManager.map.gridifyPosition(goalVector);
-		if(this.position != null && this.goalVector != null) {
-			this.path = MovementHelper.getPathVector(this.position, this.goalVector, this.gameManager.map);
-		}
 	},
 
 	synchData : function() {
@@ -99,19 +91,22 @@ module.exports = CreatureBase = cls.Class.extend({
 			return;
 		}
 		
-		//If we are chasing a monster, we only need to be in an adjacent square.
-		var proximityRange = this.targetUid != null ? this.attackRange : 1;
-		var newPosition = MovementHelper.getNewPosition(
-			this.speed, 
-			this.position, 
-			this.path, 
-			proximityRange,
-			this.gameManager.map);
+		var speed = this.speed;
+		var goal = new Vector3(this.goalVector.x, this.goalVector.y, this.goalVector.z);
+		var direction = goal.subtract(this.position).normalize();
+		var dx = speed * direction.x;
+		var dz = speed * direction.z;
+		var diffx = this.goalVector.x - this.position.x;
+		var diffz = this.goalVector.z - this.position.z;
+		var distanceRequired = this.targetUid != null ? this.attackRange : 1;
 
-		if(newPosition != null) {
-			this.position.x += newPosition.x;
-			this.position.z += newPosition.z;
+		if( Math.abs(diffx) > distanceRequired || Math.abs(diffz) > distanceRequired){
+			this.position.x += dx;
+			this.position.z += dz;
 			this.tick = new Date().getTime();
+			
+			//Regen while walking.
+			this.stats.update();
 		}
 		else {
 			//We have reached our destination.
@@ -128,15 +123,15 @@ module.exports = CreatureBase = cls.Class.extend({
 	setGoalVectorFromTarget : function() {
 		var targetObject = this.gameManager.findFromUid(this.targetUid);
 		if(targetObject != undefined) {
-			var targetPosition = new Vector3(targetObject.position.x, targetObject.position.y, targetObject.position.z);
 			if(	
 				this.viewDistance != undefined 
-				&& this.position.distanceTo(targetPosition) > this.viewDistance) {
+				&& this.position.distanceTo(
+					new Vector3(targetObject.position.x, targetObject.position.y, targetObject.position.z)) > this.viewDistance) {
 				this.targetUid = null;
 				this.goalVector = null;
 			}
 			else {
-				this.setGoal(targetPosition);
+				this.goalVector = targetObject.position;
 				targetObject.onTargetedBy(this);
 			}
 		} else {

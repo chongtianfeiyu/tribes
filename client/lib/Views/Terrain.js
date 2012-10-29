@@ -20,7 +20,7 @@ var Terrain = (function() {
 			grassTexture.repeat.y = 100;
 			grassTexture.doubleSided = true;
 			//TODO: Synchronize values w/ server.
-			this.mapWidth = 1000;
+			this.mapWidth = 100000;
 			this.mapHeight = this.mapWidth;
 			this.fragmentCount = 300;
 			console.log(this.mapWidth);

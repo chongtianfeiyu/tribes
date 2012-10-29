@@ -15,7 +15,7 @@ module.exports = GameManager = cls.Class.extend({
 
 		this.playerTicks = [];
 		this.viewDistance = 4000;
-		this.map = new Map(1000,1000);
+		this.map = new Map(100000,100000);
 
 		//Plant a tree, save the world.
 		var tree = new Tree();
@@ -94,15 +94,14 @@ module.exports = GameManager = cls.Class.extend({
 	addObject : function(o) {
 		o.tick = new Date().getTime();
 		o.gameManager = this;
-		o.position = this.map.gridifyPosition(o.position);
 		this.objects[o.uid] = o;
 	},
 
 	addTerrainObject : function(o) {
 		o.tick = new Date().getTime();
 		o.gameManager = this;
-		o.position = this.map.gridifyPosition(o.position);
 		this.terrainObjects[o.uid] = o;
+
 	},
 
 	removeObject : function(uid) {
